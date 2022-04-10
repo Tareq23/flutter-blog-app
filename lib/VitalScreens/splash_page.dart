@@ -4,34 +4,6 @@ import 'package:blog_app/VitalScreens/blog_list.dart';
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:get/get.dart';
-import 'landing_page.dart';
-
-
-
-
-// class SplashConfig extends StatelessWidget {
-//
-//   @override
-//   Widget build(BuildContext context) {
-//
-//     return GetMaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       title: 'Kaji App',
-//       showPerformanceOverlay: false,
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//         primaryColor: const Color(0xff262545),
-//         primaryColorDark: const Color(0xff201f39),
-//         brightness: Brightness.light,
-//         visualDensity: VisualDensity.adaptivePlatformDensity,
-//
-//       ),
-//       // home: LoginPage (title: 'ovivashiBatayon'),
-//       home: SplashConfigExtend (),
-//     );
-//   }
-// }
 
 class SplashConfig extends StatefulWidget {
 
@@ -44,9 +16,6 @@ class _SplashPageStateConfig extends State<SplashConfig>{
   @override
   void initState() {
     super.initState();
-
-    //userLoginStatusCheck();
-
     Future<void>.delayed(const Duration(milliseconds: 2000), () {
       _checkAccessToken();
     });
@@ -56,12 +25,10 @@ class _SplashPageStateConfig extends State<SplashConfig>{
   void _checkAccessToken() async
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String? accessToken = prefs.getString('check_token');
     String? accessToken = prefs.getString('access_token');
     if(accessToken == null){
       Navigator.push(context,MaterialPageRoute(builder: (context) => const Login()));
     }else{
-      // print("Access Token : $accessToken");
       setState(() {
         Navigator.push(context,MaterialPageRoute(builder: (context) => BlogListPageView()));
       });
@@ -83,7 +50,7 @@ class _SplashPageStateConfig extends State<SplashConfig>{
               children: <Widget>[
                 Image.asset('assets/mrdclogo.png'),
                 const Text(
-                  'MRDC App', style: TextStyle(fontSize: 40, color: Colors.white, fontWeight: FontWeight.bold),
+                  'ন্যাশনাল ম্যারেজ রেজিষ্ট্রার', style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w500),
                 ),
               ],
             ),

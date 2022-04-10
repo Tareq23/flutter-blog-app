@@ -13,5 +13,7 @@ class ApiUrl{
   static const CREATE_POST = "https://api.nationalmrdc.com/api/post";
   // String url = ApiUrl.MRDC_API + 'api/post/list/5?limit=4&page=1&title=';
   // static const MY_BLOG_POST = "https://api.nationalmrdc.com/api/post/list/5";
-
+  static String DELETE_POST = "https://api.nationalmrdc.com/api/post/delete/";
+  static String USER_PROFILE = "https://api.nationalmrdc.com/api/contacts/show/";
+  static const USER_PROFILE_UPDATE = "http://api.nationalmrdc.com/contacts/basic-info";
 }

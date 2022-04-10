@@ -1,71 +1,29 @@
-import 'package:blog_app/Services/app_service.dart';
-import 'package:blog_app/Services/base_client.dart';
-import 'package:blog_app/VitalScreens/my_blog_list.dart';
+
 import 'package:blog_app/controller/post_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
+
 import 'package:get/get.dart';
-
-import 'package:blog_app/Services/base_client.dart';
-import 'package:blog_app/Services/app_api.dart';
-
-
-import 'landing_page.dart';
-import '../LogRegScreens/login_page.dart';
-
-// class UpdateMyBlogListPageView extends StatelessWidget {
-//
-//   late final String headline;
-//   late final String content;
-//   late final String id;
-//
-//
-//   UpdateMyBlogListPageView(this.headline, this.content, this.id);
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       title: 'Kaji app',
-//       showPerformanceOverlay: false,
-//
-//       // home: LoginPage (title: 'ovivashiBatayon'),
-//       home: UpdateMyBlogListPageViewExtend(headline,content,id),
-//     );
-//   }
-// }
-//
-// class UpdateMyBlogListPageViewExtend extends StatefulWidget {
-//
-//   late final String headline;
-//   late final String content;
-//   late final String id;
-//
-//
-//   UpdateMyBlogListPageViewExtend(this.headline, this.content, this.id);
-//   @override
-//   _UpdateMyBlogListPageStateConfig createState() => _UpdateMyBlogListPageStateConfig(headline, content,id);
-// }
-//
-// class _UpdateMyBlogListPageStateConfig extends State<UpdateMyBlogListPageViewExtend>
 
 class UpdateMyBlogListPageView extends StatelessWidget {
 
   var _postController = Get.put(PostController());
 
+  final _htmlEditorController = HtmlEditorController();
+
   final _globalscaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
+  var _focusEditor = false.obs;
 
   String? headline;
   String? content;
   String? id;
 
   late String newheadline;
-  late String newdescription;
 
-  late Future<void> createFuture;
 
-  late String userTkn;
 
 
   @override
@@ -75,11 +33,9 @@ class UpdateMyBlogListPageView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.green,
         leading: IconButton( onPressed: () {
-          // Navigator.push(context, MaterialPageRoute(builder: (context) => MyBlogListPageView()));
           Navigator.pop(context);
         }, icon: const Icon(Icons.arrow_back_sharp,)),
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
+
         title: const Text('ব্লগ আপডেট করুন'),
       ),
       resizeToAvoidBottomInset: false,
@@ -88,10 +44,8 @@ class UpdateMyBlogListPageView extends StatelessWidget {
         child: SingleChildScrollView(
           reverse: false,
           child: Obx((){
-            headline = _postController.postDetails.value.headline.toString();
-            content = _postController.postDetails.value.content.toString();
-            id = _postController.postDetails.value.id.toString();
             _postController.updatePost.value = _postController.postDetails.value;
+            id = _postController.updatePost.value.id.toString();
             return  Form(
               key: _formKey,
               child: Container(
@@ -100,7 +54,9 @@ class UpdateMyBlogListPageView extends StatelessWidget {
                     child: Column(
                       children: [
                         TextFormField(
-                          initialValue:headline,
+                          minLines: 2,
+                          maxLines: null,
+                          initialValue:_postController.updatePost.value.headline.toString(),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'হেডলাইন প্রয়োজন';
@@ -110,14 +66,12 @@ class UpdateMyBlogListPageView extends StatelessWidget {
                           },
                           style: TextStyle(color: Colors.black),
                           onChanged: (v) {
-                            //_controller.userExists = "unique".obs;
-                            /*_controller.updateButtonStatus();*/
                             _postController.updatePost.value.headline = v;
                           },
                           decoration: const InputDecoration(
                             enabledBorder:
-                            const OutlineInputBorder(
-                              borderSide: const BorderSide(
+                             OutlineInputBorder(
+                              borderSide:  BorderSide(
                                   color: Colors.black,
                                   width: 1.0),
                             ),
@@ -128,56 +82,50 @@ class UpdateMyBlogListPageView extends StatelessWidget {
                                   width: 2.0),
                             ),
                             fillColor: Colors.black,
-                            label: const Text(
+                            label:  Text(
                               'নাম/টাইটেল/হেডলাইন',
                             ),
                             labelStyle:
                             TextStyle(color: Colors.black),
                           ),
-
                         ),
                         const SizedBox(height: 20,),
-                        TextFormField(
-                          minLines: 3,
-                          maxLines: null,
-                          initialValue:content,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return ' বিবরণ প্রয়োজন';
-                            } else {
-                              newdescription = value;
-                            }
-                          },
-                          style: TextStyle(color: Colors.black),
-                          onChanged: (v) {
-                            //_controller.userExists = "unique".obs;
-                            /*_controller.updateButtonStatus();*/
-                            _postController.updatePost.value.content = v;
-                          },
-                          decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(vertical: 55.0, horizontal: 20.0),
-                            enabledBorder:
-                            OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.black,
-                                  width: 1.0),
-                            ),
-                            border: OutlineInputBorder(),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.black,
-                                  width: 2.0),
-                            ),
-                            fillColor: Colors.black,
-                            label: const Text(
-                              'বিবরণ',
-                            ),
-                            labelStyle:
-                            TextStyle(color: Colors.black),
-                          ),
 
+                        Container(
+                          margin: const EdgeInsets.all(0),
+                          padding: const EdgeInsets.only(left: 3),
+                          alignment: Alignment.centerLeft,
+                          child: const Text('Description',style: TextStyle(color: Colors.black,fontWeight: FontWeight.w400,fontSize: 20),),
                         ),
-
+                        Container(
+                          constraints: BoxConstraints(
+                            maxHeight: size.height,
+                          ),
+                          child: HtmlEditor(
+                              controller: _htmlEditorController,
+                              htmlToolbarOptions: const HtmlToolbarOptions(
+                                toolbarPosition: ToolbarPosition.aboveEditor,
+                                toolbarType: ToolbarType.nativeGrid,
+                              ),
+                              htmlEditorOptions: HtmlEditorOptions(
+                                hint: 'Post Description',
+                                initialText:  _postController.updatePost.value.content,
+                                adjustHeightForKeyboard: false,
+                                autoAdjustHeight: true,
+                              ),
+                              otherOptions: OtherOptions(
+                                height: size.height * 0.8,
+                              ),
+                              callbacks: Callbacks(
+                                onChangeContent: (String? changed) {
+                                  _postController.updatePost.value.content = changed;
+                                },
+                                  onFocus:(){
+                                    _focusEditor.value = true;
+                                  }
+                              )
+                          ),
+                        ),
 
                         SizedBox(height: 20,),
 
@@ -189,29 +137,25 @@ class UpdateMyBlogListPageView extends StatelessWidget {
 
                             if (_formKey.currentState!
                                 .validate()) {
-                              // String error = ( await CallFormsFromUpdateBlogAPI(headline, content,id));
 
-                              // if (error == "") {
-                              //   ScaffoldMessenger.of(context)
-                              //       .showSnackBar(
-                              //     const SnackBar(
-                              //         content: Text(
-                              //             "সঠিক তথ্য দিন")),
-                              //   );
-                              // }
+                              if(_postController.updatePost.value.headline == null || _postController.updatePost.value.content == null){
+                                _postController.showErrorSnackbar("সঠিক তথ্য দিন");
+                              }
 
                               _postController.postUpdate();
 
-                              // ScaffoldMessenger.of(context).showSnackBar(
-                              //   const SnackBar(content: Text("কাজটি সম্পন্ন হয়েছে")),
-                              // );
+                              if(_postController.postUpdateResult.value){
+                                _postController.postUpdateResult.value = false;
+                                _postController.showSuccessSnackbar("কাজটি সম্পন্ন হয়েছে");
+                                _postController.userPostList();
+                                _postController.fetchPosts();
 
-                              // Navigator.push(context, MaterialPageRoute(builder: (context) => MyBlogListPageView()));
-
+                                 Navigator.pop(context);
+                              }
                             }
                           },
 
-                          child: Center(
+                          child:const  Center(
                             child: Text(
                               'আপডেট',
                               style: TextStyle(
@@ -219,8 +163,6 @@ class UpdateMyBlogListPageView extends StatelessWidget {
                             ),
                           ),
                         ),
-
-
                       ],
                     ),
                   )
@@ -231,27 +173,5 @@ class UpdateMyBlogListPageView extends StatelessWidget {
         ),
       ),
     );
-  }
-
-
-
-  Future<String> CallFormsFromUpdateBlogAPI(String headline, String content, String id) async {
-
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    userTkn = (prefs.getString('user_tkn') ?? '');
-    String url = ApiUrl.MRDC_API + 'api/post/'+id;
-
-    Map body = {
-      "content": newdescription,
-      "headline": newheadline,
-      "type":"5",
-      "status":"1",
-    };
-
-    var response = await BaseClient().PostMethodWithHeader(url, userTkn, body);
-
-    return response;
-
   }
 }

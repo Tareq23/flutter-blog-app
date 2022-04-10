@@ -10,45 +10,45 @@ String profileModelToJson(ProfileModel data) => json.encode(data.toJson());
 
 class ProfileModel {
   ProfileModel({
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.phone,
-    required this.type,
-    required this.slug,
-    required this.contactId,
-    required this.address,
-    required this.about,
-    required this.website,
-    required this.registrationNumber,
-    required this.mapLink,
-    required this.districtId,
-    required this.subdistrictId,
-    required this.divisionId,
-    required this.updatedBy,
-    required this.createdBy,
-    required this.image,
+     this.id,
+     this.name,
+     this.email,
+     this.phone,
+     this.type,
+     this.slug,
+     this.contactId,
+     this.address,
+     this.about,
+     this.website,
+     this.registrationNumber,
+     this.mapLink,
+     this.districtId,
+     this.subdistrictId,
+     this.divisionId,
+     this.updatedBy,
+     this.createdBy,
+     this.image,
   });
 
-  int id;
-  String name;
-  String email;
-  String phone;
-  int type;
-  String slug;
-  int contactId;
-  String address;
-  String about;
-  String website;
-  String registrationNumber;
-  String mapLink;
-  int districtId;
-  int subdistrictId;
-  int divisionId;
-  String updatedBy;
-  String createdBy;
+  int? id;
+  String? name;
+  String? email;
+  String? phone;
+  int? type;
+  String? slug;
+  int? contactId;
+  String? address;
+  String? about;
+  String? website;
+  String? registrationNumber;
+  String? mapLink;
+  int? districtId;
+  int? subdistrictId;
+  int? divisionId;
+  String? updatedBy;
+  String? createdBy;
 
-  String image;
+  String? image;
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) => ProfileModel(
     id: json["id"],

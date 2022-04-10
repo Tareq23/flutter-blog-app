@@ -19,21 +19,6 @@ class MainConfig extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    // return MaterialApp(
-    //   debugShowCheckedModeBanner: false,
-    //   title: 'ovivashiBatayon',
-    //   showPerformanceOverlay: false,
-    //   theme: ThemeData(
-    //     primarySwatch: Colors.blue,
-    //     primaryColor: const Color(0xff262545),
-    //     primaryColorDark: const Color(0xff201f39),
-    //     brightness: Brightness.light,
-    //     visualDensity: VisualDensity.adaptivePlatformDensity,
-    //
-    //   ),
-    //   // home: LoginPage (title: 'ovivashiBatayon'),
-    //   home: MainConfigExtend (),
-    // );
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'ovivashiBatayon',
@@ -87,9 +72,6 @@ class _MainPageStateConfig extends State<MainConfigExtend> {
   Widget build(BuildContext context) {
 
     return Scaffold(resizeToAvoidBottomInset: false,
-
-      //body: LoginPageView(),//HomePage(),
-      //body: SplashPageView(),//HomePage(),
       body: SplashConfig(),//HomePage(),
     );
   }

@@ -41,10 +41,11 @@ dependencies:
   image_picker: ^0.8.4+11
   flutter_verification_code: ^1.1.2+1
   fluttertoast: ^8.0.9
-  awesome_dropdown: ^0.0.4
   html_editor_enhanced: ^2.4.0+1
   shared_preferences: ^2.0.13
   back_button_interceptor: ^5.0.2
+  connectivity_plus: ^2.2.1
+  marquee: ^2.2.1
 
 dev_dependencies:
   flutter_test:
@@ -56,10 +57,16 @@ dev_dependencies:
   # rules and activating additional ones.
 
   flutter_lints: ^1.0.0
+  flutter_launcher_icons: "^0.9.2"
 
 
 #  flutter_webview_plugin: ^0.4.0
 
+flutter_icons:
+  android:  true
+  ios: true
+  image_path_android: "assets/mrdclogo.png"
+  image_path_ios: "assets/mrdclogo.png"
 
 
 # For information on the generic Dart part of this file, see the

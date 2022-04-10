@@ -14,17 +14,6 @@ import 'package:flutter_verification_code/flutter_verification_code.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-// class LoginPage extends StatelessWidget {
-//   const LoginPage({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return const MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       home: Login(),
-//     );
-//   }
-// }
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -39,7 +28,6 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   final _requiredValue = "মোবাইল প্রয়োজন";
   String userNumber = " ";
-  // String userNumber = "01723434285";
   String otpCode = "";
   bool _isValidNumber = false;
   bool _isLoadingOTP = false;
@@ -56,7 +44,6 @@ class _LoginState extends State<Login> {
 
   @override
   void initState() {
-
     init();
     phoneNumberController.addListener(_getPhoneNumber);
     super.initState();
@@ -77,12 +64,10 @@ class _LoginState extends State<Login> {
   void _checkUserNumber() async
   {
     String api_link = "https://api.nationalmrdc.com/applicant-agency-mobile";
-    String mobileRegistration = "https://api.nationalmrdc.com/applicant-agency-mobile";
     var url = Uri.parse(api_link);
     Map data = {
       'phone' : userNumber
     };
-    // print(data);
     var response = await http.post(url, body: data);
     if(response.statusCode == 200)
     {
@@ -91,17 +76,14 @@ class _LoginState extends State<Login> {
         setState(() {
           _isValidNumber = true;
         });
-        print(responseData);
       }
       else{
-        showToastMessage('Incorrect Your Number');
+        showToastMessage('ভুল নাম্বার দিয়েছেন!');
       }
     }
     else{
-      showToastMessage('Incorrect Your Number');
+      showToastMessage('ভুল নাম্বার দিয়েছেন!');
     }
-
-    // showToastMessage(response.toString());
 
   }
 
@@ -131,12 +113,9 @@ class _LoginState extends State<Login> {
     final response = await http
           .get(Uri.parse(url));
     var responseJson = jsonDecode(response.body);
-    // print(responseJson);
     if(response.statusCode == 200) {
-      // print("otp response status code : ${response.statusCode}");
       if(responseJson['access_token'].toString().length > 10){
-        print(responseJson['access_token'].toString());
-        storeLoginAccessToken(responseJson['access_token'].toString());
+        storeLoginAccessToken(responseJson['access_token'].toString(),responseJson['user']['id']);
       }
     }
     setState(() {
@@ -145,18 +124,18 @@ class _LoginState extends State<Login> {
   }
 
 
-  void storeLoginAccessToken(String token) async{
+  void storeLoginAccessToken(String token,int userId) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('access_token', token);
-    prefs.setString('check_token', "checking");
-    String access_token = (prefs.getString('access_token')??"default");
-    if(access_token != "default"){
+    prefs.setInt('user_id', userId);
+    String accessToken = (prefs.getString('access_token')??"default");
+    if(accessToken != "default"){
       Navigator.push(context, MaterialPageRoute(builder: (context) => BlogListPageView()));
     }
     else{
-      showToastMessage('Incorrect OTP');
+      showToastMessage('ওটিপি সঠিক নয়');
     }
-    // print(access_token);
+
   }
 
   @override
@@ -178,7 +157,6 @@ class _LoginState extends State<Login> {
                     image: AssetImage("assets/mrdclogo.png"),
                   ),
                 ),
-
                 _isValidNumber == false ?
                 _loginCard(context) :
                 _otpCard(context)
@@ -238,8 +216,8 @@ class _LoginState extends State<Login> {
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "কাজী তে",
-                    style: TextStyle(fontSize: 18),
+                    "ন্যাশনাল ম্যারেজ রেজিষ্ট্রার",
+                    style: TextStyle(fontSize: 14),
                   ),
                 ),
                 Container(
@@ -248,9 +226,9 @@ class _LoginState extends State<Login> {
                     key: _formKey,
                     child: TextFormField(
                       controller: phoneNumberController,
+                      // keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        hintText: "Phone Number",
-
+                        hintText: "মোবাইল নাম্বার",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                           borderSide: const BorderSide(color: Colors.black,width: 2),
@@ -258,7 +236,7 @@ class _LoginState extends State<Login> {
                         focusedBorder: const OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black)
                         ),
-                        labelText: "Phone Number",
+                        labelText: "মোবাইল নাম্বার",
                         labelStyle: const TextStyle(fontSize: 16,color: Colors.black,fontWeight:FontWeight.w400),
                       ),
                       validator: (text) {
@@ -271,11 +249,11 @@ class _LoginState extends State<Login> {
                           int val = number[i].codeUnits.first;
                           if(val>v_9 || val<v_0)
                           {
-                            return "invalid Number";
+                            return "সঠিক নাম্বার দিন";
                           }
                         }
                         if (text == null || text.isEmpty) {
-                          return 'Number is empty';
+                          return 'আপনার মোবাইল নাম্বার দিন';
                         }
                         return null;
                       },
@@ -286,7 +264,7 @@ class _LoginState extends State<Login> {
                   alignment: Alignment.centerRight,
                   child: Container(
                     margin: const EdgeInsets.only(top: 15),
-                    width: screenSize.width * 0.25,
+                    width: screenSize.width * 0.3,
                     alignment: Alignment.center,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -310,12 +288,11 @@ class _LoginState extends State<Login> {
                           //   _isValidNumber = true;
                           // });
                         }
-
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: const [
-                          Text('Next',style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 16),),
+                          Text('পরবর্তী',style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 16),),
 
                           Icon(Icons.arrow_forward,size: 28,color: Colors.white,)
                         ],
@@ -359,7 +336,7 @@ class _LoginState extends State<Login> {
         children: [
           Container(
             margin: const EdgeInsets.only(left: 20,bottom: 30),
-            child: const Text('OTP Verification',style: TextStyle(color: Colors.black,fontSize: 18),),
+            child: const Text('ওটিপি দিন',style: TextStyle(color: Colors.black,fontSize: 18),),
           ),
           VerificationCode(
             length: 6,
@@ -399,7 +376,7 @@ class _LoginState extends State<Login> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
-                  Text('Next',style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500),),
+                  Text('পরবর্তী',style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500),),
                   SizedBox(width: 5,),
                   Icon(Icons.arrow_forward_rounded,size: 30,color: Colors.white,),
                 ],

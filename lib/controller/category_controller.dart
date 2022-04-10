@@ -15,7 +15,7 @@ class CategoryController extends GetxController
     super.onInit();
   }
 
-  void fetchCategory() async {
+  Future<void> fetchCategory() async {
     try{
       var _catList = await AppService.fetchCategory();
       catList.assignAll(_catList);
