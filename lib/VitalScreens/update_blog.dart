@@ -1,4 +1,5 @@
 
+import 'package:blog_app/Services/color.dart';
 import 'package:blog_app/controller/post_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class UpdateMyBlogListPageView extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: ConstValue.color,
         leading: IconButton( onPressed: () {
           Navigator.pop(context);
         }, icon: const Icon(Icons.arrow_back_sharp,)),

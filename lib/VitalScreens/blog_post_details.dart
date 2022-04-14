@@ -1,4 +1,5 @@
 
+import 'package:blog_app/Services/color.dart';
 import 'package:blog_app/controller/post_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,7 +21,7 @@ class BlogPostDetails extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.green.shade600,
+        backgroundColor: ConstValue.color,
         leading: IconButton(
           onPressed: (){
             Navigator.pop(context);

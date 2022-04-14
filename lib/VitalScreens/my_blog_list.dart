@@ -1,3 +1,4 @@
+import 'package:blog_app/Services/color.dart';
 import 'package:blog_app/VitalScreens/blog_post_details.dart';
 import 'package:blog_app/Model/public_blog_list_model.dart';
 import 'package:blog_app/VitalScreens/create_new_blog_post.dart';
@@ -29,7 +30,7 @@ class MyBlogListState extends State<MyBlogListPageView>{
     var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: ConstValue.color,
         leading: IconButton( onPressed: () {
           // Navigator.push(context, MaterialPageRoute(builder: (context) => LandingPageView()));
           Navigator.pop(context);

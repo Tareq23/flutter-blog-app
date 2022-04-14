@@ -54,9 +54,9 @@ class ProfilePageView extends StatelessWidget {
                     margin: const EdgeInsets.all(0),
                     decoration: const BoxDecoration(
                         gradient: LinearGradient(colors: <Color>[
-                          Color(0xFF2588CD),
-                          Color(0xFF6CB2F1),
-                          Color(0xFF5E7692),
+                          Color.fromRGBO(0, 106, 78, 1.0),
+                          Color.fromRGBO(0, 106, 78, 0.8),
+                          Color.fromRGBO(0, 106, 78, 0.9),
                         ], begin: Alignment.centerLeft, end: Alignment.centerRight)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,7 +216,7 @@ class ProfilePageView extends StatelessWidget {
                                     children: [
                                       Text('ঠিকানা',style:hintStyle ,),
                                       _profileController.profile.value.address.toString() == "null" ? const Text(" ") :
-                                      Text( _profileController.profile.value.address.toString(),
+                                      Text(_profileController.profile.value.address.toString(),
                                           style: textStyle
                                       ),
                                     ],

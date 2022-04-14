@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:blog_app/LogRegScreens/registration.dart';
+import 'package:blog_app/Services/color.dart';
 import 'package:blog_app/VitalScreens/blog_list.dart';
 import 'package:blog_app/VitalScreens/my_blog_list.dart';
 import 'package:flutter/cupertino.dart';
@@ -81,10 +82,13 @@ class _LoginState extends State<Login> {
         showToastMessage('ভুল নাম্বার দিয়েছেন!');
       }
     }
-    else{
-      showToastMessage('ভুল নাম্বার দিয়েছেন!');
+    else if(response.statusCode == 500){
+      // showToastMessage('ভুল নাম্বার দিয়েছেন!');
+      // showToastMessage(response.body.toString());
+      showToastMessage("Internal Server Error");
     }
-
+    // print(response.body);
+    // print(response.statusCode.toString());
   }
 
   void showToastMessage(String message){
@@ -199,8 +203,8 @@ class _LoginState extends State<Login> {
           child: Container(
             padding: const EdgeInsets.all(20),
             margin: const EdgeInsets.all(0),
-            decoration: BoxDecoration(
-              color: Colors.blue.shade300,
+            decoration: const BoxDecoration(
+              color: ConstValue.color
             ),
             child: Column(
               children: [
@@ -210,14 +214,14 @@ class _LoginState extends State<Login> {
                       "স্বাগতম",
                       style: TextStyle(
                         fontSize: 25,
-                        color: Colors.black,
+                          color: Color(0xFFD5D4D4),
                       ),
                     )),
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "ন্যাশনাল ম্যারেজ রেজিষ্ট্রার",
-                    style: TextStyle(fontSize: 14),
+                    style: TextStyle(fontSize: 14,color: Color(0xFFD5D4D4)),
                   ),
                 ),
                 Container(
@@ -227,17 +231,20 @@ class _LoginState extends State<Login> {
                     child: TextFormField(
                       controller: phoneNumberController,
                       // keyboardType: TextInputType.number,
+                      style: const TextStyle(letterSpacing:1.2,fontSize: 16,fontWeight: FontWeight.w500,color: Color(
+                          0xFF151515)),
                       decoration: InputDecoration(
                         hintText: "মোবাইল নাম্বার",
+                        hintStyle: const TextStyle(color: Color(0xFFD0CFCF),fontWeight: FontWeight.w400,fontSize: 15),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
-                          borderSide: const BorderSide(color: Colors.black,width: 2),
+                          borderSide: const BorderSide(color: Color(0xFF6C6B6B),width: 2),
                         ),
                         focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black)
+                            borderSide: BorderSide(color: Color(0xFFAAAAAA))
                         ),
                         labelText: "মোবাইল নাম্বার",
-                        labelStyle: const TextStyle(fontSize: 16,color: Colors.black,fontWeight:FontWeight.w400),
+                        labelStyle: const TextStyle(fontSize: 16,color: Colors.white,fontWeight:FontWeight.w400),
                       ),
                       validator: (text) {
                         bool check=true;
@@ -292,7 +299,7 @@ class _LoginState extends State<Login> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: const [
-                          Text('পরবর্তী',style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 16),),
+                          Text('পরবর্তী',style: TextStyle(color: Colors.white,fontWeight: FontWeight.w500,fontSize: 16),),
 
                           Icon(Icons.arrow_forward,size: 28,color: Colors.white,)
                         ],
@@ -328,7 +335,7 @@ class _LoginState extends State<Login> {
         top: (screenSize.width * 0.1),
       ),
       decoration: BoxDecoration(
-          color: Colors.blue.shade300,
+          color: ConstValue.color,
           borderRadius: BorderRadius.circular(30)
       ),
       child: Column(

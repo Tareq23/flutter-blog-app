@@ -1,5 +1,6 @@
 
 import 'package:blog_app/LogRegScreens/login_page_with_phone_number.dart';
+import 'package:blog_app/Services/color.dart';
 import 'package:blog_app/VitalScreens/blog_list.dart';
 import 'package:flutter/material.dart';
 
@@ -39,12 +40,12 @@ class _SplashPageStateConfig extends State<SplashConfig>{
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.green,
+        color: ConstValue.color,
         child: Center(
           // Center is a layout widget. It takes a single child and positions it
           // in the middle of the parent.
           child: Container(
-            color: Colors.green,
+            color: ConstValue.color,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[

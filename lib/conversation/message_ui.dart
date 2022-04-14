@@ -1,10 +1,14 @@
 import 'dart:ffi';
 
 import 'package:blog_app/Model/message_model.dart';
+import 'package:blog_app/Services/color.dart';
 import 'package:blog_app/conversation/send_message.dart';
 import 'package:blog_app/conversation/user_message.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../LogRegScreens/login_page_with_phone_number.dart';
 import '../ProfileScreens/profile_page.dart';
 import '../VitalScreens/blog_list.dart';
 import '../VitalScreens/my_blog_list.dart';
@@ -39,16 +43,210 @@ class _MessageState extends State<Message> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // endDrawer: Drawer(
+      //   child: Container(
+      //     color: Colors.green,
+      //     child: ListView(
+      //       padding: EdgeInsets.zero,
+      //
+      //       children: [
+      //         const SizedBox(height: 20,),
+      //         const Divider(
+      //           color: Color(0xFFc1c1c1),
+      //         ),
+      //         Container(
+      //
+      //           padding: const EdgeInsets.all(16.0),
+      //
+      //           child: InkWell(
+      //             onTap: () {
+      //               Navigator.pop(context);
+      //               Navigator.push(
+      //                   context,
+      //                   MaterialPageRoute(builder: (context) => BlogListPageView()));
+      //             },
+      //             child: Row(
+      //               children: const [
+      //                 Icon(Icons.dashboard),
+      //                 SizedBox(width: 10),
+      //                 Text("ব্লগ"),
+      //               ],
+      //
+      //             ),
+      //           ),
+      //
+      //         ),
+      //         const Divider(
+      //           color: Color(0xFFc1c1c1),
+      //         ),
+      //         Container(
+      //           padding: const EdgeInsets.all(16.0),
+      //           child: InkWell(
+      //             onTap: () {
+      //               Navigator.push(
+      //                   context,
+      //                   // MaterialPageRoute(builder: (context) => ProfilePageView()));
+      //                   MaterialPageRoute(builder: (context) => ProfilePageView()));
+      //             },
+      //             child: Row(
+      //               children: const [
+      //                 Icon(Icons.person),
+      //                 SizedBox(width: 10),
+      //                 Text("প্রোফাইল"),
+      //               ],
+      //
+      //             ),
+      //           ),
+      //
+      //         ),
+      //         const Divider(
+      //           color: Color(0xFFc1c1c1),
+      //         ),
+      //         Container(
+      //
+      //           padding: const EdgeInsets.all(16.0),
+      //
+      //           child: InkWell(
+      //             onTap: () {
+      //               Navigator.push(
+      //                   context,
+      //                   MaterialPageRoute(builder: (context) => MyBlogListPageView()));
+      //             },
+      //             child: Row(
+      //               children: const [
+      //                 Icon(Icons.dashboard),
+      //                 SizedBox(width: 10),
+      //                 Text("আমার ব্লগ"),
+      //               ],
+      //
+      //             ),
+      //           ),
+      //
+      //         ),
+      //
+      //         const Divider(
+      //           color: Color(0xFFc1c1c1),
+      //         ),
+      //
+      //         Container(
+      //
+      //           padding: EdgeInsets.all(16.0),
+      //
+      //           child: InkWell(
+      //             onTap: () {
+      //               Navigator.push(context, MaterialPageRoute(builder: (context)=>Message()));
+      //               /*        Navigator.push(
+      //                   context,
+      //                   MaterialPageRoute(builder: (context) => DashBoardConfig()));*/
+      //             },
+      //             child: Row(
+      //               children: const [
+      //                 Icon(Icons.message),
+      //                 SizedBox(width: 10),
+      //                 Text("ম্যাসেজ"),
+      //               ],
+      //
+      //             ),
+      //           ),
+      //
+      //         ),
+      //
+      //         const Divider(
+      //           color: Color(0xFFc1c1c1),
+      //         ),
+      //
+      //         Container(
+      //
+      //           padding: EdgeInsets.all(16.0),
+      //
+      //           child: InkWell(
+      //             onTap: () {
+      //               /*        Navigator.push(
+      //                   context,
+      //                   MaterialPageRoute(builder: (context) => DashBoardConfig()));*/
+      //             },
+      //             child: Row(
+      //               children: const [
+      //                 Icon(Icons.money),
+      //                 SizedBox(width: 10),
+      //                 Text("পেমেন্ট"),
+      //               ],
+      //
+      //             ),
+      //           ),
+      //
+      //         ),
+      //
+      //         const Divider(
+      //           color: Color(0xFFc1c1c1),
+      //         ),
+      //
+      //         Container(
+      //           padding: EdgeInsets.all(16.0),
+      //           child: Row(
+      //             children: const [
+      //               Icon(Icons.settings),
+      //               SizedBox(width: 10),
+      //               Text("সেটিংস"),
+      //             ],
+      //
+      //           ),
+      //
+      //         ),
+      //         const Divider(
+      //           color: Color(0xFFc1c1c1),
+      //         ),
+      //
+      //         // Container(
+      //         //
+      //         //   padding: EdgeInsets.all(16.0),
+      //         //
+      //         //   child: InkWell(
+      //         //     onTap: () {
+      //         //       logout();
+      //         //     },
+      //         //     child: Row(
+      //         //       children: const [
+      //         //         Icon(Icons.logout),
+      //         //         SizedBox(width: 10),
+      //         //         Text("লগ আউট"),
+      //         //       ],
+      //         //
+      //         //     ),
+      //         //   ),
+      //         //
+      //         // ),
+      //         //
+      //         // const Divider(
+      //         //   color: Color(0xFFc1c1c1),
+      //         // ),
+      //
+      //       ],
+      //     ),
+      //   ),
+      // ),
+      // appBar: AppBar(
+      //   backgroundColor: ConstValue.color,
+      //   leading: Container(
+      //       margin: EdgeInsets.all(10),
+      //       child: Image.asset('assets/mrdclogo.png')),
+      //   // Here we take the value from the MyHomePage object that was created by
+      //   // the App.build method, and use it to set our appbar title.
+      //   title: Text('National MRDC'),
+      // ),
       endDrawer: Drawer(
+        elevation: 100,
         child: Container(
-          color: Colors.green,
+          // color: Colors.green,
+          color: ConstValue.color,
           child: ListView(
             padding: EdgeInsets.zero,
-
             children: [
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               const Divider(
-                color: Color(0xFFc1c1c1),
+                  color: ConstValue.drawerIconColor
               ),
               Container(
 
@@ -63,9 +261,9 @@ class _MessageState extends State<Message> {
                   },
                   child: Row(
                     children: const [
-                      Icon(Icons.dashboard),
+                      Icon(Icons.dashboard,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
-                      Text("ব্লগ"),
+                      Text("ব্লগ",style: ConstValue.drawerTestStyle,),
                     ],
 
                   ),
@@ -73,162 +271,125 @@ class _MessageState extends State<Message> {
 
               ),
               const Divider(
-                color: Color(0xFFc1c1c1),
+                  color: ConstValue.drawerIconColor
               ),
               Container(
-                padding: const EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(16.0),
                 child: InkWell(
                   onTap: () {
                     Navigator.push(
                         context,
                         // MaterialPageRoute(builder: (context) => ProfilePageView()));
-                        MaterialPageRoute(builder: (context) => ProfilePageView()));
+                        MaterialPageRoute(
+                            builder: (context) => ProfilePageView()));
                   },
                   child: Row(
                     children: const [
-                      Icon(Icons.person),
+                      Icon(Icons.person,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
-                      Text("প্রোফাইল"),
+                      Text("প্রোফাইল",style: ConstValue.drawerTestStyle,),
                     ],
-
                   ),
                 ),
-
               ),
               const Divider(
-                color: Color(0xFFc1c1c1),
+                  color: ConstValue.drawerIconColor
               ),
               Container(
-
-                padding: const EdgeInsets.all(16.0),
-
+                padding: EdgeInsets.all(16.0),
                 child: InkWell(
                   onTap: () {
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => MyBlogListPageView()));
+                        MaterialPageRoute(
+                            builder: (context) => MyBlogListPageView()));
                   },
                   child: Row(
                     children: const [
-                      Icon(Icons.dashboard),
+                      Icon(Icons.dashboard,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
-                      Text("আমার ব্লগ"),
+                      Text("আমার ব্লগ",style: ConstValue.drawerTestStyle,),
                     ],
-
                   ),
                 ),
-
               ),
-
               const Divider(
-                color: Color(0xFFc1c1c1),
+                  color: ConstValue.drawerIconColor
               ),
-
               Container(
-
                 padding: EdgeInsets.all(16.0),
-
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Message()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Message()));
                     /*        Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => DashBoardConfig()));*/
                   },
                   child: Row(
                     children: const [
-                      Icon(Icons.message),
+                      Icon(Icons.message,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
-                      Text("ম্যাসেজ"),
+                      Text("ম্যাসেজ",style: ConstValue.drawerTestStyle,),
                     ],
-
                   ),
                 ),
-
               ),
-
               const Divider(
-                color: Color(0xFFc1c1c1),
+                  color: ConstValue.drawerIconColor
               ),
-
               Container(
-
                 padding: EdgeInsets.all(16.0),
-
                 child: InkWell(
-                  onTap: () {
-                    /*        Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => DashBoardConfig()));*/
+                  onTap: () {},
+                  child: Row(
+                    children: const [
+                      Icon(Icons.money,color: ConstValue.drawerIconColor,),
+                      SizedBox(width: 10),
+                      Text("পেমেন্ট",style: ConstValue.drawerTestStyle,),
+                    ],
+                  ),
+                ),
+              ),
+              const Divider(
+                  color: ConstValue.drawerIconColor
+              ),
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                child: InkWell(
+                  onTap: () async{
+                    final prefs = await SharedPreferences.getInstance();
+                    final removeAccessToken = await prefs.remove('access_token');
+                    final removeUserId = await prefs.remove('user_id');
+                    if(removeAccessToken || removeUserId){
+                      Get.to(() => const Login());
+                    }
                   },
                   child: Row(
                     children: const [
-                      Icon(Icons.money),
+                      Icon(Icons.money,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
-                      Text("পেমেন্ট"),
+                      Text("Logout",style: ConstValue.drawerTestStyle,),
                     ],
-
                   ),
                 ),
-
-              ),
-
-              const Divider(
-                color: Color(0xFFc1c1c1),
-              ),
-
-              Container(
-                padding: EdgeInsets.all(16.0),
-                child: Row(
-                  children: const [
-                    Icon(Icons.settings),
-                    SizedBox(width: 10),
-                    Text("সেটিংস"),
-                  ],
-
-                ),
-
               ),
               const Divider(
-                color: Color(0xFFc1c1c1),
+                  color: ConstValue.drawerIconColor
               ),
-
-              // Container(
-              //
-              //   padding: EdgeInsets.all(16.0),
-              //
-              //   child: InkWell(
-              //     onTap: () {
-              //       logout();
-              //     },
-              //     child: Row(
-              //       children: const [
-              //         Icon(Icons.logout),
-              //         SizedBox(width: 10),
-              //         Text("লগ আউট"),
-              //       ],
-              //
-              //     ),
-              //   ),
-              //
-              // ),
-              //
-              // const Divider(
-              //   color: Color(0xFFc1c1c1),
-              // ),
-
             ],
           ),
         ),
       ),
       appBar: AppBar(
-        backgroundColor: Colors.green,
-        leading: Container(
-            margin: EdgeInsets.all(10),
-            child: Image.asset('assets/mrdclogo.png')),
+        backgroundColor: ConstValue.color,
+        leading: IconButton( onPressed: () {
+          // Navigator.push(context, MaterialPageRoute(builder: (context) => LandingPageView()));
+          Navigator.pop(context);
+        }, icon: Icon(Icons.arrow_back_sharp,)),
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text('National MRDC'),
+        title: const Text('আমার ব্লগ'),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.redAccent,

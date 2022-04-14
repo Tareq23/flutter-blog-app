@@ -1,6 +1,7 @@
 import 'package:blog_app/LogRegScreens/login_page_with_phone_number.dart';
 import 'package:blog_app/Model/category_model.dart';
 import 'package:blog_app/ProfileScreens/profile_page.dart';
+import 'package:blog_app/Services/color.dart';
 import 'package:blog_app/VitalScreens/blog_post_details.dart';
 import 'package:blog_app/VitalScreens/my_blog_list.dart';
 import 'package:blog_app/controller/category_controller.dart';
@@ -13,16 +14,6 @@ import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// class BlogListPageView extends StatefulWidget {
-//   const BlogListPageView({Key? key}) : super(key: key);
-//
-//   @override
-//   BlogListState createState() {
-//     return BlogListState();
-//   }
-// }
-
-// class BlogListState extends State<BlogListPageView>
 class BlogListPageView extends StatelessWidget {
   // final NetworkController _networkController = Get.put(NetworkController());
 
@@ -42,7 +33,8 @@ class BlogListPageView extends StatelessWidget {
       endDrawer: Drawer(
         elevation: 100,
         child: Container(
-          color: Colors.green,
+          // color: Colors.green,
+          color: ConstValue.color,
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
@@ -50,7 +42,7 @@ class BlogListPageView extends StatelessWidget {
                 height: 20,
               ),
               const Divider(
-                color: Color(0xFFc1c1c1),
+                color: ConstValue.drawerIconColor
               ),
               Container(
 
@@ -65,9 +57,9 @@ class BlogListPageView extends StatelessWidget {
                   },
                   child: Row(
                     children: const [
-                      Icon(Icons.dashboard),
+                      Icon(Icons.dashboard,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
-                      Text("ব্লগ"),
+                      Text("ব্লগ",style: ConstValue.drawerTestStyle,),
                     ],
 
                   ),
@@ -75,7 +67,7 @@ class BlogListPageView extends StatelessWidget {
 
               ),
               const Divider(
-                color: Color(0xFFc1c1c1),
+                  color: ConstValue.drawerIconColor
               ),
               Container(
                 padding: EdgeInsets.all(16.0),
@@ -89,15 +81,15 @@ class BlogListPageView extends StatelessWidget {
                   },
                   child: Row(
                     children: const [
-                      Icon(Icons.person),
+                      Icon(Icons.person,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
-                      Text("প্রোফাইল"),
+                      Text("প্রোফাইল",style: ConstValue.drawerTestStyle,),
                     ],
                   ),
                 ),
               ),
               const Divider(
-                color: Color(0xFFc1c1c1),
+                  color: ConstValue.drawerIconColor
               ),
               Container(
                 padding: EdgeInsets.all(16.0),
@@ -110,15 +102,15 @@ class BlogListPageView extends StatelessWidget {
                   },
                   child: Row(
                     children: const [
-                      Icon(Icons.dashboard),
+                      Icon(Icons.dashboard,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
-                      Text("আমার ব্লগ"),
+                      Text("আমার ব্লগ",style: ConstValue.drawerTestStyle,),
                     ],
                   ),
                 ),
               ),
               const Divider(
-                color: Color(0xFFc1c1c1),
+                  color: ConstValue.drawerIconColor
               ),
               Container(
                 padding: EdgeInsets.all(16.0),
@@ -132,15 +124,15 @@ class BlogListPageView extends StatelessWidget {
                   },
                   child: Row(
                     children: const [
-                      Icon(Icons.message),
+                      Icon(Icons.message,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
-                      Text("ম্যাসেজ"),
+                      Text("ম্যাসেজ",style: ConstValue.drawerTestStyle,),
                     ],
                   ),
                 ),
               ),
               const Divider(
-                color: Color(0xFFc1c1c1),
+                  color: ConstValue.drawerIconColor
               ),
               Container(
                 padding: EdgeInsets.all(16.0),
@@ -148,15 +140,15 @@ class BlogListPageView extends StatelessWidget {
                   onTap: () {},
                   child: Row(
                     children: const [
-                      Icon(Icons.money),
+                      Icon(Icons.money,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
-                      Text("পেমেন্ট"),
+                      Text("পেমেন্ট",style: ConstValue.drawerTestStyle,),
                     ],
                   ),
                 ),
               ),
               const Divider(
-                color: Color(0xFFc1c1c1),
+                  color: ConstValue.drawerIconColor
               ),
               Container(
                 padding: const EdgeInsets.all(16.0),
@@ -171,22 +163,22 @@ class BlogListPageView extends StatelessWidget {
                   },
                   child: Row(
                     children: const [
-                      Icon(Icons.money),
+                      Icon(Icons.money,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
-                      Text("Logout"),
+                      Text("Logout",style: ConstValue.drawerTestStyle,),
                     ],
                   ),
                 ),
               ),
               const Divider(
-                color: Color(0xFFc1c1c1),
+                  color: ConstValue.drawerIconColor
               ),
             ],
           ),
         ),
       ),
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: ConstValue.color,
         leading: Container(
             margin: const EdgeInsets.all(5),
             padding: const EdgeInsets.all(0),

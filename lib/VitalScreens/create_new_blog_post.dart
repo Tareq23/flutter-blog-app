@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:blog_app/Model/category_model.dart';
+import 'package:blog_app/Services/color.dart';
 import 'package:blog_app/controller/post_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,7 @@ class _CreateNewBlogPostState extends State<CreateNewBlogPost> {
                 wordSpacing: 2,
                 letterSpacing: 1.5),
           ),
-          backgroundColor: Colors.indigo.shade900,
+          backgroundColor: ConstValue.color,
           centerTitle: false,
           leading: IconButton(
             onPressed: () {
@@ -153,7 +154,7 @@ class _CreateNewBlogPostState extends State<CreateNewBlogPost> {
                 // post Category
                 Container(
                   margin:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                      const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -283,11 +284,19 @@ class _CreateNewBlogPostState extends State<CreateNewBlogPost> {
                   padding: const EdgeInsets.all(0),
                   margin: const EdgeInsets.all(0),
                   constraints: BoxConstraints(
-                    maxHeight: screenSize.height * 0.82,
+                    maxHeight: screenSize.height * 0.82 + 20,
                   ),
                   child: Obx((){
                     return  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                          child: Text('Description',style:TextStyle(
+                          color: Colors.indigo.shade900,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700)),
+                        ),
                         HtmlEditor(
                             controller: _htmlEditorController,
                             htmlToolbarOptions: const HtmlToolbarOptions(
