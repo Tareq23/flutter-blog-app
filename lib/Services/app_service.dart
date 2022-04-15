@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:blog_app/Model/category_model.dart';
+import 'package:blog_app/Model/message_model.dart';
 import 'package:blog_app/Model/post_model.dart';
 import 'package:blog_app/Model/profile_model.dart';
 import 'package:blog_app/Services/app_api.dart';
@@ -292,5 +293,61 @@ class AppService{
     return ProfileModel();
   }
 
+  static Future<bool> sendMessage(Map message) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+
+    try{
+      NetworkController.networkError.value = false;
+      var response = await http.post(
+          Uri.parse(ApiUrl.USER_MESSAGE_SEND),
+          body: message,
+          headers: {
+            'Accepts' : 'application/json',
+            'Authorization' : 'Bearer $accessToken'
+          }).timeout(const Duration(seconds: TIME_OUT));
+      // print("status code from message ${response.statusCode}");
+      // print(message);
+      if(response.statusCode.toString() == "200" || response.statusCode.toString() == "201"){
+        return true;
+      }
+    }
+    on SocketException{
+      NetworkController.networkError.value = true;
+    }
+    on TimeoutException{
+      NetworkController.networkError.value = true;
+    }
+    return false;
+  }
+  static Future<List<MessageModel>> fetchMessage() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+
+    try{
+      NetworkController.networkError.value = false;
+      var response = await http.get(
+          Uri.parse(ApiUrl.USER_MESSAGE_GET),
+
+          headers: {
+            'Accepts' : 'application/json',
+            'Authorization' : 'Bearer $accessToken'
+          }).timeout(const Duration(seconds: TIME_OUT));
+
+      if(response.statusCode.toString() == "200" || response.statusCode.toString() == "201"){
+        //print(response.body);
+        var jsonString = jsonDecode(response.body) as List;
+        List<MessageModel> msgList = jsonString.map((e) => MessageModel.parseJsonData(e)).toList();
+        return msgList;
+      }
+    }
+    on SocketException{
+      NetworkController.networkError.value = true;
+    }
+    on TimeoutException{
+      NetworkController.networkError.value = true;
+    }
+    return [];
+  }
 
 }

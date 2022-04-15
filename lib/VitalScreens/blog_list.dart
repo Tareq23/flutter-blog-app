@@ -19,7 +19,7 @@ class BlogListPageView extends StatelessWidget {
 
   final PostController _postController = Get.put(PostController());
   final CategoryController _categoryController = Get.put(CategoryController());
-  final _scrollController = ScrollController();
+  // final _scrollController = ScrollController();
   final _globalScaffoldKey = GlobalKey<ScaffoldState>();
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 

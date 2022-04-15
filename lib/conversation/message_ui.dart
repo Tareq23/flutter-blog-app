@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:blog_app/Model/message_model.dart';
 import 'package:blog_app/Services/color.dart';
+import 'package:blog_app/controller/message_controller.dart';
 import 'package:blog_app/conversation/send_message.dart';
 import 'package:blog_app/conversation/user_message.dart';
 import 'package:flutter/material.dart';
@@ -22,218 +23,30 @@ class Message extends StatefulWidget {
 
 class _MessageState extends State<Message> {
 
+  final messageController = Get.put(MessageController());
+  final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   List<MessageModel> messList = [
-    MessageModel("User Name","Text Message ","assets/default_person.jpg","Today"),
-    MessageModel("Admin","Text Message ","assets/default_person.jpg","Today"),
-    MessageModel("User Name","Text Message ","assets/default_person.jpg","Today"),
-    MessageModel("Admin","Text Message ","assets/default_person.jpg","Today"),
-    MessageModel("User Name","Text Message ","assets/default_person.jpg","Today"),
-    MessageModel("Admin","Text Message ","assets/default_person.jpg","Today"),
-    MessageModel("User Name","Text Message ","assets/default_person.jpg","Today"),
-    MessageModel("User Name","Text Message ","assets/default_person.jpg","Today"),
-    MessageModel("User Name","Text Message ","assets/default_person.jpg","Today"),
-    MessageModel("Admin","Text Message ","assets/default_person.jpg","Today"),
-    MessageModel("User Name","Text Message ","assets/default_person.jpg","Today"),
-    MessageModel("User Name","Text Message ","assets/default_person.jpg","Today"),
-    MessageModel("Admin","Text Message ","assets/default_person.jpg","Today"),
-    MessageModel("User Name","Text Message ","assets/default_person.jpg","Today"),
-    MessageModel("Admin","Text Message ","assets/default_person.jpg","Today"),
+    // MessageModel(1,null,"User Name","Text Message ","assets/default_person.jpg","Today"),
+    // MessageModel(2,null,"Admin","Text Message ","assets/default_person.jpg","Today"),
+    // MessageModel(3,null,"User Name","Text Message ","assets/default_person.jpg","Today"),
+    // MessageModel(4,null,"Admin","Text Message ","assets/default_person.jpg","Today"),
+    // MessageModel(5,null,"User Name","Text Message ","assets/default_person.jpg","Today"),
+    // MessageModel(6,null,"Admin","Text Message ","assets/default_person.jpg","Today"),
+    // MessageModel(7,null,"User Name","Text Message ","assets/default_person.jpg","Today"),
+    // MessageModel(8,null,"User Name","Text Message ","assets/default_person.jpg","Today"),
+    // MessageModel(9,null,"User Name","Text Message ","assets/default_person.jpg","Today"),
+    // MessageModel(10,null,"Admin","Text Message ","assets/default_person.jpg","Today"),
+    // MessageModel(11,null,"User Name","Text Message ","assets/default_person.jpg","Today"),
+    // MessageModel(12,null,"User Name","Text Message ","assets/default_person.jpg","Today"),
+    // MessageModel(13,null,"Admin","Text Message ","assets/default_person.jpg","Today"),
+    // MessageModel(14,null,"User Name","Text Message ","assets/default_person.jpg","Today"),
+    // MessageModel(15,null,"Admin","Text Message ","assets/default_person.jpg","Today"),
   ];
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // endDrawer: Drawer(
-      //   child: Container(
-      //     color: Colors.green,
-      //     child: ListView(
-      //       padding: EdgeInsets.zero,
-      //
-      //       children: [
-      //         const SizedBox(height: 20,),
-      //         const Divider(
-      //           color: Color(0xFFc1c1c1),
-      //         ),
-      //         Container(
-      //
-      //           padding: const EdgeInsets.all(16.0),
-      //
-      //           child: InkWell(
-      //             onTap: () {
-      //               Navigator.pop(context);
-      //               Navigator.push(
-      //                   context,
-      //                   MaterialPageRoute(builder: (context) => BlogListPageView()));
-      //             },
-      //             child: Row(
-      //               children: const [
-      //                 Icon(Icons.dashboard),
-      //                 SizedBox(width: 10),
-      //                 Text("ব্লগ"),
-      //               ],
-      //
-      //             ),
-      //           ),
-      //
-      //         ),
-      //         const Divider(
-      //           color: Color(0xFFc1c1c1),
-      //         ),
-      //         Container(
-      //           padding: const EdgeInsets.all(16.0),
-      //           child: InkWell(
-      //             onTap: () {
-      //               Navigator.push(
-      //                   context,
-      //                   // MaterialPageRoute(builder: (context) => ProfilePageView()));
-      //                   MaterialPageRoute(builder: (context) => ProfilePageView()));
-      //             },
-      //             child: Row(
-      //               children: const [
-      //                 Icon(Icons.person),
-      //                 SizedBox(width: 10),
-      //                 Text("প্রোফাইল"),
-      //               ],
-      //
-      //             ),
-      //           ),
-      //
-      //         ),
-      //         const Divider(
-      //           color: Color(0xFFc1c1c1),
-      //         ),
-      //         Container(
-      //
-      //           padding: const EdgeInsets.all(16.0),
-      //
-      //           child: InkWell(
-      //             onTap: () {
-      //               Navigator.push(
-      //                   context,
-      //                   MaterialPageRoute(builder: (context) => MyBlogListPageView()));
-      //             },
-      //             child: Row(
-      //               children: const [
-      //                 Icon(Icons.dashboard),
-      //                 SizedBox(width: 10),
-      //                 Text("আমার ব্লগ"),
-      //               ],
-      //
-      //             ),
-      //           ),
-      //
-      //         ),
-      //
-      //         const Divider(
-      //           color: Color(0xFFc1c1c1),
-      //         ),
-      //
-      //         Container(
-      //
-      //           padding: EdgeInsets.all(16.0),
-      //
-      //           child: InkWell(
-      //             onTap: () {
-      //               Navigator.push(context, MaterialPageRoute(builder: (context)=>Message()));
-      //               /*        Navigator.push(
-      //                   context,
-      //                   MaterialPageRoute(builder: (context) => DashBoardConfig()));*/
-      //             },
-      //             child: Row(
-      //               children: const [
-      //                 Icon(Icons.message),
-      //                 SizedBox(width: 10),
-      //                 Text("ম্যাসেজ"),
-      //               ],
-      //
-      //             ),
-      //           ),
-      //
-      //         ),
-      //
-      //         const Divider(
-      //           color: Color(0xFFc1c1c1),
-      //         ),
-      //
-      //         Container(
-      //
-      //           padding: EdgeInsets.all(16.0),
-      //
-      //           child: InkWell(
-      //             onTap: () {
-      //               /*        Navigator.push(
-      //                   context,
-      //                   MaterialPageRoute(builder: (context) => DashBoardConfig()));*/
-      //             },
-      //             child: Row(
-      //               children: const [
-      //                 Icon(Icons.money),
-      //                 SizedBox(width: 10),
-      //                 Text("পেমেন্ট"),
-      //               ],
-      //
-      //             ),
-      //           ),
-      //
-      //         ),
-      //
-      //         const Divider(
-      //           color: Color(0xFFc1c1c1),
-      //         ),
-      //
-      //         Container(
-      //           padding: EdgeInsets.all(16.0),
-      //           child: Row(
-      //             children: const [
-      //               Icon(Icons.settings),
-      //               SizedBox(width: 10),
-      //               Text("সেটিংস"),
-      //             ],
-      //
-      //           ),
-      //
-      //         ),
-      //         const Divider(
-      //           color: Color(0xFFc1c1c1),
-      //         ),
-      //
-      //         // Container(
-      //         //
-      //         //   padding: EdgeInsets.all(16.0),
-      //         //
-      //         //   child: InkWell(
-      //         //     onTap: () {
-      //         //       logout();
-      //         //     },
-      //         //     child: Row(
-      //         //       children: const [
-      //         //         Icon(Icons.logout),
-      //         //         SizedBox(width: 10),
-      //         //         Text("লগ আউট"),
-      //         //       ],
-      //         //
-      //         //     ),
-      //         //   ),
-      //         //
-      //         // ),
-      //         //
-      //         // const Divider(
-      //         //   color: Color(0xFFc1c1c1),
-      //         // ),
-      //
-      //       ],
-      //     ),
-      //   ),
-      // ),
-      // appBar: AppBar(
-      //   backgroundColor: ConstValue.color,
-      //   leading: Container(
-      //       margin: EdgeInsets.all(10),
-      //       child: Image.asset('assets/mrdclogo.png')),
-      //   // Here we take the value from the MyHomePage object that was created by
-      //   // the App.build method, and use it to set our appbar title.
-      //   title: Text('National MRDC'),
-      // ),
       endDrawer: Drawer(
         elevation: 100,
         child: Container(
@@ -389,36 +202,99 @@ class _MessageState extends State<Message> {
         }, icon: Icon(Icons.arrow_back_sharp,)),
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: const Text('আমার ব্লগ'),
+        title: const Text('ম্যাসেজ'),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.redAccent,
         onPressed: (){
           // Navigator.pop(context);
           // Navigator.push(context, MaterialPageRoute(builder: (context) => SendMessage()));
-          showSendMessageDialog(context);
+          showSendMessageDialog(context,0);
         },
-        child: Icon(Icons.add,color: Colors.white,size: 35,),
+        child: const Icon(Icons.add,color: Colors.white,size: 35,),
       ),
-      body: ListView.builder(
-        itemCount: messList.length,
-        shrinkWrap: true,
-        padding: EdgeInsets.only(top: 16),
-        physics: ScrollPhysics(),
-        itemBuilder: (context, index){
-          return ConversationList(
-            name: "${messList[index].name}",
-            messageText: "${messList[index].messageText} ${index+1}",
-            imageUrl: messList[index].imgUrl,
-            time: messList[index].time,
+      body: RefreshIndicator(
+        key: _refreshIndicatorKey,
+        onRefresh: () async {
+          await messageController.fetchMessages();
+        },
+        child: Obx((){
+          return ListView.builder(
+            // itemCount: messList.length,
+            itemCount: messageController.msgList.length,
+            shrinkWrap: true,
+            padding: EdgeInsets.only(top: 16),
+            physics: ScrollPhysics(),
+            itemBuilder: (context, index){
+              //print("user message image url : ${messageController.msgList[index].imgUrl}");
+              // return ConversationList(
+              //   id: messageController.msgList[index].id,
+              //   name: "${messageController.msgList[index].name}",
+              //   messageText: "${messageController.msgList[index].messageText}",
+              //   imageUrl: messageController.msgList[index].imgUrl,
+              //   time: messageController.msgList[index].created_at.toString(),
+              //   timeAgo: messageController.msgList[index].createdAtAgo,
+              // );
+              return GestureDetector(
+                onLongPress: (){
+                  showSendMessageDialog(context,messageController.msgList[index].id);
+                },
+                child: Container(
+                  padding: const EdgeInsets.only(left: 16,right: 16,top: 10,bottom: 10),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Row(
+                          children: <Widget>[
+                            CircleAvatar(
+                              // backgroundImage: NetworkImage(widget.imageUrl.toString()),
+
+                              // ignore: unnecessary_null_comparison
+                              // backgroundImage: AssetImage("assets/default_person.jpg"),
+                              backgroundImage: (messageController.msgList[index].imgUrl == null || messageController.msgList[index].imgUrl == '')
+                                  ? const AssetImage("assets/default_person.jpg")
+                                  : NetworkImage(messageController.msgList[index].imgUrl.toString()) as ImageProvider,
+                              maxRadius: 30,
+                            ),
+                            const SizedBox(width: 16,),
+                            Expanded(
+                              child: Container(
+                                color: Colors.transparent,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text("${messageController.msgList[index].messageText}",style: const TextStyle(fontSize: 16,color: Color(
+                                        0xFF181818),),),
+                                    const SizedBox(height: 6,),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("${messageController.msgList[index].name}", style: const TextStyle(fontSize: 13,color: Color(
+                                            0xFF505050)),),
+                                        Text("${messageController.msgList[index].createdAtAgo}", style: const TextStyle(fontSize: 11,color: Color(
+                                            0xFF505050)),),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
           );
-        },
-      ),
+        }),
+      )
     );
   }
 
 
-  void showSendMessageDialog(BuildContext context)
+  void showSendMessageDialog(BuildContext context, int? id)
   {
     showDialog(
       context: context,
@@ -432,6 +308,9 @@ class _MessageState extends State<Message> {
               padding: const EdgeInsets.all(12),
               margin: const EdgeInsets.all(0),
               child: TextFormField(
+                onChanged: (value){
+                  messageController.text.value = value;
+                },
                 minLines: 2,
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
@@ -440,7 +319,7 @@ class _MessageState extends State<Message> {
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
                   ),
                 ),
-              ),
+              )
             ),
           ),
           actions: [
@@ -460,8 +339,17 @@ class _MessageState extends State<Message> {
                 primary: const Color(0xFF0053E5),
                 onPrimary: Colors.white,
               ),
-              onPressed: (){
-                // Navigator.pop(context);
+              onPressed: () async{
+                messageController.text.value = messageController.text.value.trim();
+                print(messageController.text.value);
+                if(messageController.text.value.isNotEmpty) {
+                  var result = await messageController.sendMessage( id?? 0);
+                  if(result){
+                    messageController.text.value = '';
+                    await messageController.fetchMessages();
+                    Navigator.pop(context);
+                  }
+                }
               },
               child: const Text('Send',style: TextStyle(fontSize: 16,),),
             ),

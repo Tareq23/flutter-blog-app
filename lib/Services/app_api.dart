@@ -16,4 +16,6 @@ class ApiUrl{
   static String DELETE_POST = "https://api.nationalmrdc.com/api/post/delete/";
   static String USER_PROFILE = "https://api.nationalmrdc.com/api/contacts/show/";
   static const USER_PROFILE_UPDATE = "http://api.nationalmrdc.com/contacts/basic-info";
+  static const USER_MESSAGE_SEND = "https://api.nationalmrdc.com/api/communication/messaging";
+  static const USER_MESSAGE_GET = "https://api.nationalmrdc.com/api/communication/topic/list";
 }
