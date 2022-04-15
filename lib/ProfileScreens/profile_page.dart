@@ -104,12 +104,24 @@ class ProfilePageView extends StatelessWidget {
                   top: screenSize.height * 0.08,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular((screenSize.width * 0.45)/2),
-                    child: Image.asset(
+                    // child: Image.asset(
+                    //         'assets/default_person.jpg',
+                    //         width: screenSize.width * 0.45,
+                    //         height: screenSize.width * 0.45,
+                    //         fit: BoxFit.cover,)
+                    child:  (_profileController.selectImagePath.value == '' || _profileController.isFileImage.value)
+                            ? Image.asset(
                             'assets/default_person.jpg',
                             width: screenSize.width * 0.45,
                             height: screenSize.width * 0.45,
-                            fit: BoxFit.cover,)
-
+                            fit: BoxFit.cover,
+                            )
+                            : Image.network(
+                                _profileController.selectImagePath.value,
+                                width: screenSize.width * 0.45,
+                                height: screenSize.width * 0.45,
+                                fit: BoxFit.cover,
+                              ),
                     //_profileController.profile.value.image == "check"
                     //     ? Image.network(
                     //     _profileController.profile.value.image.toString(),

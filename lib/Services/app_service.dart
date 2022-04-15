@@ -238,6 +238,7 @@ class AppService{
       if(response.statusCode.toString() == "200" || response.statusCode.toInt() == 200) {
 
         var profileData = jsonDecode(response.body);
+        //print(response.body);
         ProfileModel _profile = ProfileModel.fromJson(profileData);
         return _profile;
       }

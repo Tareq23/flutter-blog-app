@@ -27,7 +27,7 @@ class ProfileController extends GetxController
     final pickedFile = await ImagePicker().pickImage(source: imageSource);
     if(pickedFile != null){
       selectImagePath.value = pickedFile.path;
-      // profile.value.image = selectImagePath.value;
+      profile.value.image = selectImagePath.value;
       isFileImage.value = true;
     }
     else{
@@ -40,11 +40,17 @@ class ProfileController extends GetxController
    if(isLoading.value){
      var result = await AppService.fetchUserProfile();
 
-     // if(result.image == null){
-     //   var stringImage = result.image.toString().split(', ');
-     //   print(stringImage);
-     // }
-     // selectImagePath.value = result.image == null ? '' : result.image.toString();
+     if(result.image != null){
+       var stringImage = result.image.toString().split('http');
+       if(stringImage.length>2){
+         selectImagePath.value = '';
+       }
+       else{
+         selectImagePath.value = result.image.toString();
+       }
+       //print(stringImage.length);
+     }
+     //selectImagePath.value = result.image == null ? '' : result.image.toString();
 
      profile.value = result;
    }

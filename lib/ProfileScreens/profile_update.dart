@@ -272,9 +272,9 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
                             ),
                             child: isUpdateActive.value == false ?  InkWell(
                               onTap: () async{
-                                isUpdateActive.value == true;
+                                isUpdateActive.value = true;
                                 await _profileController.updateProfile();
-                                isUpdateActive.value == false;
+                                isUpdateActive.value = false;
                               },
                               child: const Text('পরিবর্তন করুন',style: TextStyle(color: Color(0xFFFFFFFF),fontSize: 26,fontWeight: FontWeight.w500),),
                             ): const CircularProgressIndicator(),
