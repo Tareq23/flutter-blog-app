@@ -2,28 +2,17 @@ import 'dart:convert';
 
 import 'package:blog_app/LogRegScreens/login_page_with_phone_number.dart';
 import 'package:blog_app/Model/public_blog_list_model.dart';
+import 'package:blog_app/Services/color.dart';
+import 'package:blog_app/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 
-import 'landing_page.dart';
-import '../LogRegScreens/login_page.dart';
+// import 'landing_page.dart';
+// import '../LogRegScreens/login_page.dart';
 
 import 'package:blog_app/Services/base_client.dart';
 import 'package:blog_app/Services/app_api.dart';
+import 'package:get/get.dart';
 
-
-class KajiListPageView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Kaji app',
-      showPerformanceOverlay: false,
-
-      // home: LoginPage (title: 'ovivashiBatayon'),
-      home: KajiListPageViewExtend(),
-    );
-  }
-}
 
 class KajiListPageViewExtend extends StatefulWidget {
   @override
@@ -31,6 +20,8 @@ class KajiListPageViewExtend extends StatefulWidget {
 }
 
 class _KajiListPageStateConfig extends State<KajiListPageViewExtend> {
+
+  final profileController = Get.put(ProfileController());
 
   final _globalscaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -49,59 +40,116 @@ class _KajiListPageStateConfig extends State<KajiListPageViewExtend> {
 
   @override
   Widget build(BuildContext context) {
+    profileController.fetchKajiList();
+    var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: ConstValue.color,
+        elevation: 0,
         leading: IconButton( onPressed: () {
-          // Navigator.push(context, MaterialPageRoute(builder: (context) => LandingPageView()));
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+          Navigator.pop(context);
         }, icon: Icon(Icons.arrow_back_sharp,)),
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text('কাজী লিস্ট'),
+        title: const Text('কাজী লিস্ট'),
       ),
       resizeToAvoidBottomInset: false,
       key: _globalscaffoldKey,
       body: SafeArea(
-        child: SingleChildScrollView(
-          reverse: false,
-          child: Container(
-              margin: EdgeInsets.all(15),
-              child: Center(
-                child: Column(
-                  children: [
-                    Column(
+
+        child: Container(
+          padding: const EdgeInsets.all(0),
+          margin: const EdgeInsets.all(0),
+          width: screenSize.width,
+          height: screenSize.height,
+
+          child: Obx((){
+            if(profileController.kajiList.isEmpty){
+              return const Center(child: CircularProgressIndicator(color: ConstValue.color,),);
+            }
+            else{
+              return ListView.builder(
+                itemCount: profileController.kajiList.length,
+                itemBuilder: (context,index){
+                  return Container(
+                    // color: Colors.red,
+                    margin: const EdgeInsets.all(10),
+                    child: Row(
                       children: [
-                        Text('কাজী লিস্ট', style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20,)),
-                        Column(children: [
-                          Container(
-                            margin: EdgeInsets.all(10),
-                            height: 700,
-                            width: 500,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(2.0),
-                              color: Color(0x00303F9F),
+                        ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Container(
+                              width: 100,
+                              height: 100,
+                              padding: const EdgeInsets.all(0),
+                              margin: const EdgeInsets.all(0),
+                              child: const Image(
+                                image: AssetImage('assets/default_person.jpg'),
+                              ),
+                            )
+                        ),
+                        const SizedBox(width: 30,),
+                        Container(
+                          padding: const EdgeInsets.all(0),
+                          margin: const EdgeInsets.all(0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children:  [
+                              Text("${profileController.kajiList[index].name}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: Color(
+                                  0xFF181818)),),
+                              const SizedBox(height: 15,),
 
-                            ),
-
-                            child: ListBuilderKajiMethod(public_blog_future2),
+                              Text("${profileController.kajiList[index].address}",style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Color(
+                                  0xFF181818)),),
+                            ],
                           ),
-                          SizedBox(height: 10),
-
-
-                        ],),
-                   
+                        )
                       ],
-
                     ),
-
-
-                  ],
-                ),
-              )
-
-          ),
+                  );
+                },
+              );
+            }
+          }),
         ),
+
+        // child: SingleChildScrollView(
+        //   reverse: false,
+        //   child: Container(
+        //       margin: const EdgeInsets.all(15),
+        //       child: Center(
+        //         child: Column(
+        //           children: [
+        //             Column(
+        //               children: [
+        //                 Column(children: [
+        //                   Container(
+        //                     margin: EdgeInsets.all(10),
+        //                     height: 700,
+        //                     width: 500,
+        //                     decoration: BoxDecoration(
+        //                       borderRadius: BorderRadius.circular(2.0),
+        //                       color: Color(0x00303F9F),
+        //
+        //                     ),
+        //                     child: ListBuilderKajiMethod(public_blog_future2),
+        //                   ),
+        //                   SizedBox(height: 10),
+        //
+        //
+        //                 ],),
+        //
+        //               ],
+        //
+        //             ),
+        //
+        //
+        //           ],
+        //         ),
+        //       )
+        //
+        //   ),
+        // ),
       ),
     );
   }
@@ -129,7 +177,8 @@ class _KajiListPageStateConfig extends State<KajiListPageViewExtend> {
 
 
                       if(imagefile_nameString!=null){
-                        img = imagefile_nameString;
+                        //img = imagefile_nameString;
+                        img = "https://icon-library.com/images/image-placeholder-icon/image-placeholder-icon-5.jpg";
                       }
                       else
                       {
@@ -137,26 +186,24 @@ class _KajiListPageStateConfig extends State<KajiListPageViewExtend> {
                       }
 
 
-                      return Expanded(
-                        child: Card(
-                          margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                          elevation: 5,
-                          child: Column(
-                            children: [
-                              Container(
-                                  margin: EdgeInsets.all(15),
+                      return Card(
+                        margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        elevation: 5,
+                        child: Column(
+                          children: [
+                            Container(
+                                margin: EdgeInsets.all(15),
 
-                                  child: Container(
-                                      height: 200,
-                                      child: Image.network(img))),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(phone),
+                                child: Container(
+                                    height: 200,
+                                    child: Image.network(img))),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text("01700000000"),
 
 
-                            ],
-                          ),
+                          ],
                         ),
                       );
                     },
@@ -196,7 +243,7 @@ class _KajiListPageStateConfig extends State<KajiListPageViewExtend> {
     };
 
     var response = await BaseClient().PostMethod(url, body);
-
+    //print(response.body);
     try {
       if (response == null) {
       } else {

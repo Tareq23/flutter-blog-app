@@ -34,14 +34,6 @@ class ProfilePageView extends StatelessWidget {
       body: SafeArea(
         child: Obx((){
           if(_profileController.profile.value.id != null){
-
-            List<String> splitImage = _profileController.profile.value.image.toString().split(', ');
-            // print(splitImage[1]);
-            // var profileAvater = File('profileAvater.png');
-            Uint8List? base64Image;
-            // Uint8List base64Image = base64Decode(splitImage[1]);
-            // profileAvater.writeAsBytesSync(splitImage[1].toString());
-
             return Stack(
               children: [
                 SizedBox(
@@ -104,11 +96,6 @@ class ProfilePageView extends StatelessWidget {
                   top: screenSize.height * 0.08,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular((screenSize.width * 0.45)/2),
-                    // child: Image.asset(
-                    //         'assets/default_person.jpg',
-                    //         width: screenSize.width * 0.45,
-                    //         height: screenSize.width * 0.45,
-                    //         fit: BoxFit.cover,)
                     child:  (_profileController.selectImagePath.value == '' || _profileController.isFileImage.value)
                             ? Image.asset(
                             'assets/default_person.jpg',
@@ -122,26 +109,6 @@ class ProfilePageView extends StatelessWidget {
                                 height: screenSize.width * 0.45,
                                 fit: BoxFit.cover,
                               ),
-                    //_profileController.profile.value.image == "check"
-                    //     ? Image.network(
-                    //     _profileController.profile.value.image.toString(),
-                    //   width: screenSize.width * 0.45,
-                    //   height: screenSize.width * 0.45,
-                    //   fit: BoxFit.cover,
-                    // )
-                    //     ? Image.memory(base64Decode(base64String[0]+base64String[1]),
-                    //     ? Image.memory(base64Decode(base64String[0]+','+base64String[1]),
-                    //     ? Image.memory(base64Image!,
-                    //   width: screenSize.width * 0.45,
-                    //   height: screenSize.width * 0.45,
-                    //   fit: BoxFit.cover,
-                    // )
-                    //     : Image.asset(
-                    //   'assets/default_person.jpg',
-                    //   width: screenSize.width * 0.45,
-                    //   height: screenSize.width * 0.45,
-                    //   fit: BoxFit.cover,
-                    // ),
                   ),
                 ),
                 Positioned(

@@ -11,6 +11,7 @@ import '../Model/profile_model.dart';
 
 class ProfileController extends GetxController
 {
+  var kajiList = <ProfileModel>[].obs;
   var profile = ProfileModel().obs;
   var isLoading = true.obs;
   var selectImagePath = ''.obs;
@@ -73,10 +74,24 @@ class ProfileController extends GetxController
     };
 
     var result = await AppService.updateUserProfile(user);
+    // print(result);
     if(result.id != null) {
         profile.value = result;
     }
     // print(result.name.toString());
+  }
+
+
+  Future<void> fetchKajiList() async {
+    Map filter = {
+      "name" : "",
+      "division_id" : "",
+      "district_id" : "",
+      "sub_district_id" : "",
+      "address" : "",
+    };
+    var result = await AppService.fetchKajiProfileList(filter);
+    kajiList.addAll(result);
   }
 
   void showErrorSnackbar(String message)
@@ -100,4 +115,5 @@ class ProfileController extends GetxController
         colorText: Colors.white
     );
   }
+
 }

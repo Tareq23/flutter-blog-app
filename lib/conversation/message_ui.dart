@@ -341,7 +341,7 @@ class _MessageState extends State<Message> {
               ),
               onPressed: () async{
                 messageController.text.value = messageController.text.value.trim();
-                print(messageController.text.value);
+                //print(messageController.text.value);
                 if(messageController.text.value.isNotEmpty) {
                   var result = await messageController.sendMessage( id?? 0);
                   if(result){

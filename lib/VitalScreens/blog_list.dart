@@ -3,6 +3,7 @@ import 'package:blog_app/Model/category_model.dart';
 import 'package:blog_app/ProfileScreens/profile_page.dart';
 import 'package:blog_app/Services/color.dart';
 import 'package:blog_app/VitalScreens/blog_post_details.dart';
+import 'package:blog_app/VitalScreens/kaji_list.dart';
 import 'package:blog_app/VitalScreens/my_blog_list.dart';
 import 'package:blog_app/controller/category_controller.dart';
 import 'package:blog_app/controller/network_controller.dart';
@@ -60,6 +61,31 @@ class BlogListPageView extends StatelessWidget {
                       Icon(Icons.dashboard,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
                       Text("ব্লগ",style: ConstValue.drawerTestStyle,),
+                    ],
+
+                  ),
+                ),
+
+              ),
+              const Divider(
+                  color: ConstValue.drawerIconColor
+              ),
+              Container(
+
+                padding: const EdgeInsets.all(16.0),
+
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => KajiListPageViewExtend()));
+                  },
+                  child: Row(
+                    children: const [
+                      Icon(Icons.dashboard,color: ConstValue.drawerIconColor,),
+                      SizedBox(width: 10),
+                      Text("কাজী লিস্ট",style: ConstValue.drawerTestStyle,),
                     ],
 
                   ),
@@ -262,8 +288,14 @@ class BlogListPageView extends StatelessWidget {
                       img =
                           "https://icon-library.com/images/image-placeholder-icon/image-placeholder-icon-5.jpg";
                     }
+
+                    List img2 = img.split(".");
+                    // print(img2);
                     String heroAnimationTag = index.toString();
                     var topPadding = index == 0 ? 15.0 : 0.0;
+                    if(img2[img2.length-1].toString().toLowerCase() != "jpg" && img2[img2.length-1].toString().toLowerCase() != "png"){
+                      img = "https://icon-library.com/images/image-placeholder-icon/image-placeholder-icon-5.jpg";
+                    }
                     return Container(
                         padding: EdgeInsets.only(
                             left: 0, right: 0, bottom: 0, top: topPadding),

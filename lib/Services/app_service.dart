@@ -238,7 +238,7 @@ class AppService{
       if(response.statusCode.toString() == "200" || response.statusCode.toInt() == 200) {
 
         var profileData = jsonDecode(response.body);
-        //print(response.body);
+        // print(response.body);
         ProfileModel _profile = ProfileModel.fromJson(profileData);
         return _profile;
       }
@@ -258,9 +258,10 @@ class AppService{
   static Future<ProfileModel> updateUserProfile(Map userInfo) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('access_token');
-    String userId = "101";
+    //String userId = "101";
+    int userId = prefs.getInt('user_id')?? 0;
     try{
-      var request = http.MultipartRequest("POST",Uri.parse(ApiUrl.USER_PROFILE_UPDATE));
+      var request = http.MultipartRequest("POST",Uri.parse(ApiUrl.USER_PROFILE_UPDATE+userId.toString()));
       request.fields['name'] = userInfo['name'];
       request.fields['email'] = userInfo['email'];
       request.fields['phone'] = userInfo['phone'].toString();
@@ -277,7 +278,7 @@ class AppService{
       var result = await request.send().timeout(const Duration(seconds: TIME_OUT));
 
       var response = await http.Response.fromStream(result);
-      // print(response.body);
+      //print(response.body);
       var updatedProfile = ProfileModel().obs;
       updatedProfile.value = ProfileModel.fromJson(jsonDecode(response.body));
       return updatedProfile.value;
@@ -292,6 +293,54 @@ class AppService{
 
     }
     return ProfileModel();
+  }
+
+
+  static Future<List<ProfileModel>> fetchKajiProfileList(Map filter) async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+
+    try{
+      var request = http.MultipartRequest("POST",Uri.parse(ApiUrl.KAJI_PROFILE));
+      request.fields['name'] = filter['name'];
+      request.fields['division_id'] = filter['division_id'];
+      request.fields['district_id'] = filter['district_id'];
+      request.fields['sub_district_id'] = filter['sub_district_id'];
+      request.fields['address'] = filter['address'];
+      request.headers.addAll({
+        'Content-Type' : 'multipart/form-data',
+        'Authorization' : 'Bearer $accessToken'
+      });
+      var result = await request.send().timeout(const Duration(seconds: TIME_OUT));
+      var response = await http.Response.fromStream(result);
+      var jsonString = jsonDecode(response.body) ;
+      //jsonString = jsonDecode(jsonString['data']) as List;
+      // myList = new List<String>.from(results['users']);
+      // results['users'].cast<String>();
+      jsonString = jsonString['data'];
+      //print(jsonString);
+      List _list = jsonString as List;
+      List<ProfileModel> _profileList = [];
+      for(int i=0; i<_list.length; i++){
+        _profileList.add(ProfileModel.fromJson(_list[i]));
+
+      }
+      //print(_profileList.length);
+
+      return _profileList;
+    }
+    on SocketException{
+      NetworkController.showNetworkConnection();
+    }
+    on TimeoutException{
+      NetworkController.networkError.value = true;
+    }
+    finally{
+
+    }
+
+    return [];
   }
 
   static Future<bool> sendMessage(Map message) async{
@@ -329,16 +378,29 @@ class AppService{
       NetworkController.networkError.value = false;
       var response = await http.get(
           Uri.parse(ApiUrl.USER_MESSAGE_GET),
-
           headers: {
             'Accepts' : 'application/json',
             'Authorization' : 'Bearer $accessToken'
           }).timeout(const Duration(seconds: TIME_OUT));
-
       if(response.statusCode.toString() == "200" || response.statusCode.toString() == "201"){
-        //print(response.body);
+
         var jsonString = jsonDecode(response.body) as List;
-        List<MessageModel> msgList = jsonString.map((e) => MessageModel.parseJsonData(e)).toList();
+        List<MessageModel> replayList,_list=[];
+        List<MessageModel> msgList=[];
+        msgList = jsonString.map((e) {
+          var _msgCheck = e['replay'] as List;
+          if(_msgCheck.isNotEmpty){
+            replayList = _msgCheck.map((item)=>MessageModel.parseJsonData(item)).toList();
+            _list.addAll(replayList);
+          }
+          //print(e);
+          return MessageModel.parseJsonData(e);
+        }).toList();
+        for(int i=0,j=0; i<msgList.length && j < _list.length; i++){
+            if(msgList[i].id == _list[j].parentId){
+              msgList.insert(i+1, _list[j++]);
+            }
+        }
         return msgList;
       }
     }

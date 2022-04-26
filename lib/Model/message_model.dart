@@ -1,5 +1,9 @@
 
 
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
+
 class MessageModel{
   int? id;
   int? parentId;
@@ -20,5 +24,7 @@ class MessageModel{
     imgUrl = json['image'];
     created_at = DateTime.tryParse(json['created_at']);
     createdAtAgo = json['created_at_ago'];
+    //var msgList = jsonDecode(json['replay']) as List;
+    //print(msgList);
   }
 }

@@ -275,6 +275,7 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
                                 isUpdateActive.value = true;
                                 await _profileController.updateProfile();
                                 isUpdateActive.value = false;
+                                _profileController.fetchProfile();
                               },
                               child: const Text('পরিবর্তন করুন',style: TextStyle(color: Color(0xFFFFFFFF),fontSize: 26,fontWeight: FontWeight.w500),),
                             ): const CircularProgressIndicator(),
