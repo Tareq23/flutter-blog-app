@@ -4,15 +4,20 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:blog_app/Model/DistrictModel.dart';
 import 'package:blog_app/Model/category_model.dart';
+import 'package:blog_app/Model/division_model.dart';
 import 'package:blog_app/Model/message_model.dart';
 import 'package:blog_app/Model/post_model.dart';
 import 'package:blog_app/Model/profile_model.dart';
+import 'package:blog_app/Model/union_model.dart';
 import 'package:blog_app/Services/app_api.dart';
 import 'package:blog_app/controller/network_controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Model/sub_district_model.dart';
 
 class AppService{
 
@@ -296,53 +301,6 @@ class AppService{
   }
 
 
-  static Future<List<ProfileModel>> fetchKajiProfileList(Map filter) async {
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? accessToken = prefs.getString('access_token');
-
-    try{
-      var request = http.MultipartRequest("POST",Uri.parse(ApiUrl.KAJI_PROFILE));
-      request.fields['name'] = filter['name'];
-      request.fields['division_id'] = filter['division_id'];
-      request.fields['district_id'] = filter['district_id'];
-      request.fields['sub_district_id'] = filter['sub_district_id'];
-      request.fields['address'] = filter['address'];
-      request.headers.addAll({
-        'Content-Type' : 'multipart/form-data',
-        'Authorization' : 'Bearer $accessToken'
-      });
-      var result = await request.send().timeout(const Duration(seconds: TIME_OUT));
-      var response = await http.Response.fromStream(result);
-      var jsonString = jsonDecode(response.body) ;
-      //jsonString = jsonDecode(jsonString['data']) as List;
-      // myList = new List<String>.from(results['users']);
-      // results['users'].cast<String>();
-      jsonString = jsonString['data'];
-      //print(jsonString);
-      List _list = jsonString as List;
-      List<ProfileModel> _profileList = [];
-      for(int i=0; i<_list.length; i++){
-        _profileList.add(ProfileModel.fromJson(_list[i]));
-
-      }
-      //print(_profileList.length);
-
-      return _profileList;
-    }
-    on SocketException{
-      NetworkController.showNetworkConnection();
-    }
-    on TimeoutException{
-      NetworkController.networkError.value = true;
-    }
-    finally{
-
-    }
-
-    return [];
-  }
-
   static Future<bool> sendMessage(Map message) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('access_token');
@@ -357,9 +315,9 @@ class AppService{
             'Authorization' : 'Bearer $accessToken'
           }).timeout(const Duration(seconds: TIME_OUT));
       //print(response.body);
-      print("status code from message ${response.statusCode}");
+      // print("status code from message ${response.statusCode}");
       //print(message);
-      print(accessToken);
+      // print(accessToken);
       if(response.statusCode.toString() == "200" || response.statusCode.toString() == "201"){
         return true;
       }
@@ -411,6 +369,229 @@ class AppService{
     }
     on TimeoutException{
       NetworkController.networkError.value = true;
+    }
+    return [];
+  }
+
+
+  static Future<List<ProfileModel>> fetchKajiProfileList(Map filter) async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+
+    try{
+      var request = http.MultipartRequest("POST",Uri.parse(ApiUrl.KAJI_PROFILE));
+      request.fields['name'] = filter['name'];
+      request.fields['division_id'] = filter['division_id'];
+      request.fields['district_id'] = filter['district_id'];
+      request.fields['sub_district_id'] = filter['sub_district_id'];
+      request.fields['address'] = filter['address'];
+      request.headers.addAll({
+        'Content-Type' : 'multipart/form-data',
+        'Authorization' : 'Bearer $accessToken'
+      });
+      var result = await request.send().timeout(const Duration(seconds: TIME_OUT));
+      var response = await http.Response.fromStream(result);
+      var jsonString = jsonDecode(response.body) ;
+      //jsonString = jsonDecode(jsonString['data']) as List;
+      // myList = new List<String>.from(results['users']);
+      // results['users'].cast<String>();
+      jsonString = jsonString['data'];
+      //print(jsonString);
+      List _list = jsonString as List;
+      List<ProfileModel> _profileList = [];
+      for(int i=0; i<_list.length; i++){
+        _profileList.add(ProfileModel.fromJson(_list[i]));
+
+      }
+      //print(_profileList.length);
+
+      return _profileList;
+    }
+    on SocketException{
+      NetworkController.showNetworkConnection();
+    }
+    on TimeoutException{
+      NetworkController.networkError.value = true;
+    }
+    finally{
+
+    }
+
+    return [];
+  }
+
+
+  static Future<List<ProfileModel>> fetchKajiList(Map filter) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+
+    String url = "${ApiUrl.KAJI_CONTACT}division_id=${filter['division_id']}&"
+        "district_id=${filter['district_id']}&subdistrict_id=${filter['subdistrict_id']}"
+        "&search=${filter['search']}&city_corporation_id=${filter['city_corporation_id']}&union_id=${filter['union_id']}"
+        "&ward_union=${filter['ward_union']}&type=${filter['type']}&limit=${filter['limit']}&page=${filter['page']}";
+
+    try{
+      NetworkController.networkError.value = false;
+      var response = await http.get(
+          Uri.parse(url),
+          headers: {
+            'Content-Type' : 'application/json',
+            'Accepts' : 'application/json',
+            'Authorization' : 'Bearer $accessToken'
+          }).timeout(const Duration(seconds: TIME_OUT));
+      // print("from app service contact list statusCode ${response.statusCode}");
+      if(response.statusCode == 200){
+        // print(url);
+        // print(response.body);
+        var jsonString = jsonDecode(response.body);
+        //jsonString = jsonDecode(jsonString['data']) as List;
+        // myList = new List<String>.from(results['users']);
+        // results['users'].cast<String>();
+        jsonString = jsonString['data'];
+        //print(jsonString);
+        List _list = jsonString as List;
+        List<ProfileModel> _profileList = [];
+        for(int i=0; i<_list.length; i++){
+          _profileList.add(ProfileModel.fromJson(_list[i]));
+
+        }
+        //print(_profileList.length);
+
+        return _profileList;
+      }
+    }
+    on SocketException{
+      NetworkController.networkError.value = true;
+    }
+    on TimeoutException{
+      NetworkController.networkError.value = true;
+    }
+    finally{
+
+    }
+    return [];
+
+  }
+
+  static Future<List<DivisionModel>> fetchDivision() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+    try{
+      NetworkController.networkError.value = false;
+
+      var response = await http.get(
+          Uri.parse(ApiUrl.DIVISION_LIST),
+          headers: {
+            'Content-Type' : 'application/json',
+            'Accepts' : 'application/json',
+            'Authorization' : 'Bearer $accessToken'
+          }).timeout(const Duration(seconds: TIME_OUT));
+      if(response.statusCode == 200){
+        var jsonString = jsonDecode(response.body) as List;
+        List<DivisionModel> _catList = jsonString.map((items) => DivisionModel.parseJsonData(items)).toList();
+        return _catList;
+      }
+    }
+    on SocketException{
+      NetworkController.networkError.value = true;
+    }
+    on TimeoutException{
+      NetworkController.networkError.value = true;
+    }
+    finally{
+
+    }
+    return [];
+  }
+
+  static Future<List<DistrictModel>> fetchDistrict(int id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+    try{
+      NetworkController.networkError.value = false;
+
+      var response = await http.get(
+          Uri.parse(ApiUrl.DISTRICT_LIST+id.toString()),
+          headers: {
+            'Content-Type' : 'application/json',
+            'Accepts' : 'application/json',
+            'Authorization' : 'Bearer $accessToken'
+          }).timeout(const Duration(seconds: TIME_OUT));
+      if(response.statusCode == 200){
+        var jsonString = jsonDecode(response.body) as List;
+        List<DistrictModel> _districtList = jsonString.map((items) => DistrictModel.parseJsonData(items)).toList();
+        return _districtList;
+      }
+    }
+    on SocketException{
+      NetworkController.networkError.value = true;
+    }
+    on TimeoutException{
+      NetworkController.networkError.value = true;
+    }
+    finally{
+
+    }
+    return [];
+  }
+
+  static Future<List<SubDistrictModel>> fetchSubDistrict(int id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+    try{
+      NetworkController.networkError.value = false;
+      var response = await http.get(
+          Uri.parse(ApiUrl.SUB_DISTRICT_LIST+id.toString()),
+          headers: {
+            'Content-Type' : 'application/json',
+            'Accepts' : 'application/json',
+            'Authorization' : 'Bearer $accessToken'
+          }).timeout(const Duration(seconds: TIME_OUT));
+      if(response.statusCode == 200){
+        var jsonString = jsonDecode(response.body) as List;
+        List<SubDistrictModel> _subDistrictList = jsonString.map((items) => SubDistrictModel.parseJsonData(items)).toList();
+        return _subDistrictList;
+      }
+    }
+    on SocketException{
+      NetworkController.networkError.value = true;
+    }
+    on TimeoutException{
+      NetworkController.networkError.value = true;
+    }
+    finally{
+
+    }
+    return [];
+  }
+
+  static Future<List<UnionModel>> fetchUnion(int id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+    try{
+      NetworkController.networkError.value = false;
+      var response = await http.get(
+          Uri.parse(ApiUrl.UNION_LIST+id.toString()),
+          headers: {
+            'Content-Type' : 'application/json',
+            'Accepts' : 'application/json',
+            'Authorization' : 'Bearer $accessToken'
+          }).timeout(const Duration(seconds: TIME_OUT));
+      if(response.statusCode == 200){
+        var jsonString = jsonDecode(response.body) as List;
+        List<UnionModel> _unionList = jsonString.map((items) => UnionModel.parseJsonData(items)).toList();
+        return _unionList;
+      }
+    }
+    on SocketException{
+      NetworkController.networkError.value = true;
+    }
+    on TimeoutException{
+      NetworkController.networkError.value = true;
+    }
+    finally{
+
     }
     return [];
   }

@@ -42,9 +42,9 @@ class ProfileModel {
   String? website;
   String? registrationNumber;
   String? mapLink;
-  String? districtId;
-  String? subdistrictId;
-  String? divisionId;
+  int? districtId;
+  int? subdistrictId;
+  int? divisionId;
   String? updatedBy;
   String? createdBy;
 

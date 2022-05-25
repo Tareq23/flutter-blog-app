@@ -19,4 +19,13 @@ class ApiUrl{
   static const USER_PROFILE_UPDATE = "http://api.nationalmrdc.com/contacts/basic-info";
   static const USER_MESSAGE_SEND = "https://api.nationalmrdc.com/api/communication/messaging";
   static const USER_MESSAGE_GET = "https://api.nationalmrdc.com/api/communication/topic/list";
+
+  // KAJI LIST FILTER API
+
+  static const DIVISION_LIST = "https://api.nationalmrdc.com/api/get-division";
+  static String DISTRICT_LIST = "https://api.nationalmrdc.com/api/get-district/";
+  static String SUB_DISTRICT_LIST = "https://api.nationalmrdc.com/api/get-subdistrict/";
+  static String UNION_LIST = "https://api.nationalmrdc.com/api/get-union/";
+  static String KAJI_CONTACT = "https://api.nationalmrdc.com/api/frontend/contacts?";
+
 }

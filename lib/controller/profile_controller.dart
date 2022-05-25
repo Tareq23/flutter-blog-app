@@ -16,6 +16,11 @@ class ProfileController extends GetxController
   var isLoading = true.obs;
   var selectImagePath = ''.obs;
   var isFileImage = false.obs;
+  var isLoadKajiList = true.obs;
+  var isFilter = false.obs;
+  var kajiListPage = 1.obs;
+
+
   @override
   void onInit()
   {
@@ -82,16 +87,31 @@ class ProfileController extends GetxController
   }
 
 
-  Future<void> fetchKajiList() async {
+  Future<void> fetchKajiList(Map<dynamic,String> map) async {
     Map filter = {
       "name" : "",
-      "division_id" : "",
-      "district_id" : "",
-      "sub_district_id" : "",
+      "division_id" : map['division_id']??"",
+      "district_id" : map['district_id']??"",
+      "subdistrict_id" : map['subdistrict_id']??"",
       "address" : "",
+      "search" : "",
+      "city_corporation_id" : map['city_corporation_id']??"",
+      "union_id" : map['union_id']??"",
+      "ward_union" : map['ward_union']??"",
+      "type" : 3,
+      "limit" : 20,
+      "page" : map['page']??1
     };
-    var result = await AppService.fetchKajiProfileList(filter);
-    kajiList.addAll(result);
+    // var result = await AppService.fetchKajiProfileList(filter);
+    if(isLoadKajiList.value){
+      if(isFilter.value){
+        kajiList.assignAll([]);
+        isFilter.value = false;
+      }
+      var result = await AppService.fetchKajiList(filter);
+      kajiList.addAll(result);
+      isLoadKajiList.value  = false;
+    }
   }
 
   void showErrorSnackbar(String message)
