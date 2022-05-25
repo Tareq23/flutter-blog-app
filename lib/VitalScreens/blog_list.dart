@@ -24,6 +24,12 @@ class BlogListPageView extends StatelessWidget {
   final _globalScaffoldKey = GlobalKey<ScaffoldState>();
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
+  final Image defaultImage = Image.asset(
+      "assets/default_blog_post_image.jpg",
+      width: double.infinity,
+      height: double.infinity,
+      fit: BoxFit.cover,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -323,14 +329,18 @@ class BlogListPageView extends StatelessWidget {
                                 margin: const EdgeInsets.all(0),
                                 child: Hero(
                                   tag: heroAnimationTag,
-                                  child: Image(
-                                    image: NetworkImage(img.toString()),
+                                  child: Image.network(
+                                    _postController.allPostList[index].image.toString(),
                                     width: double.infinity,
                                     height: double.infinity,
-                                    fit: BoxFit.fill,
+                                    loadingBuilder: (context, child, loadingProgress) =>
+                                    (loadingProgress == null) ? child : const CircularProgressIndicator(strokeWidth: 3,color: Color(
+                                        0xFF0A4000),),
+                                    errorBuilder: (context, error, stackTrace) => defaultImage,
                                   ),
+
+                                )
                                 ),
-                              ),
                               Container(
                                   width: (screenSize.width * 0.65) - 25,
                                   height: screenSize.height * 0.2,

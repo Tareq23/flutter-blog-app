@@ -236,7 +236,7 @@ class AppService{
             'Authorization' : 'Bearer $accessToken'
           }).timeout(const Duration(seconds: TIME_OUT));
       if(response.statusCode.toString() == "200" || response.statusCode.toInt() == 200) {
-
+        // print(response.body);
         var profileData = jsonDecode(response.body);
         // print(response.body);
         ProfileModel _profile = ProfileModel.fromJson(profileData);
@@ -356,8 +356,10 @@ class AppService{
             'Accepts' : 'application/json',
             'Authorization' : 'Bearer $accessToken'
           }).timeout(const Duration(seconds: TIME_OUT));
-      // print("status code from message ${response.statusCode}");
-      // print(message);
+      //print(response.body);
+      print("status code from message ${response.statusCode}");
+      //print(message);
+      print(accessToken);
       if(response.statusCode.toString() == "200" || response.statusCode.toString() == "201"){
         return true;
       }
