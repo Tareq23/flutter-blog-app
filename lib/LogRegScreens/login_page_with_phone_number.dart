@@ -158,7 +158,7 @@ class _LoginState extends State<Login> {
                   height: screenSize.width * 0.4,
                   margin: EdgeInsets.only(top: (screenSize.height * 0.08)),
                   child: const Image(
-                    image: AssetImage("assets/mrdclogo.png"),
+                    image: AssetImage("assets/bmrplogo.png"),
                   ),
                 ),
                 _isValidNumber == false ?
@@ -217,13 +217,13 @@ class _LoginState extends State<Login> {
                           color: Color(0xFFD5D4D4),
                       ),
                     )),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "ন্যাশনাল ম্যারেজ রেজিষ্ট্রার",
-                    style: TextStyle(fontSize: 14,color: Color(0xFFD5D4D4)),
-                  ),
-                ),
+                // const Align(
+                //   alignment: Alignment.centerLeft,
+                //   child: Text(
+                //     "ন্যাশনাল ম্যারেজ রেজিষ্ট্রার",
+                //     style: TextStyle(fontSize: 14,color: Color(0xFFD5D4D4)),
+                //   ),
+                // ),
                 Container(
                   margin: const EdgeInsets.only(top: 20),
                   child: Form(
@@ -232,7 +232,7 @@ class _LoginState extends State<Login> {
                       controller: phoneNumberController,
                       // keyboardType: TextInputType.number,
                       style: const TextStyle(letterSpacing:1.2,fontSize: 16,fontWeight: FontWeight.w500,color: Color(
-                          0xFF151515)),
+                          0xFFFFFFFF)),
                       decoration: InputDecoration(
                         hintText: "মোবাইল নাম্বার",
                         hintStyle: const TextStyle(color: Color(0xFFD0CFCF),fontWeight: FontWeight.w400,fontSize: 15),
@@ -383,7 +383,7 @@ class _LoginState extends State<Login> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
-                  Text('পরবর্তী',style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500),),
+                  Text('লগইন',style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500),),
                   SizedBox(width: 5,),
                   Icon(Icons.arrow_forward_rounded,size: 30,color: Colors.white,),
                 ],

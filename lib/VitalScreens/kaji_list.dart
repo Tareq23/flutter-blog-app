@@ -122,8 +122,14 @@ class _KajiListPageStateConfig extends State<KajiListPageViewExtend> {
                                       0xFF181818)),),
                                   const SizedBox(height: 15,),
 
-                                  Text("${profileController.kajiList[index].address}",style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Color(
+                                  // Text("${profileController.kajiList[index].address}",style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Color(
+                                  //     0xFF181818)),),
+                                  Text("জেলা - ${profileController.kajiList[index].district?.districtNameBng}",style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: Color(
                                       0xFF181818)),),
+                                  Text("উপজেলা - ${profileController.kajiList[index].subDistrict?.upazilaNameBng}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: Color(
+                                      0xFF181818)),),
+                                  Text("ইউনিয়ন - ${profileController.kajiList[index].union?.unionNameBng}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: Color(
+                                      0xFF171616)),),
                                 ],
                               ),
                             ),

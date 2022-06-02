@@ -49,9 +49,9 @@ class _SplashPageStateConfig extends State<SplashConfig>{
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Image.asset('assets/mrdclogo.png'),
+                Image.asset('assets/bmrplogo2.png'),
                 const Text(
-                  'ন্যাশনাল ম্যারেজ রেজিষ্ট্রার', style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w500),
+                  'বাংলাদেশ ম্যারেজ রেজিষ্ট্রার্স প্লাটফর্ম', style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w500),
                 ),
               ],
             ),

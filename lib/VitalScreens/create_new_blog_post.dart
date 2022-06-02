@@ -21,7 +21,7 @@ class CreateNewBlogPost extends StatefulWidget {
 
 class _CreateNewBlogPostState extends State<CreateNewBlogPost> {
   var postController = Get.put(PostController());
-  var categoryController = Get.put(CategoryController());
+  // var categoryController = Get.put(CategoryController());
 
   final titleStyle = TextStyle(
       fontSize: 26,
@@ -35,17 +35,17 @@ class _CreateNewBlogPostState extends State<CreateNewBlogPost> {
   var _isSubmit = false.obs;
   var _focusEditor = false.obs;
 
-  List<Map> _statusMap = [
-    {"id": 1, "value": "Active"},
-    {"id": 2, "value": "InActive"}
-  ];
-
-  Map activeStatus = {"id": 1, "value": "Active"};
+  // List<Map> _statusMap = [
+  //   {"id": 1, "value": "Active"},
+  //   {"id": 2, "value": "InActive"}
+  // ];
+  //
+  // Map activeStatus = {"id": 1, "value": "Active"};
 
   @override
   Widget build(BuildContext context) {
-    postController.createPost.value.status = activeStatus['id'];
-    postController.createPost.value.job_id = categoryController.catList[0].id;
+    // postController.createPost.value.status = activeStatus['id'];
+    // postController.createPost.value.job_id = categoryController.catList[0].id;
     var screenSize = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
@@ -151,10 +151,10 @@ class _CreateNewBlogPostState extends State<CreateNewBlogPost> {
                   ),
                 ),
 
-                // post Category
+                // youtube video link
                 Container(
                   margin:
-                      const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -176,56 +176,118 @@ class _CreateNewBlogPostState extends State<CreateNewBlogPost> {
                                   color: Colors.indigo.shade900,
                                 ),
                                 child: const Icon(
-                                  Icons.category_outlined,
+                                  Icons.ondemand_video_outlined,
                                   color: Colors.white,
                                 )),
                           ),
                           const SizedBox(
                             width: 30,
                           ),
-                          Container(
-                            padding: const EdgeInsets.all(0),
-                            margin: const EdgeInsets.all(0),
-                            child: Obx(() {
-                              if (categoryController.catList.isNotEmpty) {
-                                return DropdownButton<CategoryModel>(
-                                  value: categoryController
-                                      .selectCategoryForSearch.value,
-                                  icon: Icon(
-                                    Icons.arrow_circle_down_outlined,
-                                    color: Colors.indigo.shade900,
-                                  ),
-                                  hint: const Text('Select Category'),
-                                  dropdownColor: Colors.white,
-                                  onChanged: (newValue) {
-                                    categoryController.selectCategoryForSearch
-                                        .value = newValue!;
-                                    postController.createPost.value.job_id =
-                                        categoryController
-                                            .selectCategoryForSearch.value.id;
-                                  },
-                                  items: categoryController.catList
-                                      .map((items) =>
-                                          DropdownMenuItem<CategoryModel>(
-                                            child: Text(items.name.toString()),
-                                            value: items,
-                                          ))
-                                      .toList(),
-                                );
-                              } else {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                            }),
+                          Expanded(
+                            child: TextFormField(
+                              onChanged: (value) {
+                                postController.createPost.value.videlUrl =
+                                    value;
+                              },
+                              minLines: 1,
+                              maxLines: null,
+                              keyboardType: TextInputType.multiline,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(10.0)),
+                                    borderSide: BorderSide(
+                                        width: 2,
+                                        color: Colors.indigo.shade900)),
+                                focusColor: Colors.indigo.shade900,
+                                hintText: "Video Url",
+                                labelText: "Enter Video Url",
+                                labelStyle:
+                                    const TextStyle(color: Colors.black),
+                              ),
+                            ),
                           ),
                         ],
                       ),
-                      _errorWidget('Category Required',
-                          postController.createPost.value.job_id)
                     ],
                   ),
                 ),
+
+                // post Category
+                // Container(
+                //   margin:
+                //       const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.center,
+                //     children: [
+                //       Row(
+                //         mainAxisAlignment: MainAxisAlignment.start,
+                //         children: [
+                //           Container(
+                //             padding: const EdgeInsets.all(0),
+                //             margin: const EdgeInsets.all(0),
+                //             width: screenSize.width * 0.08,
+                //             alignment: Alignment.centerLeft,
+                //             child: Container(
+                //                 padding: const EdgeInsets.all(0),
+                //                 margin: const EdgeInsets.all(0),
+                //                 width: screenSize.width * 0.08,
+                //                 height: screenSize.width * 0.08,
+                //                 decoration: BoxDecoration(
+                //                   borderRadius: BorderRadius.circular(50),
+                //                   color: Colors.indigo.shade900,
+                //                 ),
+                //                 child: const Icon(
+                //                   Icons.category_outlined,
+                //                   color: Colors.white,
+                //                 )),
+                //           ),
+                //           const SizedBox(
+                //             width: 30,
+                //           ),
+                //           Container(
+                //             padding: const EdgeInsets.all(0),
+                //             margin: const EdgeInsets.all(0),
+                //             child: Obx(() {
+                //               if (categoryController.catList.isNotEmpty) {
+                //                 return DropdownButton<CategoryModel>(
+                //                   value: categoryController
+                //                       .selectCategoryForSearch.value,
+                //                   icon: Icon(
+                //                     Icons.arrow_circle_down_outlined,
+                //                     color: Colors.indigo.shade900,
+                //                   ),
+                //                   hint: const Text('Select Category'),
+                //                   dropdownColor: Colors.white,
+                //                   onChanged: (newValue) {
+                //                     categoryController.selectCategoryForSearch
+                //                         .value = newValue!;
+                //                     postController.createPost.value.job_id =
+                //                         categoryController
+                //                             .selectCategoryForSearch.value.id;
+                //                   },
+                //                   items: categoryController.catList
+                //                       .map((items) =>
+                //                           DropdownMenuItem<CategoryModel>(
+                //                             child: Text(items.name.toString()),
+                //                             value: items,
+                //                           ))
+                //                       .toList(),
+                //                 );
+                //               } else {
+                //                 return const Center(
+                //                   child: CircularProgressIndicator(),
+                //                 );
+                //               }
+                //             }),
+                //           ),
+                //         ],
+                //       ),
+                //       _errorWidget('Category Required',
+                //           postController.createPost.value.job_id)
+                //     ],
+                //   ),
+                // ),
 
                 // post image
                 Container(
@@ -329,71 +391,71 @@ class _CreateNewBlogPostState extends State<CreateNewBlogPost> {
                 ),
 
                 //status
-                Container(
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(0),
-                            margin: const EdgeInsets.all(0),
-                            width: screenSize.width * 0.08,
-                            alignment: Alignment.centerLeft,
-                            child: Container(
-                                padding: const EdgeInsets.all(0),
-                                margin: const EdgeInsets.all(0),
-                                width: screenSize.width * 0.08,
-                                height: screenSize.width * 0.08,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: Colors.indigo.shade900,
-                                ),
-                                child: const Icon(
-                                  Icons.check,
-                                  color: Colors.white,
-                                )),
-                          ),
-                          const SizedBox(
-                            width: 30,
-                          ),
-                          Expanded(
-                              child: DropdownButton(
-                            icon: Icon(
-                              Icons.arrow_circle_down_outlined,
-                              color: Colors.indigo.shade900,
-                            ),
-                            hint: const Text(
-                                'select status'), // Not necessary for Option 1
-                            value: activeStatus['id'],
-                            onChanged: (newValue) {
-                              setState(() {
-                                activeStatus = {
-                                  "id": newValue,
-                                  "value": newValue == 1 ? "Active" : "InActive"
-                                };
-                              });
-                              postController.createPost.value.status =
-                                  activeStatus['id'];
-                            },
-                            items: _statusMap.map((Map status) {
-                              return DropdownMenuItem(
-                                  value: status['id'],
-                                  child: Text(
-                                    status['value'].toString(),
-                                  ));
-                            }).toList(),
-                          ))
-                        ],
-                      ),
-                      _errorWidget('Status Required',
-                          postController.createPost.value.status)
-                    ],
-                  ),
-                ),
+                // Container(
+                //   margin:
+                //       const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.center,
+                //     children: [
+                //       Row(
+                //         mainAxisAlignment: MainAxisAlignment.start,
+                //         children: [
+                //           Container(
+                //             padding: const EdgeInsets.all(0),
+                //             margin: const EdgeInsets.all(0),
+                //             width: screenSize.width * 0.08,
+                //             alignment: Alignment.centerLeft,
+                //             child: Container(
+                //                 padding: const EdgeInsets.all(0),
+                //                 margin: const EdgeInsets.all(0),
+                //                 width: screenSize.width * 0.08,
+                //                 height: screenSize.width * 0.08,
+                //                 decoration: BoxDecoration(
+                //                   borderRadius: BorderRadius.circular(50),
+                //                   color: Colors.indigo.shade900,
+                //                 ),
+                //                 child: const Icon(
+                //                   Icons.check,
+                //                   color: Colors.white,
+                //                 )),
+                //           ),
+                //           const SizedBox(
+                //             width: 30,
+                //           ),
+                //           Expanded(
+                //               child: DropdownButton(
+                //             icon: Icon(
+                //               Icons.arrow_circle_down_outlined,
+                //               color: Colors.indigo.shade900,
+                //             ),
+                //             hint: const Text(
+                //                 'select status'), // Not necessary for Option 1
+                //             value: activeStatus['id'],
+                //             onChanged: (newValue) {
+                //               setState(() {
+                //                 activeStatus = {
+                //                   "id": newValue,
+                //                   "value": newValue == 1 ? "Active" : "InActive"
+                //                 };
+                //               });
+                //               postController.createPost.value.status =
+                //                   activeStatus['id'];
+                //             },
+                //             items: _statusMap.map((Map status) {
+                //               return DropdownMenuItem(
+                //                   value: status['id'],
+                //                   child: Text(
+                //                     status['value'].toString(),
+                //                   ));
+                //             }).toList(),
+                //           ))
+                //         ],
+                //       ),
+                //       _errorWidget('Status Required',
+                //           postController.createPost.value.status)
+                //     ],
+                //   ),
+                // ),
 
                 /*Submit Button*/
                 Container(

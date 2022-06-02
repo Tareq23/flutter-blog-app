@@ -124,8 +124,9 @@ class PostController extends GetxController{
         "headline" : createPost.value.headline,
         "content" : createPost.value.content,
         "status" : createPost.value.status,
-        "job_id" : createPost.value.job_id,
+        // "job_id" : createPost.value.job_id,
         "image" : "data:image/png:base64, "+base64Encode(bytes),
+        "video" : createPost.value.videlUrl
       };
       createPostStatusCode.value = await AppService.createPost(postBody);
     }
@@ -141,8 +142,8 @@ class PostController extends GetxController{
   {
     if(createPost.value.headline == null) return false;
     if(createPost.value.content == null) return false;
-    if(createPost.value.job_id == null) return false;
-    if(createPost.value.status == null) return false;
+    // if(createPost.value.job_id == null) return false;
+    // if(createPost.value.status == null) return false;
     if(selectImagePath.isEmpty) return false;
     return true;
   }

@@ -16,6 +16,8 @@ class MessageController extends GetxController
     super.onInit();
   }
 
+
+
   Future<void> fetchMessages() async
   {
     var _msgList = await AppService.fetchMessage();

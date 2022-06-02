@@ -4,6 +4,11 @@
 
 import 'dart:convert';
 
+import 'package:blog_app/Model/DistrictModel.dart';
+import 'package:blog_app/Model/division_model.dart';
+import 'package:blog_app/Model/sub_district_model.dart';
+import 'package:blog_app/Model/union_model.dart';
+
 ProfileModel profileModelFromJson(String str) => ProfileModel.fromJson(json.decode(str));
 
 String profileModelToJson(ProfileModel data) => json.encode(data.toJson());
@@ -28,6 +33,9 @@ class ProfileModel {
      this.updatedBy,
      this.createdBy,
      this.image,
+     this.district,
+     this.subDistrict,
+     this.union
   });
 
   int? id;
@@ -50,6 +58,11 @@ class ProfileModel {
 
   String? image;
 
+  // DivisionModel? division = DistrictModel() as DivisionModel?;
+  DistrictModel? district = DistrictModel(0,"district","district");
+  SubDistrictModel? subDistrict = SubDistrictModel(0, "upazilaNameEng", "upazilaNameBng");
+  UnionModel? union = UnionModel(0, "unionNameEng", "unionNameBng");
+
   factory ProfileModel.fromJson(Map<String, dynamic> json) => ProfileModel(
     id: json["id"],
     name: json["name"],
@@ -68,7 +81,9 @@ class ProfileModel {
     divisionId: json["division_id"],
     updatedBy: json["updated_by"],
     createdBy: json["created_by"],
-
+    district : DistrictModel.parseJsonData(json["district"]??{}),
+    subDistrict: SubDistrictModel.parseJsonData(json["subdistrict"]??{}),
+    union: UnionModel.parseJsonData(json["union"]??{}),
     image: json["image"],
   );
 

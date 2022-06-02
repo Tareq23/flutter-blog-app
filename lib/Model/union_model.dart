@@ -11,7 +11,7 @@ class UnionModel {
 
   UnionModel.parseJsonData(Map<String,dynamic>data)
   {
-    id = data['id'];
+    id = data['id']??0;
     unionNameEng = data['union_name_eng'];
     unionNameBng = data['union_name_bng'];
   }

@@ -10,7 +10,7 @@ class DistrictModel {
 
   DistrictModel.parseJsonData(Map<String,dynamic>data)
   {
-    id = data['id'];
+    id = data['id']??0;
     districtNameBng = data['district_name_bng'];
     districtNameEng = data['district_name_eng'];
   }

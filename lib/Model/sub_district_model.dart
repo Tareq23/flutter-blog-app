@@ -10,7 +10,7 @@ class SubDistrictModel {
 
   SubDistrictModel.parseJsonData(Map<String,dynamic>data)
   {
-    id = data['id'];
+    id = data['id']??0;
     upazilaNameBng = data['upazila_name_bng'];
     upazilaNameEng = data['upazila_name_eng'];
   }

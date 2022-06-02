@@ -115,7 +115,7 @@ class BlogListPageView extends StatelessWidget {
                     children: const [
                       Icon(Icons.person,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
-                      Text("প্রোফাইল",style: ConstValue.drawerTestStyle,),
+                      Text("আমার প্রোফাইল",style: ConstValue.drawerTestStyle,),
                     ],
                   ),
                 ),
@@ -225,7 +225,7 @@ class BlogListPageView extends StatelessWidget {
             height: double.infinity,
             child: Center(
               child: Marquee(
-                text: 'ন্যাশনাল ম্যারেজ রেজিষ্ট্রার ডাটা সেন্টারে আপনাকে স্বাগতম। ',
+                text: 'বাংলাদেশ ম্যারেজ রেজিষ্ট্রার্স প্লাটফর্মে আপনাকে স্বাগতম। ',
                 style: const TextStyle(fontWeight: FontWeight.w500,fontSize: 15),
                 scrollAxis: Axis.horizontal,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -473,27 +473,27 @@ class BlogListPageView extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  DropdownButton<CategoryModel>(
-                      borderRadius: BorderRadius.circular(10),
-                      icon: Icon(
-                        Icons.arrow_circle_down_outlined,
-                        color: Colors.indigo.shade900,
-                      ),
-                      hint: const Text('Select Category'),
-                      dropdownColor: Colors.white,
-                      value: _categoryController.selectCategoryForSearch.value,
-                      onChanged: (newValue) {
-                        _categoryController.selectCategoryForSearch.value =
-                        newValue!;
-                      },
-                      items: _categoryController.catList.isNotEmpty
-                          ? _categoryController.catList
-                          .map((items) => DropdownMenuItem<CategoryModel>(
-                        child: Text(items.name.toString()),
-                        value: items,
-                      ))
-                          .toList()
-                          : [])
+                  // DropdownButton<CategoryModel>(
+                  //     borderRadius: BorderRadius.circular(10),
+                  //     icon: Icon(
+                  //       Icons.arrow_circle_down_outlined,
+                  //       color: Colors.indigo.shade900,
+                  //     ),
+                  //     hint: const Text('Select Category'),
+                  //     dropdownColor: Colors.white,
+                  //     value: _categoryController.selectCategoryForSearch.value,
+                  //     onChanged: (newValue) {
+                  //       _categoryController.selectCategoryForSearch.value =
+                  //       newValue!;
+                  //     },
+                  //     items: _categoryController.catList.isNotEmpty
+                  //         ? _categoryController.catList
+                  //         .map((items) => DropdownMenuItem<CategoryModel>(
+                  //       child: Text(items.name.toString()),
+                  //       value: items,
+                  //     ))
+                  //         .toList()
+                  //         : [])
                 ],
               ),
             ),

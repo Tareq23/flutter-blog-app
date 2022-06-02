@@ -16,6 +16,7 @@ class PostModel{
    String? slug;
    DateTime? created_at;
    int? status;
+   String? videlUrl;
 
   PostModel({
     this.id,
@@ -29,6 +30,7 @@ class PostModel{
     this.image,
     this.slug,
     this.created_at,
+    this.videlUrl
   });
 
    PostModel.fromJson(Map<String, dynamic> json)
@@ -42,7 +44,9 @@ class PostModel{
          image = json['image'],
          slug = json['slug'],
          headline = json['headline'],
-         created_at = DateTime.tryParse(json['created_at']);
+         videlUrl = json['video'],
+         created_at = DateTime.tryParse(json['created_at'],
+         );
 
    Map<String, dynamic> toJson() =>
        {
@@ -56,5 +60,6 @@ class PostModel{
          'expired_at' : expired_at,
          'slug' : slug,
          'image' : image,
+         'video' : videlUrl
        };
 }

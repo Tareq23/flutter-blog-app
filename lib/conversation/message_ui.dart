@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../LogRegScreens/login_page_with_phone_number.dart';
 import '../ProfileScreens/profile_page.dart';
 import '../VitalScreens/blog_list.dart';
+import '../VitalScreens/kaji_list.dart';
 import '../VitalScreens/my_blog_list.dart';
 
 class Message extends StatefulWidget {
@@ -100,7 +101,7 @@ class _MessageState extends State<Message> {
                     children: const [
                       Icon(Icons.person,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
-                      Text("প্রোফাইল",style: ConstValue.drawerTestStyle,),
+                      Text("আমার প্রোফাইল",style: ConstValue.drawerTestStyle,),
                     ],
                   ),
                 ),
@@ -125,6 +126,31 @@ class _MessageState extends State<Message> {
                     ],
                   ),
                 ),
+              ),
+              const Divider(
+                  color: ConstValue.drawerIconColor
+              ),
+              Container(
+
+                padding: const EdgeInsets.all(16.0),
+
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => KajiListPageViewExtend()));
+                  },
+                  child: Row(
+                    children: const [
+                      Icon(Icons.dashboard,color: ConstValue.drawerIconColor,),
+                      SizedBox(width: 10),
+                      Text("কাজী লিস্ট",style: ConstValue.drawerTestStyle,),
+                    ],
+
+                  ),
+                ),
+
               ),
               const Divider(
                   color: ConstValue.drawerIconColor

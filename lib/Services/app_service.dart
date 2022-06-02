@@ -38,10 +38,10 @@ class AppService{
            'Accepts' : 'application/json',
            'Authorization' : 'Bearer $accessToken'
          }).timeout(const Duration(seconds: TIME_OUT));
-
      if(response.statusCode == 200){
        var jsonString = jsonDecode(response.body);
        var jsonPost = jsonString['data'] as List;
+       // print(response.body);
        List<PostModel> _postList = jsonPost.map((items) => PostModel.fromJson(items)).toList();
        return _postList;
      }
@@ -130,8 +130,9 @@ class AppService{
       request.fields['headline'] = postBody['headline'];
       request.fields['content'] = postBody['content'];
       request.fields['status'] = postBody['status'].toString();
-      request.fields['jobCategory'] = postBody['job_id'].toString();
+      // request.fields['jobCategory'] = postBody['job_id'].toString();
       request.fields['type'] = "5";
+      request.fields['video'] = postBody['video']??"";
       // request.files.add(await http.MultipartFile.fromPath("image", postBody['image_path']));
       request.files.add(await http.MultipartFile.fromString("image", postBody['image']));
       request.headers.addAll({
