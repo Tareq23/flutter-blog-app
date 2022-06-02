@@ -67,4 +67,19 @@ class NetworkController extends GetxController
         colorText: const Color(0xFF000815)
     );
   }
+
+  static void showInternalError(Map map)
+  {
+    Get.defaultDialog(
+       title: "status code : $map['status_code']",
+       content: Container(
+         height: 400,
+         child: SingleChildScrollView(
+           child: Flexible(
+             child: Text(map['body']),
+           ),
+         ),
+       )
+    );
+  }
 }

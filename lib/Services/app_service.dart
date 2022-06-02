@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:blog_app/Model/DistrictModel.dart';
+import 'package:blog_app/Model/assistant_model.dart';
 import 'package:blog_app/Model/category_model.dart';
 import 'package:blog_app/Model/division_model.dart';
 import 'package:blog_app/Model/message_model.dart';
@@ -13,6 +14,7 @@ import 'package:blog_app/Model/profile_model.dart';
 import 'package:blog_app/Model/union_model.dart';
 import 'package:blog_app/Services/app_api.dart';
 import 'package:blog_app/controller/network_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -596,5 +598,110 @@ class AppService{
     }
     return [];
   }
+
+
+  static Future<List<AssistantModel>> fetchAssistant() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+    try{
+      NetworkController.networkError.value = false;
+      var response = await http.get(
+          Uri.parse(ApiUrl.ASSISTENT_LIST),
+          headers: {
+            'Content-Type' : 'application/json',
+            'Accepts' : 'application/json',
+            'Authorization' : 'Bearer $accessToken'
+          }).timeout(const Duration(seconds: TIME_OUT));
+      // print("fetch assistant status code : ${response.statusCode}");
+      // print(response.body);
+      if(response.statusCode == 200){
+        var jsonString = jsonDecode(response.body) as List;
+        List<AssistantModel> _assistantList = jsonString.map((items) => AssistantModel.parseJsonData(items)).toList();
+        return _assistantList;
+      }
+    }
+    on SocketException{
+      NetworkController.networkError.value = true;
+    }
+    on TimeoutException{
+      NetworkController.networkError.value = true;
+    }
+    finally{
+
+    }
+    return [];
+  }
+
+
+  static Future<bool> addAssistant(Map assistant) async
+  {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+    try{
+      NetworkController.networkError.value = false;
+      var response = await http.post(
+          Uri.parse(ApiUrl.ASSISTENT_ADD),
+          headers: {
+            'Accepts' : 'application/json',
+            'Authorization' : 'Bearer $accessToken'
+          },body: assistant).timeout(const Duration(seconds: TIME_OUT));
+
+      // print(response.statusCode);
+      // print(response.body);
+      if(response.statusCode == 201 || response.statusCode == 200)
+        {
+          return true;
+        }
+
+    }
+    on SocketException{
+      NetworkController.networkError.value = true;
+    }
+    on TimeoutException{
+      NetworkController.networkError.value = true;
+    }
+    finally{
+
+
+    }
+    return false;
+  }
+
+
+  static Future<bool> deleteAssistant(int id) async
+  {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+    try{
+      NetworkController.networkError.value = false;
+      var response = await http.delete(
+          Uri.parse(ApiUrl.ASSISTENT_REMOVE+id.toString()),
+          headers: {
+            'Accepts' : 'application/json',
+            'Authorization' : 'Bearer $accessToken'
+          }).timeout(const Duration(seconds: TIME_OUT));
+
+      // print(response.statusCode);
+      // print(response.body);
+      if(response.statusCode == 201 || response.statusCode == 200)
+      {
+        return true;
+      }
+
+    }
+    on SocketException{
+      NetworkController.networkError.value = true;
+    }
+    on TimeoutException{
+      NetworkController.networkError.value = true;
+    }
+    finally{
+
+
+    }
+    return false;
+  }
+
+
 
 }

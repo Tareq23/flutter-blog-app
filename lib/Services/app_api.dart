@@ -28,4 +28,11 @@ class ApiUrl{
   static String UNION_LIST = "https://api.nationalmrdc.com/api/get-union/";
   static String KAJI_CONTACT = "https://api.nationalmrdc.com/api/frontend/contacts?";
 
+
+  // ASSISTENT API
+
+  static const ASSISTENT_LIST = "http://api.nationalmrdc.com/api/contacts/assistent";
+  static const ASSISTENT_ADD = "http://api.nationalmrdc.com/contacts";
+  static String ASSISTENT_REMOVE = "http://api.nationalmrdc.com/contacts/";
+
 }

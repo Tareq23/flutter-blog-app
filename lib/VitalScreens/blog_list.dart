@@ -2,6 +2,7 @@ import 'package:blog_app/LogRegScreens/login_page_with_phone_number.dart';
 import 'package:blog_app/Model/category_model.dart';
 import 'package:blog_app/ProfileScreens/profile_page.dart';
 import 'package:blog_app/Services/color.dart';
+import 'package:blog_app/VitalScreens/assistent.dart';
 import 'package:blog_app/VitalScreens/blog_post_details.dart';
 import 'package:blog_app/VitalScreens/kaji_list.dart';
 import 'package:blog_app/VitalScreens/my_blog_list.dart';
@@ -19,7 +20,7 @@ class BlogListPageView extends StatelessWidget {
   // final NetworkController _networkController = Get.put(NetworkController());
 
   final PostController _postController = Get.put(PostController());
-  final CategoryController _categoryController = Get.put(CategoryController());
+  // final CategoryController _categoryController = Get.put(CategoryController());
   // final _scrollController = ScrollController();
   final _globalScaffoldKey = GlobalKey<ScaffoldState>();
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
@@ -48,31 +49,31 @@ class BlogListPageView extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              const Divider(
-                color: ConstValue.drawerIconColor
-              ),
-              Container(
-
-                padding: const EdgeInsets.all(16.0),
-
-                child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => BlogListPageView()));
-                  },
-                  child: Row(
-                    children: const [
-                      Icon(Icons.dashboard,color: ConstValue.drawerIconColor,),
-                      SizedBox(width: 10),
-                      Text("ব্লগ",style: ConstValue.drawerTestStyle,),
-                    ],
-
-                  ),
-                ),
-
-              ),
+              // const Divider(
+              //   color: ConstValue.drawerIconColor
+              // ),
+              // Container(
+              //
+              //   padding: const EdgeInsets.all(16.0),
+              //
+              //   child: InkWell(
+              //     onTap: () {
+              //       Navigator.pop(context);
+              //       Navigator.push(
+              //           context,
+              //           MaterialPageRoute(builder: (context) => BlogListPageView()));
+              //     },
+              //     child: Row(
+              //       children: const [
+              //         Icon(Icons.dashboard,color: ConstValue.drawerIconColor,),
+              //         SizedBox(width: 10),
+              //         Text("ব্লগ",style: ConstValue.drawerTestStyle,),
+              //       ],
+              //
+              //     ),
+              //   ),
+              //
+              // ),
               const Divider(
                   color: ConstValue.drawerIconColor
               ),
@@ -92,6 +93,31 @@ class BlogListPageView extends StatelessWidget {
                       Icon(Icons.dashboard,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
                       Text("কাজী লিস্ট",style: ConstValue.drawerTestStyle,),
+                    ],
+
+                  ),
+                ),
+
+              ),
+              const Divider(
+                  color: ConstValue.drawerIconColor
+              ),
+              Container(
+
+                padding: const EdgeInsets.all(16.0),
+
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Assistant()));
+                  },
+                  child: Row(
+                    children: const [
+                      Icon(Icons.dashboard,color: ConstValue.drawerIconColor,),
+                      SizedBox(width: 10),
+                      Text("অ্যাসিস্ট্যান্ট",style: ConstValue.drawerTestStyle,),
                     ],
 
                   ),
@@ -598,7 +624,7 @@ class BlogListPageView extends StatelessWidget {
           child: InkWell(
             onTap: () async {
               await _postController.fetchPosts();
-              await _categoryController.fetchCategory();
+              // await _categoryController.fetchCategory();
             },
             child: Container(
               margin: const EdgeInsets.all(0),
