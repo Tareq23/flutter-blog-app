@@ -7,7 +7,6 @@ import 'package:blog_app/Model/public_blog_list_model.dart';
 import 'package:blog_app/Model/union_model.dart';
 import 'package:blog_app/Services/color.dart';
 import 'package:blog_app/controller/profile_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // import 'landing_page.dart';
@@ -18,7 +17,9 @@ import 'package:blog_app/Services/app_api.dart';
 import 'package:get/get.dart';
 
 import '../Model/sub_district_model.dart';
+import '../Services/common_widgets.dart';
 import '../controller/kaji_list_filter_controller.dart';
+import '../controller/network_controller.dart';
 
 
 class KajiListPageViewExtend extends StatefulWidget {
@@ -86,59 +87,25 @@ class _KajiListPageStateConfig extends State<KajiListPageViewExtend> {
               });
             },
             child: Obx((){
-              if(profileController.kajiList.isEmpty){
-                return const Center(child: CircularProgressIndicator(color: ConstValue.color,),);
+              if (NetworkController.networkError.value &&
+                  profileController.kajiList.isEmpty) {
+                return Center(
+                  child: NetworkNotConnect(page: "kajiList",controller: profileController,filterController: kajiListFilterController,),
+                );
+              }
+              else if(profileController.isLoadKajiList.value){
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              else if(profileController.kajiList.isNotEmpty){
+
+                return ListView(
+                  children:  showKajiItem(context),
+                );
               }
               else{
-                return ListView.builder(
-                  itemCount: profileController.kajiList.length,
-                  itemBuilder: (context,index){
-                    return Container(
-                      // color: Colors.red,
-                      margin: const EdgeInsets.all(10),
-                      child: Row(
-                        children: [
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(50),
-                              child: Container(
-                                width: 100,
-                                height: 100,
-                                padding: const EdgeInsets.all(0),
-                                margin: const EdgeInsets.all(0),
-                                child: const Image(
-                                  image: AssetImage('assets/default_person.jpg'),
-                                ),
-                              )
-                          ),
-                          const SizedBox(width: 30,),
-                          Flexible(
-                            child: Container(
-                              padding: const EdgeInsets.all(0),
-                              margin: const EdgeInsets.all(0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children:  [
-                                  Text("${profileController.kajiList[index].name}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: Color(
-                                      0xFF181818)),),
-                                  const SizedBox(height: 15,),
-
-                                  // Text("${profileController.kajiList[index].address}",style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: Color(
-                                  //     0xFF181818)),),
-                                  Text("জেলা - ${profileController.kajiList[index].district?.districtNameBng}",style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: Color(
-                                      0xFF181818)),),
-                                  Text("উপজেলা - ${profileController.kajiList[index].subDistrict?.upazilaNameBng}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: Color(
-                                      0xFF181818)),),
-                                  Text("ইউনিয়ন - ${profileController.kajiList[index].union?.unionNameBng}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: Color(
-                                      0xFF171616)),),
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                );
+                return EmptyListData(page: "kajiList",controller: profileController,);
               }
             }),
           )
@@ -149,10 +116,86 @@ class _KajiListPageStateConfig extends State<KajiListPageViewExtend> {
     );
   }
 
+  List<Widget> showKajiItem(BuildContext context)
+  {
+    List<Widget> _list = [];
+    for(int index=0; index<profileController.kajiList.length; index++){
+      _list.add(Container(
+        // color: Colors.red,
+        margin: const EdgeInsets.all(10),
+        child: Row(
+          children: [
+            ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  padding: const EdgeInsets.all(0),
+                  margin: const EdgeInsets.all(0),
+                  child: const Image(
+                    image: AssetImage('assets/default_person.jpg'),
+                  ),
+                )
+            ),
+            const SizedBox(width: 30,),
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.all(0),
+                margin: const EdgeInsets.all(0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children:  [
+                    Text("${profileController.kajiList[index].name}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: Color(
+                        0xFF181818)),),
+                    const SizedBox(height: 15,),
+
+
+                    Text("জেলা - ${profileController.kajiList[index].district?.districtNameBng??''}",style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: Color(
+                        0xFF181818)),),
+                    Text("উপজেলা - ${profileController.kajiList[index].subDistrict?.upazilaNameBng??''}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: Color(
+                        0xFF181818)),),
+                    Text("ইউনিয়ন - ${profileController.kajiList[index].union?.unionNameBng??''}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: Color(
+                        0xFF171616)),),
+                    // Text("সিটি কর্পোরেশন - ${profileController.kajiList[index].union?.unionNameBng??''}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: Color(
+                    //     0xFF171616)),),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ));
+    }
+    _list.add(
+      SizedBox(height: 15,),
+    );
+    _list.add(
+      OutlinedButton(
+          onPressed: (){
+            profileController.isLoadKajiList.value = true;
+            profileController.kajiListPage.value++;
+            profileController.fetchKajiList({
+              "division_id" : kajiListFilterController.selectDivision.value.id == 0 ? "" : kajiListFilterController.selectDivision.value.id.toString(),
+              "district_id" : kajiListFilterController.selectDistrict.value.id == 0 ? "" : kajiListFilterController.selectDistrict.value.id.toString(),
+              "union_id" : kajiListFilterController.selectUnion.value.id == 0 ? "" : kajiListFilterController.selectUnion.value.id.toString(),
+              "subdistrict_id" : kajiListFilterController.selectSubDistrict.value.id == 0 ? "" : kajiListFilterController.selectSubDistrict.value.id.toString(),
+              "page" : profileController.kajiListPage.value.toString()
+            });
+          },
+          child: const Text('Load more',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),
+        style: OutlinedButton.styleFrom(
+          primary: ConstValue.whileColor,
+          backgroundColor: ConstValue.color,
+
+        ),
+      )
+    );
+    return _list;
+  }
+
+
   FloatingActionButton _filterList(BuildContext context)
   {
-
-
 
     Size screenSize = MediaQuery.of(context).size;
     return FloatingActionButton(
@@ -172,7 +215,7 @@ class _KajiListPageStateConfig extends State<KajiListPageViewExtend> {
                       thickness: 2,
                       color: Color(0xFF313131),
                     ),
-                    SizedBox(height: 5,),
+                    const SizedBox(height: 5,),
                     DropdownButton<DivisionModel>(
                         borderRadius: BorderRadius.circular(10),
                         icon: Icon(
@@ -181,9 +224,17 @@ class _KajiListPageStateConfig extends State<KajiListPageViewExtend> {
                         ),
                         hint: const Text('Select Division'),
                         dropdownColor: Colors.white,
+                        autofocus: true,
                         value: kajiListFilterController.selectDivision.value,
                         onChanged: (newValue) {
                           kajiListFilterController.selectDivision.value = newValue!;
+                          kajiListFilterController.selectDistrict.value = DistrictModel(0, "Select District", "Select District");
+                          kajiListFilterController.selectSubDistrict.value = SubDistrictModel(0, "Select upazila", "Select upazila");
+                          kajiListFilterController.selectUnion.value = UnionModel(0, "Select Union", "Select Union");
+                          kajiListFilterController.districtList.clear();
+                          kajiListFilterController.subDistrictList.clear();
+                          kajiListFilterController.unionList.clear();
+                          // kajiListFilterController.districtList.assignAll(kajiListFilterController.districtList.where((p0) => p0.id == 0));
                           kajiListFilterController.fetchDistrict();
                         },
                         items: kajiListFilterController.divisionList.isNotEmpty
@@ -206,6 +257,11 @@ class _KajiListPageStateConfig extends State<KajiListPageViewExtend> {
                         value: kajiListFilterController.selectDistrict.value,
                         onChanged: (newValue) {
                           kajiListFilterController.selectDistrict.value = newValue!;
+                          kajiListFilterController.selectSubDistrict.value = SubDistrictModel(0, "Select upazila", "Select upazila");
+                          kajiListFilterController.selectUnion.value = UnionModel(0, "Select Union", "Select Union");
+                          kajiListFilterController.subDistrictList.clear();
+                          kajiListFilterController.unionList.clear();
+
                           kajiListFilterController.fetchSubDistrict();
                         },
                         items: kajiListFilterController.districtList.isNotEmpty
@@ -229,6 +285,8 @@ class _KajiListPageStateConfig extends State<KajiListPageViewExtend> {
                         value: kajiListFilterController.selectSubDistrict.value,
                         onChanged: (newValue) {
                           kajiListFilterController.selectSubDistrict.value = newValue!;
+                          kajiListFilterController.selectUnion.value = UnionModel(0, "Select Union", "Select Union");
+                          kajiListFilterController.unionList.clear();
                           kajiListFilterController.fetchUnion();
                         },
                         items: kajiListFilterController.subDistrictList.isNotEmpty
@@ -252,7 +310,6 @@ class _KajiListPageStateConfig extends State<KajiListPageViewExtend> {
                         value: kajiListFilterController.selectUnion.value,
                         onChanged: (newValue) {
                           kajiListFilterController.selectUnion.value = newValue!;
-
                         },
                         items: kajiListFilterController.unionList.isNotEmpty
                             ? kajiListFilterController.unionList
@@ -313,115 +370,4 @@ class _KajiListPageStateConfig extends State<KajiListPageViewExtend> {
     );
   }
 
-  // Widget ListBuilderKajiMethod(Future<void> public_bloglist_model_fut) {
-  //   return FutureBuilder<void>(
-  //     future: public_bloglist_model_fut,
-  //     builder: (BuildContext context, AsyncSnapshot snapshot) {
-  //       debugPrint('Builder');
-  //       switch (snapshot.connectionState) {
-  //         case ConnectionState.done:
-  //           if (snapshot.hasError)
-  //             return Center(child: new Text('Loading...'));
-  //           else {
-  //             if (snapshot.hasData) {
-  //               if(_public_blog_list2.length>0){
-  //                 return ListView.builder(
-  //                   itemBuilder: (BuildContext context, int index) {
-  //                     String phone = snapshot.data[index].phone;
-  //
-  //                     String imagefile_nameString = snapshot.data[index].image;
-  //
-  //                     String img;
-  //
-  //
-  //                     if(imagefile_nameString!=null){
-  //                       //img = imagefile_nameString;
-  //                       img = "https://icon-library.com/images/image-placeholder-icon/image-placeholder-icon-5.jpg";
-  //                     }
-  //                     else
-  //                     {
-  //                       img = "https://icon-library.com/images/image-placeholder-icon/image-placeholder-icon-5.jpg";
-  //                     }
-  //
-  //
-  //                     return Card(
-  //                       margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-  //                       elevation: 5,
-  //                       child: Column(
-  //                         children: [
-  //                           Container(
-  //                               margin: EdgeInsets.all(15),
-  //
-  //                               child: Container(
-  //                                   height: 200,
-  //                                   child: Image.network(img))),
-  //                           const SizedBox(
-  //                             width: 10,
-  //                           ),
-  //                           Text("01700000000"),
-  //
-  //
-  //                         ],
-  //                       ),
-  //                     );
-  //                   },
-  //                   itemCount: snapshot.data.length,
-  //                 );
-  //               }
-  //               else{
-  //                 return Center(child: new Text('কোন তথ্য পাওয়া যায় নি', style: new TextStyle(color: Colors.grey, fontSize: 20)));
-  //               }
-  //
-  //             } else
-  //               return Center(child: CircularProgressIndicator());
-  //           }
-  //           break;
-  //
-  //         default:
-  //           debugPrint("Snapshot " + snapshot.toString());
-  //           return Center(child: new Text('Loading...'));
-  //       }
-  //     },
-  //   );
-  // }
-  //
-  //
-  //
-  //
-  // Future<List<PublicBlogListModel>> CallFormsFromKajiAPI() async {
-  //   String error = "";
-  //   String url = ApiUrl.MRDC_API + 'api/frontend/users?role=3&name&address';
-  //
-  //
-  //
-  //   Map body = {
-  //     "role": "3",
-  //     "name": "",
-  //     "address": "",
-  //   };
-  //
-  //   var response = await BaseClient().PostMethod(url, body);
-  //   //print(response.body);
-  //   try {
-  //     if (response == null) {
-  //     } else {
-  //       try {
-  //         Map<String, dynamic> map = json.decode(response);
-  //         List<dynamic> data = map["data"];
-  //
-  //         for (int i = 0; i < 2; i++) {
-  //           PublicBlogListModel fact = PublicBlogListModel.fromJson(data[i]);
-  //
-  //           _public_blog_list2.add(fact);
-  //         }
-  //       } catch (Exception) {
-  //         print(Exception);
-  //       }
-  //     }
-  //   } finally {
-  //     print('');
-  //   }
-  //
-  //   return _public_blog_list2;
-  // }
 }

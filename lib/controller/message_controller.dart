@@ -7,8 +7,12 @@ import 'package:get/get.dart';
 class MessageController extends GetxController
 {
 
+  var isLoadingMessage = true.obs;
   var msgList = <MessageModel>[].obs;
   var text = ''.obs;
+
+  var isSendMessage = false.obs;
+  var sentMessage = MessageModel(0, 0, "name", "messageText", "imgUrl", DateTime.now(), "createdAtAgo").obs;
 
   @override
   void onInit() {
@@ -20,8 +24,12 @@ class MessageController extends GetxController
 
   Future<void> fetchMessages() async
   {
-    var _msgList = await AppService.fetchMessage();
-    msgList.assignAll(_msgList);
+    if(isLoadingMessage.value){
+      var _msgList = await AppService.fetchMessage();
+      msgList.assignAll(_msgList);
+      isLoadingMessage.value = false;
+    }
+
     //print(_msgList);
   }
   Future<bool> sendMessage(int id) async
@@ -40,7 +48,19 @@ class MessageController extends GetxController
     }
     //print(message);
     try{
-      return await AppService.sendMessage(message);
+      if(isSendMessage.value){
+        var result =  await AppService.sendMessage(message);
+        isSendMessage.value = false;
+        if(result.id != 0){
+          // isLoadingMessage.value = true;
+          // fetchMessages();
+          msgList.add(result);
+          return true;
+        }
+        else{
+          return false;
+        }
+      }
     }
     catch(e){
       // print(e);

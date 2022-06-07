@@ -63,8 +63,8 @@ class NetworkController extends GetxController
       "Network",
       "Check Your Internet Connection ☁",
         snackPosition: SnackPosition.TOP,
-        backgroundColor: const Color(0xffbababa),
-        colorText: const Color(0xFF000815)
+        backgroundColor: const Color(0xffef3f3f),
+        colorText: const Color(0xFFFFFFFF)
     );
   }
 

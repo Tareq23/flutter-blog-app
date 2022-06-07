@@ -11,6 +11,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
+import '../Services/common_widgets.dart';
+import '../controller/network_controller.dart';
+
 class MyBlogListPageView extends StatefulWidget{
   MyBlogListState createState(){
     return MyBlogListState();
@@ -55,7 +58,18 @@ class MyBlogListState extends State<MyBlogListPageView>{
               await _userPostController.fetchUserPosts();
             },
             child: Obx((){
-              if(_userPostController.userPostList.isNotEmpty){
+              if (NetworkController.networkError.value &&
+                  _userPostController.allPostList.isEmpty) {
+                return Center(
+                  child: NetworkNotConnect(page: "allPost",controller: _userPostController,),
+                );
+              }
+              else if(_userPostController.isUserPostLoading.value){
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              else if(_userPostController.userPostList.isNotEmpty){
                 int itemLength = _userPostController.userPostList.length;
                 return ListView.builder(
                   // itemCount: snapshot.data.length,
@@ -163,8 +177,7 @@ class MyBlogListState extends State<MyBlogListPageView>{
                 );
               }
               else{
-                _userPostController.userPostList();
-                return const Center(child: CircularProgressIndicator(),);
+                return EmptyListData(page: "userPost",controller: _userPostController,);
               }
             }),
           )

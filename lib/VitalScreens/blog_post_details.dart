@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_html/flutter_html.dart';
 
+import '../controller/network_controller.dart';
+
 class BlogPostDetails extends StatelessWidget {
 
   String? author;
@@ -37,6 +39,11 @@ class BlogPostDetails extends StatelessWidget {
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Obx((){
+
+              if(NetworkController.networkError.value){
+                Navigator.pop(context);
+              }
+
               String imageFileNameString = _postController.postDetails.value.image.toString();
 
               String img ;

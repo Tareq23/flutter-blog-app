@@ -12,6 +12,8 @@ import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import '../LogRegScreens/login_page_with_phone_number.dart';
 import '../ProfileScreens/profile_page.dart';
 import '../Services/color.dart';
+import '../Services/common_widgets.dart';
+import '../controller/network_controller.dart';
 import '../conversation/message_ui.dart';
 
 
@@ -225,17 +227,22 @@ class _AssistantState extends State<Assistant> {
         width: screenSize.width,
         height: screenSize.height,
         child: Obx((){
-          if(assistantController.assistantList.isEmpty){
+          if (NetworkController.networkError.value &&
+              assistantController.assistantList.isEmpty) {
+            return Center(
+              child: NetworkNotConnect(page: "allPost",controller: assistantController,),
+            );
+          }
+          else if(assistantController.isLoading.value){
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
-          else{
+          else if(assistantController.assistantList.isNotEmpty){
             return ListView.builder(
                 shrinkWrap: true,
                 itemCount: assistantController.assistantList.length,
                 itemBuilder: (BuildContext context, int index){
-
                   return Card(
                       elevation: 0,
                       child: Container(
@@ -295,6 +302,9 @@ class _AssistantState extends State<Assistant> {
                       )
                   );
                 });
+          }
+          else{
+            return EmptyListData(page: "assistantList", controller: assistantController);
           }
 
         })
@@ -391,32 +401,39 @@ class _AssistantState extends State<Assistant> {
 
                  Align(
                    alignment: Alignment.centerRight,
-                   child: OutlinedButton(
-                     style: OutlinedButton.styleFrom(
-                       primary: ConstValue.whileColor,
-                       backgroundColor: ConstValue.color,
-                       side: const BorderSide(width: 0)
-                     ),
-                     onPressed: () async {
-                       if(formState.currentState!.validate()){
-                         formState.currentState!.save();
-                         bool result = await assistantController.addAssistant({
-                            "name" : name,
-                            "phone" : phone
-                          });
-                          formState.currentState!.reset();
-                          Navigator.pop(context);
-                          if(result){
-                            assistantController.isLoading.value = true;
-                            assistantController.fetchAssistant();
-                          }
-                          else{
-                            Get.snackbar("Error","Something went to wrong!!",backgroundColor: ConstValue.focusColor);
-                          }
-                       }
-                     },
-                     child: const Text("Save"),
-                   ),
+                   child: Obx((){
+                     if(assistantController.isAddAssistant.value){
+                       return OutlinedButton(
+                         style: OutlinedButton.styleFrom(
+                             primary: ConstValue.whileColor,
+                             backgroundColor: ConstValue.color,
+                             side: const BorderSide(width: 0)
+                         ),
+                         onPressed: () async {
+                           if(formState.currentState!.validate()){
+                             formState.currentState!.save();
+                             bool result = await assistantController.addAssistant({
+                               "name" : name,
+                               "phone" : phone
+                             });
+                             formState.currentState!.reset();
+                             Navigator.pop(context);
+                             if(result){
+                               assistantController.isLoading.value = true;
+                               assistantController.fetchAssistant();
+                             }
+                             else{
+                               Get.snackbar("Error","Something went to wrong!!",colorText: ConstValue.whileColor,backgroundColor: ConstValue.focusColor);
+                             }
+                           }
+                         },
+                         child: const Text("Save"),
+                       );
+                     }
+                     else{
+                       return const CircularProgressIndicator(color: ConstValue.color,);
+                     }
+                   })
                  )
               ],
             ),

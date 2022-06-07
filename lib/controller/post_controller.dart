@@ -10,8 +10,11 @@ import 'dart:io';
 
 class PostController extends GetxController{
 
+  var isAllPostLoading = true.obs;
   var allPostList = <PostModel>[].obs;
   var postDetails = PostModel().obs;
+
+  var isUserPostLoading = true.obs;
   var userPostList = <PostModel>[].obs;
   var updatePost = PostModel().obs;
   var postUpdateResult = false.obs;
@@ -41,10 +44,13 @@ class PostController extends GetxController{
 
   Future<void> fetchPosts() async {
     try{
-      var allPosts = await AppService.fetchAllPost();
-      // print("check post length: post controller : ${allPosts.length}");
-      allPostList.assignAll(allPosts);
-      update();
+      if(isAllPostLoading.value){
+        var allPosts = await AppService.fetchAllPost();
+        // print("check post length: post controller : ${allPosts.length}");
+        allPostList.assignAll(allPosts);
+        update();
+        isAllPostLoading.value = false;
+      }
       // print("check post length: post controller : ${allPostList.length}");
     }
     finally{
@@ -55,8 +61,11 @@ class PostController extends GetxController{
 
   Future<void> fetchUserPosts() async {
     try{
-      var userPosts = await AppService.fetchUserPost();
-      userPostList.assignAll(userPosts);
+      if(isUserPostLoading.value){
+        var userPosts = await AppService.fetchUserPost();
+        userPostList.assignAll(userPosts);
+        isUserPostLoading.value = false;
+      }
     }
     finally{
 

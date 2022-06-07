@@ -9,6 +9,8 @@ import 'package:get/get.dart';
 
 class KajiListFilterController extends GetxController
 {
+
+  var isLoadingDivision = true.obs;
   var divisionList = <DivisionModel>[].obs;
   var selectDivision = DivisionModel(0, "Select Division", "Select Division").obs;
 
@@ -29,9 +31,10 @@ class KajiListFilterController extends GetxController
   }
 
   void fetchDivision() async {
-    if(divisionList.length <2){
+    if(divisionList.length <2 && isLoadingDivision.value){
       var list = await AppService.fetchDivision();
       divisionList.addAll(list);
+      isLoadingDivision.value = false;
     }
   }
 

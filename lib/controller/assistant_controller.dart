@@ -14,7 +14,10 @@ class AssistantController extends GetxController
   var assistantList = <AssistantModel>[].obs;
 
   var isLoading = true.obs;
+
+  var isLoadingAddAssistant = false.obs;
   var isAddAssistant = true.obs;
+
   var isRemoveAssistant = true.obs;
 
   @override

@@ -8,4 +8,5 @@ class ConstValue{
   static const whileColor = Color(0xFFFFFFFF);
   static const focusColor = Color(0xF0C44141);
   static const buttonBgDark = Color(0xff001118);
+  static const dotIconColor = Color(0xFF535550);
 }

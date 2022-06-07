@@ -36,10 +36,16 @@ class AppService{
      var response = await http.post(
          Uri.parse(ApiUrl.BLOG_POST),
          headers: {
-           'Content-Type' : 'application/json',
+           'Content-Type' : 'application/x-www-form-urlencoded',
            'Accepts' : 'application/json',
            'Authorization' : 'Bearer $accessToken'
-         }).timeout(const Duration(seconds: TIME_OUT));
+         },
+       body: {
+           "type" : "5",
+            "limit" : "",
+            "title" : ""
+       }
+     ).timeout(const Duration(seconds: TIME_OUT));
      if(response.statusCode == 200){
        var jsonString = jsonDecode(response.body);
        var jsonPost = jsonString['data'] as List;
@@ -304,7 +310,7 @@ class AppService{
   }
 
 
-  static Future<bool> sendMessage(Map message) async{
+  static Future<MessageModel> sendMessage(Map message) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('access_token');
 
@@ -321,8 +327,9 @@ class AppService{
       // print("status code from message ${response.statusCode}");
       //print(message);
       // print(accessToken);
-      if(response.statusCode.toString() == "200" || response.statusCode.toString() == "201"){
-        return true;
+      if(response.statusCode == 200 || response.statusCode == 201){
+        var result = jsonDecode(response.body);
+        return MessageModel.parseJsonData(result);
       }
     }
     on SocketException{
@@ -331,7 +338,7 @@ class AppService{
     on TimeoutException{
       NetworkController.networkError.value = true;
     }
-    return false;
+    return MessageModel(0, 0, "name", "messageText", "imgUrl", DateTime.now(), "createdAtAgo");
   }
   static Future<List<MessageModel>> fetchMessage() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();

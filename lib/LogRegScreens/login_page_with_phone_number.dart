@@ -343,7 +343,7 @@ class _LoginState extends State<Login> {
         children: [
           Container(
             margin: const EdgeInsets.only(left: 20,bottom: 30),
-            child: const Text('ওটিপি দিন',style: TextStyle(color: Colors.black,fontSize: 18),),
+            child: const Text('ওটিপি দিন',style: TextStyle(color: ConstValue.whileColor,fontSize: 18),),
           ),
           VerificationCode(
             length: 6,
@@ -352,7 +352,7 @@ class _LoginState extends State<Login> {
             autofocus: true,
             underlineUnfocusedColor: Colors.blueGrey,
             underlineWidth: 2.5,
-            textStyle: const TextStyle(fontSize: 18),
+            textStyle: const TextStyle(fontSize: 18,color: ConstValue.whileColor),
             fillColor: Colors.greenAccent,
             onEditing: (bool value) {  },
             onCompleted: (value){

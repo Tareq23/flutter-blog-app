@@ -87,7 +87,7 @@ class ProfileController extends GetxController
   }
 
 
-  Future<void> fetchKajiList(Map<dynamic,String> map) async {
+  Future<void> fetchKajiList(Map<String,dynamic> map) async {
     Map filter = {
       "name" : "",
       "division_id" : map['division_id']??"",
