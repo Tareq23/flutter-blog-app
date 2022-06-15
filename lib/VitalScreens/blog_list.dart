@@ -2,6 +2,7 @@ import 'package:blog_app/LogRegScreens/login_page_with_phone_number.dart';
 import 'package:blog_app/ProfileScreens/profile_page.dart';
 import 'package:blog_app/Services/color.dart';
 import 'package:blog_app/Services/common_widgets.dart';
+import 'package:blog_app/VitalScreens/about.dart';
 import 'package:blog_app/VitalScreens/assistent.dart';
 import 'package:blog_app/VitalScreens/blog_post_details.dart';
 import 'package:blog_app/VitalScreens/kaji_list.dart';
@@ -159,7 +160,7 @@ class BlogListPageView extends StatelessWidget {
                     children: const [
                       Icon(Icons.dashboard,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
-                      Text("আমার ব্লগ",style: ConstValue.drawerTestStyle,),
+                      Text("আমার লেখা",style: ConstValue.drawerTestStyle,),
                     ],
                   ),
                 ),
@@ -198,6 +199,24 @@ class BlogListPageView extends StatelessWidget {
                       Icon(Icons.money,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
                       Text("পেমেন্ট",style: ConstValue.drawerTestStyle,),
+                    ],
+                  ),
+                ),
+              ),
+              const Divider(
+                  color: ConstValue.drawerIconColor
+              ),
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>About()));
+                  },
+                  child: Row(
+                    children: const [
+                      Icon(Icons.info,color: ConstValue.drawerIconColor,),
+                      SizedBox(width: 10),
+                      Text("সম্পর্কে",style: ConstValue.drawerTestStyle,),
                     ],
                   ),
                 ),

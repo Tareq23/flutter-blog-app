@@ -1,5 +1,6 @@
 
 import 'package:blog_app/Services/color.dart';
+import 'package:blog_app/Services/common_widgets.dart';
 import 'package:blog_app/controller/post_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -84,6 +85,12 @@ class BlogPostDetails extends StatelessWidget {
                     '${_postController.postDetails.value.headline}',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: Colors.blueGrey.shade900),
                   ),
                   const SizedBox(height: 10,),
+
+                  // ? VideoPlayerFromUrl(url: _postController.postDetails.value.videlUrl.toString()) : null,
+
+                  if(_postController.postDetails.value.videlUrl != null)
+                    VideoPlayerFromUrl(url: _postController.postDetails.value.videlUrl.toString()),
+
                   // SelectableText(
                   //   '${_postController.postDetails.value.content}',style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w400,color: Colors.black),
                   // ),

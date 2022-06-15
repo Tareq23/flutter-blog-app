@@ -35,4 +35,9 @@ class ApiUrl{
   static const ASSISTENT_ADD = "http://api.nationalmrdc.com/contacts";
   static String ASSISTENT_REMOVE = "http://api.nationalmrdc.com/contacts/";
 
+
+  // APP ABOUT
+
+  static const ABOUT = "https://api.nationalmrdc.com/api/frontend/post/details/about";
+
 }

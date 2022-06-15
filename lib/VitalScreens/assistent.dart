@@ -15,6 +15,7 @@ import '../Services/color.dart';
 import '../Services/common_widgets.dart';
 import '../controller/network_controller.dart';
 import '../conversation/message_ui.dart';
+import 'about.dart';
 
 
 class Assistant extends StatefulWidget {
@@ -106,7 +107,7 @@ class _AssistantState extends State<Assistant> {
                     children: const [
                       Icon(Icons.dashboard,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
-                      Text("আমার ব্লগ",style: ConstValue.drawerTestStyle,),
+                      Text("আমার লেখা",style: ConstValue.drawerTestStyle,),
                     ],
                   ),
                 ),
@@ -154,6 +155,24 @@ class _AssistantState extends State<Assistant> {
                       Icon(Icons.message,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
                       Text("ম্যাসেজ",style: ConstValue.drawerTestStyle,),
+                    ],
+                  ),
+                ),
+              ),
+              const Divider(
+                  color: ConstValue.drawerIconColor
+              ),
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>About()));
+                  },
+                  child: Row(
+                    children: const [
+                      Icon(Icons.info,color: ConstValue.drawerIconColor,),
+                      SizedBox(width: 10),
+                      Text("সম্পর্কে",style: ConstValue.drawerTestStyle,),
                     ],
                   ),
                 ),

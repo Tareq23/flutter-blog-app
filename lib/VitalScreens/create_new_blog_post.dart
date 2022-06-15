@@ -213,83 +213,6 @@ class _CreateNewBlogPostState extends State<CreateNewBlogPost> {
                   ),
                 ),
 
-                // post Category
-                // Container(
-                //   margin:
-                //       const EdgeInsets.symmetric(vertical: 3, horizontal: 15),
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.center,
-                //     children: [
-                //       Row(
-                //         mainAxisAlignment: MainAxisAlignment.start,
-                //         children: [
-                //           Container(
-                //             padding: const EdgeInsets.all(0),
-                //             margin: const EdgeInsets.all(0),
-                //             width: screenSize.width * 0.08,
-                //             alignment: Alignment.centerLeft,
-                //             child: Container(
-                //                 padding: const EdgeInsets.all(0),
-                //                 margin: const EdgeInsets.all(0),
-                //                 width: screenSize.width * 0.08,
-                //                 height: screenSize.width * 0.08,
-                //                 decoration: BoxDecoration(
-                //                   borderRadius: BorderRadius.circular(50),
-                //                   color: Colors.indigo.shade900,
-                //                 ),
-                //                 child: const Icon(
-                //                   Icons.category_outlined,
-                //                   color: Colors.white,
-                //                 )),
-                //           ),
-                //           const SizedBox(
-                //             width: 30,
-                //           ),
-                //           Container(
-                //             padding: const EdgeInsets.all(0),
-                //             margin: const EdgeInsets.all(0),
-                //             child: Obx(() {
-                //               if (categoryController.catList.isNotEmpty) {
-                //                 return DropdownButton<CategoryModel>(
-                //                   value: categoryController
-                //                       .selectCategoryForSearch.value,
-                //                   icon: Icon(
-                //                     Icons.arrow_circle_down_outlined,
-                //                     color: Colors.indigo.shade900,
-                //                   ),
-                //                   hint: const Text('Select Category'),
-                //                   dropdownColor: Colors.white,
-                //                   onChanged: (newValue) {
-                //                     categoryController.selectCategoryForSearch
-                //                         .value = newValue!;
-                //                     postController.createPost.value.job_id =
-                //                         categoryController
-                //                             .selectCategoryForSearch.value.id;
-                //                   },
-                //                   items: categoryController.catList
-                //                       .map((items) =>
-                //                           DropdownMenuItem<CategoryModel>(
-                //                             child: Text(items.name.toString()),
-                //                             value: items,
-                //                           ))
-                //                       .toList(),
-                //                 );
-                //               } else {
-                //                 return const Center(
-                //                   child: CircularProgressIndicator(),
-                //                 );
-                //               }
-                //             }),
-                //           ),
-                //         ],
-                //       ),
-                //       _errorWidget('Category Required',
-                //           postController.createPost.value.job_id)
-                //     ],
-                //   ),
-                // ),
-
-                // post image
                 Container(
                   margin:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -390,72 +313,7 @@ class _CreateNewBlogPostState extends State<CreateNewBlogPost> {
                   })
                 ),
 
-                //status
-                // Container(
-                //   margin:
-                //       const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.center,
-                //     children: [
-                //       Row(
-                //         mainAxisAlignment: MainAxisAlignment.start,
-                //         children: [
-                //           Container(
-                //             padding: const EdgeInsets.all(0),
-                //             margin: const EdgeInsets.all(0),
-                //             width: screenSize.width * 0.08,
-                //             alignment: Alignment.centerLeft,
-                //             child: Container(
-                //                 padding: const EdgeInsets.all(0),
-                //                 margin: const EdgeInsets.all(0),
-                //                 width: screenSize.width * 0.08,
-                //                 height: screenSize.width * 0.08,
-                //                 decoration: BoxDecoration(
-                //                   borderRadius: BorderRadius.circular(50),
-                //                   color: Colors.indigo.shade900,
-                //                 ),
-                //                 child: const Icon(
-                //                   Icons.check,
-                //                   color: Colors.white,
-                //                 )),
-                //           ),
-                //           const SizedBox(
-                //             width: 30,
-                //           ),
-                //           Expanded(
-                //               child: DropdownButton(
-                //             icon: Icon(
-                //               Icons.arrow_circle_down_outlined,
-                //               color: Colors.indigo.shade900,
-                //             ),
-                //             hint: const Text(
-                //                 'select status'), // Not necessary for Option 1
-                //             value: activeStatus['id'],
-                //             onChanged: (newValue) {
-                //               setState(() {
-                //                 activeStatus = {
-                //                   "id": newValue,
-                //                   "value": newValue == 1 ? "Active" : "InActive"
-                //                 };
-                //               });
-                //               postController.createPost.value.status =
-                //                   activeStatus['id'];
-                //             },
-                //             items: _statusMap.map((Map status) {
-                //               return DropdownMenuItem(
-                //                   value: status['id'],
-                //                   child: Text(
-                //                     status['value'].toString(),
-                //                   ));
-                //             }).toList(),
-                //           ))
-                //         ],
-                //       ),
-                //       _errorWidget('Status Required',
-                //           postController.createPost.value.status)
-                //     ],
-                //   ),
-                // ),
+
 
                 /*Submit Button*/
                 Container(
@@ -475,11 +333,12 @@ class _CreateNewBlogPostState extends State<CreateNewBlogPost> {
                           completeAllFields.value = true;
                           await postController.createNewPost();
                           if(postController.createPostStatusCode.value == "201"){
-                            print("if condition : ${postController.createPostStatusCode.value}");
                             postController.showSuccessSnackbar("Post Created success");
                             postController.createPostStatusCode.value="";
                             _isSubmit.value = false;
                             Navigator.pop(context);
+                            postController.isUserPostLoading.value=true;
+                            postController.fetchUserPosts();
                           }
                           else{
                             postController.showErrorSnackbar("Failed to create post");

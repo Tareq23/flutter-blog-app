@@ -12,6 +12,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../LogRegScreens/login_page_with_phone_number.dart';
 import '../ProfileScreens/profile_page.dart';
 import '../Services/common_widgets.dart';
+import '../VitalScreens/about.dart';
+import '../VitalScreens/assistent.dart';
 import '../VitalScreens/blog_list.dart';
 import '../VitalScreens/kaji_list.dart';
 import '../VitalScreens/my_blog_list.dart';
@@ -28,23 +30,7 @@ class _MessageState extends State<Message> {
 
   final messageController = Get.put(MessageController());
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
-  List<MessageModel> messList = [
-    // MessageModel(1,null,"User Name","Text Message ","assets/default_person.jpg","Today"),
-    // MessageModel(2,null,"Admin","Text Message ","assets/default_person.jpg","Today"),
-    // MessageModel(3,null,"User Name","Text Message ","assets/default_person.jpg","Today"),
-    // MessageModel(4,null,"Admin","Text Message ","assets/default_person.jpg","Today"),
-    // MessageModel(5,null,"User Name","Text Message ","assets/default_person.jpg","Today"),
-    // MessageModel(6,null,"Admin","Text Message ","assets/default_person.jpg","Today"),
-    // MessageModel(7,null,"User Name","Text Message ","assets/default_person.jpg","Today"),
-    // MessageModel(8,null,"User Name","Text Message ","assets/default_person.jpg","Today"),
-    // MessageModel(9,null,"User Name","Text Message ","assets/default_person.jpg","Today"),
-    // MessageModel(10,null,"Admin","Text Message ","assets/default_person.jpg","Today"),
-    // MessageModel(11,null,"User Name","Text Message ","assets/default_person.jpg","Today"),
-    // MessageModel(12,null,"User Name","Text Message ","assets/default_person.jpg","Today"),
-    // MessageModel(13,null,"Admin","Text Message ","assets/default_person.jpg","Today"),
-    // MessageModel(14,null,"User Name","Text Message ","assets/default_person.jpg","Today"),
-    // MessageModel(15,null,"Admin","Text Message ","assets/default_person.jpg","Today"),
-  ];
+
 
 
   @override
@@ -124,7 +110,7 @@ class _MessageState extends State<Message> {
                     children: const [
                       Icon(Icons.dashboard,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
-                      Text("আমার ব্লগ",style: ConstValue.drawerTestStyle,),
+                      Text("আমার লেখা",style: ConstValue.drawerTestStyle,),
                     ],
                   ),
                 ),
@@ -158,6 +144,31 @@ class _MessageState extends State<Message> {
                   color: ConstValue.drawerIconColor
               ),
               Container(
+
+                padding: const EdgeInsets.all(16.0),
+
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Assistant()));
+                  },
+                  child: Row(
+                    children: const [
+                      Icon(Icons.dashboard,color: ConstValue.drawerIconColor,),
+                      SizedBox(width: 10),
+                      Text("অ্যাসিস্ট্যান্ট",style: ConstValue.drawerTestStyle,),
+                    ],
+
+                  ),
+                ),
+
+              ),
+              const Divider(
+                  color: ConstValue.drawerIconColor
+              ),
+              Container(
                 padding: EdgeInsets.all(16.0),
                 child: InkWell(
                   onTap: () {
@@ -172,6 +183,24 @@ class _MessageState extends State<Message> {
                       Icon(Icons.message,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
                       Text("ম্যাসেজ",style: ConstValue.drawerTestStyle,),
+                    ],
+                  ),
+                ),
+              ),
+              const Divider(
+                  color: ConstValue.drawerIconColor
+              ),
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>About()));
+                  },
+                  child: Row(
+                    children: const [
+                      Icon(Icons.info,color: ConstValue.drawerIconColor,),
+                      SizedBox(width: 10),
+                      Text("সম্পর্কে",style: ConstValue.drawerTestStyle,),
                     ],
                   ),
                 ),

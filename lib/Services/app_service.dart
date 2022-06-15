@@ -710,5 +710,39 @@ class AppService{
   }
 
 
+  static Future<String> fetchAbout() async
+  {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+    try{
+      NetworkController.networkError.value = false;
+      var response = await http.get(
+          Uri.parse(ApiUrl.ABOUT)).timeout(const Duration(seconds: TIME_OUT));
+
+      // print("status code : ${response.statusCode}");
+      // print(response.body);
+      if(response.statusCode == 201 || response.statusCode == 200)
+      {
+        var data = jsonDecode(response.body);
+        // print(data);
+        // print(data['content']);
+        return data['content'];
+      }
+
+    }
+    on SocketException{
+      NetworkController.networkError.value = true;
+    }
+    on TimeoutException{
+      NetworkController.networkError.value = true;
+    }
+    finally{
+
+
+    }
+    return "";
+  }
+
+
 
 }

@@ -1,6 +1,9 @@
 import 'package:blog_app/Services/color.dart';
 import 'package:blog_app/controller/kaji_list_filter_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
+
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 
 class NetworkNotConnect extends StatelessWidget {
@@ -91,6 +94,10 @@ class NetworkNotConnect extends StatelessWidget {
                     controller.isLoadingMessage.value = true;
                     controller.fetchMessages();
                   }
+                  else if(page == "about"){
+                    controller.isLoading.value = true;
+                    controller.fetchAboutData();
+                  }
                 },
                 child: Container(
                   margin: const EdgeInsets.all(0),
@@ -161,6 +168,10 @@ class EmptyListData extends StatelessWidget {
                 controller.isLoadingMessage.value = true;
                 controller.fetchMessages();
               }
+              else if(page == "about"){
+                controller.isLoading.value = true;
+                controller.fetchAboutData();
+              }
             },
             style: OutlinedButton.styleFrom(
               backgroundColor: ConstValue.color,
@@ -176,16 +187,57 @@ class EmptyListData extends StatelessWidget {
 
 
 class VideoPlayerFromUrl extends StatefulWidget {
-  const VideoPlayerFromUrl({Key? key}) : super(key: key);
+
+  String url;
+
+  VideoPlayerFromUrl({Key? key,required this.url}) : super(key: key);
 
   @override
   _VideoPlayerFromUrlState createState() => _VideoPlayerFromUrlState();
 }
 
 class _VideoPlayerFromUrlState extends State<VideoPlayerFromUrl> {
+
+
+  late YoutubePlayerController youtubePlayerController;
+
+  @override
+  void initState() {
+
+    List<String> splitUrl = widget.url.split("v=");
+
+    youtubePlayerController = YoutubePlayerController(
+        initialVideoId: splitUrl[splitUrl.length-1].toString(),
+        flags: const YoutubePlayerFlags(
+          autoPlay: true,
+          mute: false,
+          startAt: 0,
+        )
+
+    );
+
+  }
+
+  @override
+  void dispose() {
+    youtubePlayerController.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    var screenSize = MediaQuery.of(context).size;
+    return Container(
+      width: screenSize.width,
+      height: screenSize.height * 0.3,
+      padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 0),
+
+      child: YoutubePlayer(
+        controller: youtubePlayerController,
+        showVideoProgressIndicator: true,
+      ),
+    );
   }
 }
 
