@@ -91,28 +91,28 @@ class ProfilePageView extends StatelessWidget {
                     ),
                   ),
                 ),
+                // Positioned(
+                //   right: 20,
+                //   top: screenSize.height * 0.08,
+                //   child: ClipRRect(
+                //     borderRadius: BorderRadius.circular((screenSize.width * 0.45)/2),
+                //     child:  (_profileController.selectImagePath.value == '' || _profileController.isFileImage.value)
+                //             ? Image.asset(
+                //             'assets/default_person.jpg',
+                //             width: screenSize.width * 0.45,
+                //             height: screenSize.width * 0.45,
+                //             fit: BoxFit.cover,
+                //             )
+                //             : Image.network(
+                //                 _profileController.selectImagePath.value,
+                //                 width: screenSize.width * 0.45,
+                //                 height: screenSize.width * 0.45,
+                //                 fit: BoxFit.cover,
+                //               ),
+                //   ),
+                // ),
                 Positioned(
-                  right: 20,
-                  top: screenSize.height * 0.08,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular((screenSize.width * 0.45)/2),
-                    child:  (_profileController.selectImagePath.value == '' || _profileController.isFileImage.value)
-                            ? Image.asset(
-                            'assets/default_person.jpg',
-                            width: screenSize.width * 0.45,
-                            height: screenSize.width * 0.45,
-                            fit: BoxFit.cover,
-                            )
-                            : Image.network(
-                                _profileController.selectImagePath.value,
-                                width: screenSize.width * 0.45,
-                                height: screenSize.width * 0.45,
-                                fit: BoxFit.cover,
-                              ),
-                  ),
-                ),
-                Positioned(
-                  top: screenSize.height * 0.35,
+                  top: screenSize.height * 0.25,
                   child: Container(
                     padding: const EdgeInsets.only(top: 20, right: 10, left: 10),
                     margin: const EdgeInsets.all(0),

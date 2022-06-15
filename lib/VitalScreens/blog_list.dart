@@ -330,27 +330,27 @@ class BlogListPageView extends StatelessWidget {
                       String imageFileNameString =
                       post.image.toString();
 
-                      String img;
-                      // ignore: unnecessary_null_comparison
-                      if (imageFileNameString != null) {
-                        img = imageFileNameString;
-                        List imgUrlExplode = img.split("://");
-                        if (img.length > 2000 || imgUrlExplode[0] != "https") {
-                          img =
-                          "https://icon-library.com/images/image-placeholder-icon/image-placeholder-icon-5.jpg";
-                        }
-                      } else {
-                        img =
-                        "https://icon-library.com/images/image-placeholder-icon/image-placeholder-icon-5.jpg";
-                      }
+                      // String img;
+                      // // ignore: unnecessary_null_comparison
+                      // if (imageFileNameString != null) {
+                      //   img = imageFileNameString;
+                      //   List imgUrlExplode = img.split("://");
+                      //   if (img.length > 2000 || imgUrlExplode[0] != "https") {
+                      //     img =
+                      //     "https://icon-library.com/images/image-placeholder-icon/image-placeholder-icon-5.jpg";
+                      //   }
+                      // } else {
+                      //   img =
+                      //   "https://icon-library.com/images/image-placeholder-icon/image-placeholder-icon-5.jpg";
+                      // }
 
-                      List img2 = img.split(".");
-                      // print(img2);
-                      String heroAnimationTag = post.id.toString();
-                      // var topPadding = index == 0 ? 15.0 : 0.0;
-                      if(img2[img2.length-1].toString().toLowerCase() != "jpg" && img2[img2.length-1].toString().toLowerCase() != "png"){
-                        img = "https://icon-library.com/images/image-placeholder-icon/image-placeholder-icon-5.jpg";
-                      }
+                      // List img2 = img.split(".");
+                      // // print(img2);
+                      // String heroAnimationTag = post.id.toString();
+                      // // var topPadding = index == 0 ? 15.0 : 0.0;
+                      // if(img2[img2.length-1].toString().toLowerCase() != "jpg" && img2[img2.length-1].toString().toLowerCase() != "png"){
+                      //   img = "https://icon-library.com/images/image-placeholder-icon/image-placeholder-icon-5.jpg";
+                      // }
                       return Container(
                           padding:  const EdgeInsets.all(0),
                           margin: const EdgeInsets.only(
@@ -370,7 +370,7 @@ class BlogListPageView extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          BlogPostDetails(heroAnimationTag)));
+                                          BlogPostDetails(post.id.toString())));
                             },
                             child: Row(
                               children: [
@@ -379,8 +379,8 @@ class BlogListPageView extends StatelessWidget {
                                     padding: const EdgeInsets.all(0),
                                     margin: const EdgeInsets.all(0),
                                     child: Hero(
-                                      tag: heroAnimationTag,
-                                      child: Image.network(
+                                      tag: post.id.toString(),
+                                      child: post.image != null ? Image.network(
                                         post.image.toString(),
                                         width: double.infinity,
                                         height: double.infinity,
@@ -388,6 +388,10 @@ class BlogListPageView extends StatelessWidget {
                                         (loadingProgress == null) ? child : const CircularProgressIndicator(strokeWidth: 3,color: Color(
                                             0xFF0A4000),),
                                         errorBuilder: (context, error, stackTrace) => defaultImage,
+                                      ) : Image.asset(
+                                        "assets/blank_post_image.PNG",
+                                        width: double.infinity,
+                                        height: double.infinity,
                                       ),
 
                                     )
@@ -463,6 +467,7 @@ class BlogListPageView extends StatelessWidget {
                     OutlinedButton(
                       onPressed: (){
                         _postController.isAllPostLoading.value = true;
+                        _postController.allPostPage.value++;
                         _postController.fetchPosts();
                       },
                       child: const Text('Load more',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600),),

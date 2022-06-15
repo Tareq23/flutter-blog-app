@@ -233,15 +233,17 @@ class _CreateNewBlogPostState extends State<CreateNewBlogPost> {
                         child: Obx(() {
                           if (postController.selectImagePath.value == '') {
                             return Image.asset(
-                              'assets/default_blog_post_image.jpg',
-                              fit: BoxFit.contain,
+                              'assets/blank_post_image.PNG',
+                              width: double.infinity,
+                              height: double.infinity,
+                              fit: BoxFit.cover,
                             );
                           } else {
                             return Image.file(
                                 File(postController.selectImagePath.value),
                                 width: double.infinity,
                                 height: double.infinity,
-                                fit: BoxFit.contain);
+                                fit: BoxFit.cover);
                           }
                         }),
                       ),
@@ -258,8 +260,8 @@ class _CreateNewBlogPostState extends State<CreateNewBlogPost> {
                           ),
                         ),
                       ),
-                      _errorWidget(
-                          'Image Required', postController.selectImagePath)
+                      // _errorWidget(
+                      //     'Image Required', postController.selectImagePath)
                     ],
                   ),
                 ),

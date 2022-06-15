@@ -82,27 +82,27 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
                     child: Column(
                       children: [
                         const SizedBox(height: 10,),
-                        Stack(
-                          children: [
-                            ClipOval(
-                              child: _profileController.isFileImage.value && _profileController.selectImagePath.value.length > 12
-                                      ? Image.file(File(_profileController.selectImagePath.value),height: 200,width: 200,fit: BoxFit.cover,)
-                                      : _profileController.selectImagePath.value == '' ?
-                                          Image.asset('assets/default_person.jpg',height: 200,width: 200,fit: BoxFit.cover)
-                                          : Image.network(_profileController.selectImagePath.value,height: 200,width: 200,fit: BoxFit.cover),
-                            ),
-                            Positioned(
-                              right: 0,
-                              bottom: 20,
-                              child: IconButton(
-                                onPressed: (){
-                                  _profileController.getImage(ImageSource.gallery);
-                                },
-                                icon: const Icon(Icons.camera_alt,color: Color(0xFFFC4B4B),size: 36,),
-                              ),
-                            )
-                          ],
-                        ),
+                        // Stack(
+                        //   children: [
+                        //     ClipOval(
+                        //       child: _profileController.isFileImage.value && _profileController.selectImagePath.value.length > 12
+                        //               ? Image.file(File(_profileController.selectImagePath.value),height: 200,width: 200,fit: BoxFit.cover,)
+                        //               : _profileController.selectImagePath.value == '' ?
+                        //                   Image.asset('assets/default_person.jpg',height: 200,width: 200,fit: BoxFit.cover)
+                        //                   : Image.network(_profileController.selectImagePath.value,height: 200,width: 200,fit: BoxFit.cover),
+                        //     ),
+                        //     Positioned(
+                        //       right: 0,
+                        //       bottom: 20,
+                        //       child: IconButton(
+                        //         onPressed: (){
+                        //           _profileController.getImage(ImageSource.gallery);
+                        //         },
+                        //         icon: const Icon(Icons.camera_alt,color: Color(0xFFFC4B4B),size: 36,),
+                        //       ),
+                        //     )
+                        //   ],
+                        // ),
 
                         /* user name */
                         Padding(

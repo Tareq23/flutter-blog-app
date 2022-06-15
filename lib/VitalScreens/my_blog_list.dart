@@ -82,18 +82,9 @@ class MyBlogListState extends State<MyBlogListPageView>{
                     String dataTime =  _userPostController.userPostList[index].created_at.toString();
                     String imageFileNameString = _userPostController.userPostList[index].image.toString();
 
-                    String img ;
-                    // ignore: unnecessary_null_comparison
-                    if (imageFileNameString != null) {
-                      img = imageFileNameString;
-                      List imgUrlExplode = img.split("://");
-                      if (img.length > 2000 || imgUrlExplode[0] != "https") {
-                        img = "https://icon-library.com/images/image-placeholder-icon/image-placeholder-icon-5.jpg";
-                      }
-                    }
-                    else {
-                      img = "https://icon-library.com/images/image-placeholder-icon/image-placeholder-icon-5.jpg";
-                    }
+                    String img;
+                    List imageUrlExplode = _userPostController.userPostList[index].image.toString().split(".");
+
                     String heroAnimationTag = index.toString();
                     return Container(
                       margin: EdgeInsets.only(left: 10,right: 10,bottom: (index == itemLength-1) ? 100 : 15,),
@@ -108,7 +99,7 @@ class MyBlogListState extends State<MyBlogListPageView>{
                               _userPostController.postDetails.value = _userPostController.userPostList[index];
                               Navigator.push(context,
                                   MaterialPageRoute(
-                                      builder: (context) => BlogPostDetails(heroAnimationTag)));
+                                      builder: (context) => BlogPostDetails(_userPostController.userPostList[index].id.toString())));
                             },
                             child: Container(
                               margin: const EdgeInsets.all(0),
@@ -116,14 +107,18 @@ class MyBlogListState extends State<MyBlogListPageView>{
                               child: Column(
                                 children: [
                                   Hero(
-                                    tag: heroAnimationTag,
-                                    child: Image(
-                                      image: NetworkImage(img),
-                                      width: double.infinity,
-                                      height: 200,
-                                      fit: BoxFit.cover,
-                                    ),
+                                    tag: _userPostController.userPostList[index].id.toString(),
+                                    // child: Image(
+                                    //   image: imageUrlExplode.length == 4 ? NetworkImage(img) : AssetImage(""),
+                                    //   width: double.infinity,
+                                    //   height: 200,
+                                    //   fit: BoxFit.cover,
+                                    // ),
+                                    child: imageUrlExplode.length == 4 ?
+                                    Image.network(_userPostController.userPostList[index].image!,width: double.infinity,height: 200,fit: BoxFit.cover,) :
+                                    Image.asset("assets/blank_post_image.PNG",width: double.infinity,height: 200,fit: BoxFit.cover,),
                                   ),
+
                                   const SizedBox(height: 10,),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

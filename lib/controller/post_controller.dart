@@ -13,6 +13,7 @@ class PostController extends GetxController{
   var isAllPostLoading = true.obs;
   var allPostList = <PostModel>[].obs;
   var postDetails = PostModel().obs;
+  var allPostPage = 1.obs;
 
   var isUserPostLoading = true.obs;
   var userPostList = <PostModel>[].obs;
@@ -45,9 +46,19 @@ class PostController extends GetxController{
   Future<void> fetchPosts() async {
     try{
       if(isAllPostLoading.value){
-        var allPosts = await AppService.fetchAllPost();
+        var allPosts = await AppService.fetchAllPost({
+          "limit" : "",
+          "title" : "",
+          "page" : allPostPage.value.toString(),
+          "type" : 5.toString()
+        });
         // print("check post length: post controller : ${allPosts.length}");
-        allPostList.assignAll(allPosts);
+        if(allPostPage.value == 1){
+          allPostList.assignAll(allPosts);
+        }
+        else{
+          allPostList.addAll(allPosts);
+        }
         update();
         isAllPostLoading.value = false;
       }
@@ -127,14 +138,14 @@ class PostController extends GetxController{
 
   Future<void> createNewPost() async
   {
-    var bytes = File(selectImagePath.value).readAsBytesSync();
+    var bytes =  selectImagePath.value != '' ?  File(selectImagePath.value).readAsBytesSync() : null;
     try{
       Map<String,dynamic> postBody = {
         "headline" : createPost.value.headline,
         "content" : createPost.value.content,
         "status" : createPost.value.status,
         // "job_id" : createPost.value.job_id,
-        "image" : "data:image/png:base64, "+base64Encode(bytes),
+        "image" : selectImagePath.value != '' ? "data:image/png:base64, "+base64Encode(bytes!) : "",
         "video" : createPost.value.videlUrl
       };
       createPostStatusCode.value = await AppService.createPost(postBody);
@@ -153,7 +164,7 @@ class PostController extends GetxController{
     if(createPost.value.content == null) return false;
     // if(createPost.value.job_id == null) return false;
     // if(createPost.value.status == null) return false;
-    if(selectImagePath.isEmpty) return false;
+    // if(selectImagePath.isEmpty) return false;
     return true;
   }
 

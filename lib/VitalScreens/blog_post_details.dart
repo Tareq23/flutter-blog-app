@@ -45,30 +45,16 @@ class BlogPostDetails extends StatelessWidget {
                 Navigator.pop(context);
               }
 
-              String imageFileNameString = _postController.postDetails.value.image.toString();
-
-              String img ;
-              // ignore: unnecessary_null_comparison
-              if (imageFileNameString != null) {
-                img = imageFileNameString;
-                List imgUrlExplode = img.split("://");
-                if (img.length > 2000 || imgUrlExplode[0] != "https") {
-                  img = "https://icon-library.com/images/image-placeholder-icon/image-placeholder-icon-5.jpg";
-                }
-              } else {
-                img = "https://icon-library.com/images/image-placeholder-icon/image-placeholder-icon-5.jpg";
-              }
+              List imageUrlExplode = _postController.postDetails.value.image.toString().split(".");
               return  Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Hero(
                     tag: heroAnimationTag,
-                    child: Image(
-                      image: NetworkImage(img),
-                      width: double.infinity,
-                      height: screenSize.height * 0.27,
-                      fit: BoxFit.cover,
-                    ),
+
+                    child: imageUrlExplode.length == 4 ?
+                    Image.network(_postController.postDetails.value.image!,width: double.infinity,height: 200,fit: BoxFit.cover,) :
+                    Image.asset("assets/blank_post_image.PNG",width: double.infinity,height: 200,fit: BoxFit.cover,),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -86,7 +72,7 @@ class BlogPostDetails extends StatelessWidget {
                   ),
                   const SizedBox(height: 10,),
 
-                  // ? VideoPlayerFromUrl(url: _postController.postDetails.value.videlUrl.toString()) : null,
+                  
 
                   if(_postController.postDetails.value.videlUrl != null)
                     VideoPlayerFromUrl(url: _postController.postDetails.value.videlUrl.toString()),

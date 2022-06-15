@@ -27,7 +27,7 @@ class AppService{
   static const TIME_OUT = 30;
 
 
-  static Future<List<PostModel>> fetchAllPost() async {
+  static Future<List<PostModel>> fetchAllPost(Map<String, dynamic> map) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('access_token');
 
@@ -40,12 +40,9 @@ class AppService{
            'Accepts' : 'application/json',
            'Authorization' : 'Bearer $accessToken'
          },
-       body: {
-           "type" : "5",
-            "limit" : "",
-            "title" : ""
-       }
+       body: map
      ).timeout(const Duration(seconds: TIME_OUT));
+     print("all post fetch status code : ${response.statusCode}");
      if(response.statusCode == 200){
        var jsonString = jsonDecode(response.body);
        var jsonPost = jsonString['data'] as List;
@@ -79,7 +76,9 @@ class AppService{
             'Accepts' : 'application/json',
             'Authorization' : 'Bearer $accessToken'
           }).timeout(const Duration(seconds: TIME_OUT));
-      
+
+      //print(response.body);
+
       if(response.statusCode == 200){
         var jsonString = jsonDecode(response.body) as List;
         List<PostModel> _postList = jsonString.map((items) => PostModel.fromJson(items)).toList();
@@ -250,7 +249,7 @@ class AppService{
             'Authorization' : 'Bearer $accessToken'
           }).timeout(const Duration(seconds: TIME_OUT));
       if(response.statusCode.toString() == "200" || response.statusCode.toInt() == 200) {
-        // print(response.body);
+        //print(response.body);
         var profileData = jsonDecode(response.body);
         // print(response.body);
         ProfileModel _profile = ProfileModel.fromJson(profileData);
