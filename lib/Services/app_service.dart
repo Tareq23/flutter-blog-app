@@ -42,7 +42,7 @@ class AppService{
          },
        body: map
      ).timeout(const Duration(seconds: TIME_OUT));
-     print("all post fetch status code : ${response.statusCode}");
+     //print("all post fetch status code : ${response.statusCode}");
      if(response.statusCode == 200){
        var jsonString = jsonDecode(response.body);
        var jsonPost = jsonString['data'] as List;
@@ -351,6 +351,52 @@ class AppService{
             'Accepts' : 'application/json',
             'Authorization' : 'Bearer $accessToken'
           }).timeout(const Duration(seconds: TIME_OUT));
+      if(response.statusCode.toString() == "200" || response.statusCode.toString() == "201"){
+
+        var jsonString = jsonDecode(response.body) as List;
+        List<MessageModel> replayList,_list=[];
+        List<MessageModel> msgList=[];
+        msgList = jsonString.map((e) {
+          var _msgCheck = e['replay'] as List;
+          if(_msgCheck.isNotEmpty){
+            replayList = _msgCheck.map((item)=>MessageModel.parseJsonData(item)).toList();
+            _list.addAll(replayList);
+          }
+          //print(e);
+          return MessageModel.parseJsonData(e);
+        }).toList();
+        for(int i=0,j=0; i<msgList.length && j < _list.length; i++){
+            if(msgList[i].id == _list[j].parentId){
+              msgList.insert(i+1, _list[j++]);
+            }
+        }
+        return msgList;
+      }
+    }
+    on SocketException{
+      NetworkController.networkError.value = true;
+    }
+    on TimeoutException{
+      NetworkController.networkError.value = true;
+    }
+    return [];
+  }
+
+  static Future<List<MessageModel>> fetchAdminMessage(Map map) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+
+    try{
+      NetworkController.networkError.value = false;
+      var response = await http.get(
+          Uri.parse(ApiUrl.ADMIN_MESSAGE_GET+"?skip=${map['skip']}&take${map['take']}"),
+          headers: {
+            'Accepts' : 'application/json',
+            'Authorization' : 'Bearer $accessToken'
+          },
+      ).timeout(const Duration(seconds: TIME_OUT));
+      print("Status code Admin Info Message : ${response.statusCode}");
+      print(response.body);
       if(response.statusCode.toString() == "200" || response.statusCode.toString() == "201"){
 
         var jsonString = jsonDecode(response.body) as List;

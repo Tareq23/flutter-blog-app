@@ -26,15 +26,30 @@ class Message extends StatefulWidget {
   _MessageState createState() => _MessageState();
 }
 
-class _MessageState extends State<Message> {
+class _MessageState extends State<Message> with TickerProviderStateMixin{
 
   final messageController = Get.put(MessageController());
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
+  late TabController tabController;
+
+  @override
+  void initState()
+  {
+    super.initState();
+    tabController = TabController(length: 2, vsync:this);
+  }
+
+  @override
+  void dispose(){
+    tabController.dispose();
+    super.dispose();
+  }
 
 
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       endDrawer: Drawer(
         elevation: 100,
@@ -259,6 +274,13 @@ class _MessageState extends State<Message> {
         }, icon: Icon(Icons.arrow_back_sharp,)),
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
+        bottom:  TabBar(
+          controller: tabController,
+          tabs: const [
+            Tab(text: 'My Message'),
+            Tab(text: 'Admin Message'),
+          ],
+        ),
         title: const Text('ম্যাসেজ'),
       ),
       floatingActionButton: FloatingActionButton(
@@ -270,98 +292,171 @@ class _MessageState extends State<Message> {
         },
         child: const Icon(Icons.add,color: Colors.white,size: 35,),
       ),
-      body: RefreshIndicator(
-        key: _refreshIndicatorKey,
-        onRefresh: () async {
-          await messageController.fetchMessages();
-        },
-        child: Obx((){
-          if (NetworkController.networkError.value &&
-              messageController.msgList.isEmpty) {
-            return Center(
-              child: NetworkNotConnect(page: "message",controller: messageController,),
-            );
-          }
-          else if(messageController.isLoadingMessage.value){
-            return const Center(child: CircularProgressIndicator());
-          }
-          else if(messageController.msgList.isNotEmpty){
-            return ListView.builder(
-              // itemCount: messList.length,
-              itemCount: messageController.msgList.length,
-              shrinkWrap: true,
-              padding: EdgeInsets.only(top: 16),
-              physics: ScrollPhysics(),
-              itemBuilder: (context, index){
-                //print("user message image url : ${messageController.msgList[index].imgUrl}");
-                // return ConversationList(
-                //   id: messageController.msgList[index].id,
-                //   name: "${messageController.msgList[index].name}",
-                //   messageText: "${messageController.msgList[index].messageText}",
-                //   imageUrl: messageController.msgList[index].imgUrl,
-                //   time: messageController.msgList[index].created_at.toString(),
-                //   timeAgo: messageController.msgList[index].createdAtAgo,
-                // );
-                return GestureDetector(
-                  onLongPress: (){
-                    showSendMessageDialog(context,messageController.msgList[index].id);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.only(left: 16,right: 16,top: 10,bottom: 10),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Row(
-                            children: <Widget>[
-                              CircleAvatar(
-                                // backgroundImage: NetworkImage(widget.imageUrl.toString()),
+      body: TabBarView(
+        controller: tabController,
+        children: [
+          RefreshIndicator(
+            key: _refreshIndicatorKey,
+            onRefresh: () async {
+              await messageController.fetchMessages();
+            },
+            child: Obx((){
+              if (NetworkController.networkError.value &&
+                  messageController.msgList.isEmpty) {
+                return Center(
+                  child: NetworkNotConnect(page: "message",controller: messageController,),
+                );
+              }
+              else if(messageController.isLoadingMessage.value){
+                return const Center(child: CircularProgressIndicator());
+              }
+              else if(messageController.msgList.isNotEmpty){
+                return ListView.builder(
+                  // itemCount: messList.length,
+                  itemCount: messageController.msgList.length,
+                  shrinkWrap: true,
+                  padding: EdgeInsets.only(top: 16),
+                  physics: ScrollPhysics(),
+                  itemBuilder: (context, index){
 
-                                // ignore: unnecessary_null_comparison
-                                // backgroundImage: AssetImage("assets/default_person.jpg"),
-                                backgroundImage: (messageController.msgList[index].imgUrl == null || messageController.msgList[index].imgUrl == '')
-                                    ? const AssetImage("assets/default_person.jpg")
-                                    : NetworkImage(messageController.msgList[index].imgUrl.toString()) as ImageProvider,
-                                maxRadius: 30,
-                              ),
-                              const SizedBox(width: 16,),
-                              Expanded(
-                                child: Container(
-                                  color: Colors.transparent,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text("${messageController.msgList[index].messageText}",style: const TextStyle(fontSize: 16,color: Color(
-                                          0xFF181818),),),
-                                      const SizedBox(height: 6,),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          messageController.msgList[index].name != null ?
-                                          Text("${messageController.msgList[index].name}", style: const TextStyle(fontSize: 13,color: Color(
-                                              0xFF505050)),) : const Text(""),
-                                          Text("${messageController.msgList[index].createdAtAgo}", style: const TextStyle(fontSize: 11,color: Color(
-                                              0xFF505050)),),
+                    return GestureDetector(
+                      onLongPress: (){
+                        showSendMessageDialog(context,messageController.msgList[index].id);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.only(left: 16,right: 16,top: 10,bottom: 10),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Row(
+                                children: <Widget>[
+                                  CircleAvatar(
+                                    // backgroundImage: NetworkImage(widget.imageUrl.toString()),
+
+                                    // ignore: unnecessary_null_comparison
+                                    // backgroundImage: AssetImage("assets/default_person.jpg"),
+                                    backgroundImage: (messageController.msgList[index].imgUrl == null || messageController.msgList[index].imgUrl == '')
+                                        ? const AssetImage("assets/default_person.jpg")
+                                        : NetworkImage(messageController.msgList[index].imgUrl.toString()) as ImageProvider,
+                                    maxRadius: 30,
+                                  ),
+                                  const SizedBox(width: 16,),
+                                  Expanded(
+                                    child: Container(
+                                      color: Colors.transparent,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text("${messageController.msgList[index].messageText}",style: const TextStyle(fontSize: 16,color: Color(
+                                              0xFF181818),),),
+                                          const SizedBox(height: 6,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              messageController.msgList[index].name != null ?
+                                              Text("${messageController.msgList[index].name}", style: const TextStyle(fontSize: 13,color: Color(
+                                                  0xFF505050)),) : const Text(""),
+                                              Text("${messageController.msgList[index].createdAtAgo}", style: const TextStyle(fontSize: 11,color: Color(
+                                                  0xFF505050)),),
+                                            ],
+                                          ),
                                         ],
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
+                    );
+                  },
                 );
-              },
-            );
-          }
-          else{
-            return EmptyListData(page: "message", controller: messageController);
-          }
+              }
+              else{
+                return EmptyListData(page: "message", controller: messageController);
+              }
 
-        }),
+            }),
+          ),
+          Container(
+            width: screenSize.width,
+            height: screenSize.height,
+            padding: const EdgeInsets.all(0),
+            margin: const EdgeInsets.all(0),
+            child: Obx((){
+              if (NetworkController.networkError.value &&
+                  messageController.adminMessageList.isEmpty) {
+                return Center(
+                  child: NetworkNotConnect(page: "message",controller: messageController,),
+                );
+              }
+              else if(messageController.isLoadingAdminMessage.value){
+                return const Center(child: CircularProgressIndicator());
+              }
+              else if(messageController.adminMessageList.isNotEmpty){
+                return ListView(
+                  children: [
+                    ...messageController.adminMessageList.map((element){
+                      return Container(
+                        padding: const EdgeInsets.only(left: 16,right: 16,top: 10,bottom: 10),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Row(
+                                children: <Widget>[
+                                  CircleAvatar(
+                                    // backgroundImage: NetworkImage(widget.imageUrl.toString()),
+
+                                    // ignore: unnecessary_null_comparison
+                                    // backgroundImage: AssetImage("assets/default_person.jpg"),
+                                    backgroundImage: (element.imgUrl == null || element.imgUrl == '')
+                                        ? const AssetImage("assets/default_person.jpg")
+                                        : NetworkImage(element.imgUrl.toString()) as ImageProvider,
+                                    maxRadius: 30,
+                                  ),
+                                  const SizedBox(width: 16,),
+                                  Expanded(
+                                    child: Container(
+                                      color: Colors.transparent,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text("${element.messageText}",style: const TextStyle(fontSize: 16,color: Color(
+                                              0xFF181818),),),
+                                          const SizedBox(height: 6,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              element.name != null ?
+                                              Text("${element.name}", style: const TextStyle(fontSize: 13,color: Color(
+                                                  0xFF505050)),) : const Text(""),
+                                              Text("${element.createdAtAgo}", style: const TextStyle(fontSize: 11,color: Color(
+                                                  0xFF505050)),),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
+                  ],
+                );
+              }
+              else{
+                return EmptyListData(page: "message", controller: messageController);
+              }
+
+            })
+          )
+        ],
       )
     );
   }
@@ -371,7 +466,7 @@ class _MessageState extends State<Message> {
   {
     //print("User Id -> $id");
     Get.defaultDialog(
-      title: "Send Message",
+      title: "Message To Admin",
       titleStyle: const TextStyle(fontWeight: FontWeight.w500,fontSize: 16,color: Colors.black),
       content: Container(
           width: MediaQuery.of(context).size.width * 0.6,

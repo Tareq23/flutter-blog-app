@@ -2,10 +2,15 @@
 
 import 'package:blog_app/Model/message_model.dart';
 import 'package:blog_app/Services/app_service.dart';
+import 'package:blog_app/conversation/message_ui.dart';
 import 'package:get/get.dart';
 
 class MessageController extends GetxController
 {
+
+  var isLoadingAdminMessage = true.obs;
+  var adminMessageList = <MessageModel>[].obs;
+
 
   var isLoadingMessage = true.obs;
   var msgList = <MessageModel>[].obs;
@@ -21,6 +26,21 @@ class MessageController extends GetxController
   }
 
 
+  void fetchAdminMessage() async {
+    if(isLoadingAdminMessage.value){
+
+      var result = await AppService.fetchAdminMessage({
+        "skip" : 0,
+        "take" : 20
+      });
+
+      adminMessageList.addAll(result);
+
+      print("Admin info size : ${result.length}");
+
+      isLoadingAdminMessage.value = false;
+    }
+  }
 
   Future<void> fetchMessages() async
   {
@@ -28,6 +48,7 @@ class MessageController extends GetxController
       var _msgList = await AppService.fetchMessage();
       msgList.assignAll(_msgList);
       isLoadingMessage.value = false;
+      fetchAdminMessage();
     }
 
     //print(_msgList);
