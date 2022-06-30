@@ -1,4 +1,4 @@
-package com.example.checkapp
+package com.nationalmrdc.bmrp
 
 import io.flutter.embedding.android.FlutterActivity
 

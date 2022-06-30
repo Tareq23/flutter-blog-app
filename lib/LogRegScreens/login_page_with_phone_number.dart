@@ -288,7 +288,7 @@ class _LoginState extends State<Login> {
                           setState(() {
                             _isLoginButtonClicked = true;
                           });
-                          _checkUserNumber();
+                          // _checkUserNumber();
 
                           /*For check*/
                           // setState(() {
