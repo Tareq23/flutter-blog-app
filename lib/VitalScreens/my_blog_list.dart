@@ -65,9 +65,7 @@ class MyBlogListState extends State<MyBlogListPageView>{
                 );
               }
               else if(_userPostController.isUserPostLoading.value){
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const LoadBlogPostAnimation();
               }
               else if(_userPostController.userPostList.isNotEmpty){
                 int itemLength = _userPostController.userPostList.length;

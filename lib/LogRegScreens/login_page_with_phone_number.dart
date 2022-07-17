@@ -69,7 +69,10 @@ class _LoginState extends State<Login> {
     Map data = {
       'phone' : userNumber
     };
+    //print("usernumber : ${data}");
     var response = await http.post(url, body: data);
+    // print("login status code : ${response.statusCode}");
+    // print("${response.body}");
     if(response.statusCode == 200)
     {
       var responseData = jsonDecode(response.body);
@@ -116,6 +119,8 @@ class _LoginState extends State<Login> {
     var url = "https://api.nationalmrdc.com/applicant-agency-mobile/activation/$userNumber/$otpCode";
     final response = await http
           .get(Uri.parse(url));
+    // print("otp response : ${response.statusCode}");
+    // print("reponse body : ${response.body}");
     var responseJson = jsonDecode(response.body);
     if(response.statusCode == 200) {
       if(responseJson['access_token'].toString().length > 10){
@@ -288,7 +293,7 @@ class _LoginState extends State<Login> {
                           setState(() {
                             _isLoginButtonClicked = true;
                           });
-                          // _checkUserNumber();
+                          _checkUserNumber();
 
                           /*For check*/
                           // setState(() {
@@ -362,9 +367,13 @@ class _LoginState extends State<Login> {
             },
           ),
           const SizedBox(height: 20,),
-          SizedBox(
+          _isLoadingOTP ?  const CircularProgressIndicator(
+            backgroundColor: Colors.black,
+            strokeWidth: 2.5,
+            color: Colors.white,
+          ) : SizedBox(
             width: screenSize.width * 0.35,
-            child: MaterialButton(
+            child:  MaterialButton(
               onPressed: (){
                 if(otpCode.length == 6)
                 {
@@ -375,12 +384,7 @@ class _LoginState extends State<Login> {
                 }
               },
               color: Colors.red,
-              child: _isLoadingOTP ? const CircularProgressIndicator(
-                backgroundColor: Colors.black,
-                strokeWidth: 2.5,
-                color: Colors.white,
-              ) :
-              Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   Text('লগইন',style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500),),

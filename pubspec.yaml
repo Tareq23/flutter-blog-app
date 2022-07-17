@@ -49,6 +49,7 @@ dependencies:
   flutter_phone_direct_caller: ^2.1.1
   youtube_player_flutter: ^8.1.0
   change_app_package_name: ^1.1.0
+  shimmer: ^2.0.0
 
 dev_dependencies:
   flutter_test:

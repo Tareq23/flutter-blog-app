@@ -311,11 +311,10 @@ class BlogListPageView extends StatelessWidget {
                   child: NetworkNotConnect(page: "allPost",controller: _postController,),
                 );
               }else if(_postController.isAllPostLoading.value){
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
+                return const LoadBlogPostAnimation();
               }
               else if (_postController.allPostList.isNotEmpty) {
+
                 return ListView(
                   children: [
                     const SizedBox(height: 15,),
@@ -329,28 +328,6 @@ class BlogListPageView extends StatelessWidget {
 
                       String imageFileNameString =
                       post.image.toString();
-
-                      // String img;
-                      // // ignore: unnecessary_null_comparison
-                      // if (imageFileNameString != null) {
-                      //   img = imageFileNameString;
-                      //   List imgUrlExplode = img.split("://");
-                      //   if (img.length > 2000 || imgUrlExplode[0] != "https") {
-                      //     img =
-                      //     "https://icon-library.com/images/image-placeholder-icon/image-placeholder-icon-5.jpg";
-                      //   }
-                      // } else {
-                      //   img =
-                      //   "https://icon-library.com/images/image-placeholder-icon/image-placeholder-icon-5.jpg";
-                      // }
-
-                      // List img2 = img.split(".");
-                      // // print(img2);
-                      // String heroAnimationTag = post.id.toString();
-                      // // var topPadding = index == 0 ? 15.0 : 0.0;
-                      // if(img2[img2.length-1].toString().toLowerCase() != "jpg" && img2[img2.length-1].toString().toLowerCase() != "png"){
-                      //   img = "https://icon-library.com/images/image-placeholder-icon/image-placeholder-icon-5.jpg";
-                      // }
                       return Container(
                           padding:  const EdgeInsets.all(0),
                           margin: const EdgeInsets.only(
