@@ -13,9 +13,18 @@ import 'package:blog_app/conversation/message_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
+import 'package:new_version/new_version.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class BlogListPageView extends StatelessWidget {
+
+class BlogListPageView extends StatefulWidget {
+  const BlogListPageView({Key? key}) : super(key: key);
+
+  @override
+  State<BlogListPageView> createState() => _BlogListPageViewState();
+}
+
+class _BlogListPageViewState extends State<BlogListPageView> {
 
   final PostController _postController = Get.put(PostController());
   final NetworkController _networkController = Get.put(NetworkController());
@@ -24,11 +33,39 @@ class BlogListPageView extends StatelessWidget {
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   final Image defaultImage = Image.asset(
-      "assets/default_blog_post_image.jpg",
-      width: double.infinity,
-      height: double.infinity,
-      fit: BoxFit.cover,
+    "assets/default_blog_post_image.jpg",
+    width: double.infinity,
+    height: double.infinity,
+    fit: BoxFit.cover,
   );
+
+
+  @override
+  void initState(){
+    super.initState();
+    final newVersion = NewVersion(
+      androidId: 'com.national24mrdc.BMRP',
+    );
+    advancedStatusCheck(newVersion);
+  }
+
+  advancedStatusCheck(NewVersion newVersion) async {
+    final status = await newVersion.getVersionStatus();
+    if (status != null && status.localVersion != status.storeVersion) {
+            debugPrint(status.releaseNotes);
+            debugPrint(status.appStoreLink);
+            debugPrint(status.localVersion);
+            debugPrint(status.storeVersion);
+            debugPrint(status.canUpdate.toString());
+      newVersion.showUpdateDialog(
+        context: context,
+        versionStatus: status,
+        dialogTitle: 'Update Available',
+        dialogText: 'some new features added!!',
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -260,19 +297,19 @@ class BlogListPageView extends StatelessWidget {
         // title: const Text('National MRDC',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700),),
         actions: [
           Container(
-            margin: const EdgeInsets.all(0),
-            // padding: const EdgeInsets.all(0),
+              margin: const EdgeInsets.all(0),
+              // padding: const EdgeInsets.all(0),
               padding: const EdgeInsets.only(top: 18),
-            width: screenSize.width * 0.7,
-            height: double.infinity,
-            child: Center(
-              child: Marquee(
-                text: 'বাংলাদেশ ম্যারেজ রেজিষ্ট্রার্স প্লাটফর্মে আপনাকে স্বাগতম। ',
-                style: const TextStyle(fontWeight: FontWeight.w500,fontSize: 15),
-                scrollAxis: Axis.horizontal,
-                crossAxisAlignment: CrossAxisAlignment.start,
-              ),
-            )
+              width: screenSize.width * 0.7,
+              height: double.infinity,
+              child: Center(
+                child: Marquee(
+                  text: 'বাংলাদেশ ম্যারেজ রেজিষ্ট্রার্স প্লাটফর্মে আপনাকে স্বাগতম। ',
+                  style: const TextStyle(fontWeight: FontWeight.w500,fontSize: 15),
+                  scrollAxis: Axis.horizontal,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                ),
+              )
           ),
           IconButton(onPressed: (){
             _globalScaffoldKey.currentState?.openEndDrawer();
@@ -362,8 +399,13 @@ class BlogListPageView extends StatelessWidget {
                                         width: double.infinity,
                                         height: double.infinity,
                                         loadingBuilder: (context, child, loadingProgress) =>
-                                        (loadingProgress == null) ? child : const CircularProgressIndicator(strokeWidth: 3,color: Color(
-                                            0xFF0A4000),),
+                                        (loadingProgress == null) ?
+                                        // child : const CircularProgressIndicator(
+                                        //   strokeWidth: 3,
+                                        //   color: Color(
+                                        //     0xFF0A4000),
+                                        // ),
+                                        child : ShimmerWidget.rectangular(height: (MediaQuery.of(context).size.height * 0.2)),
                                         errorBuilder: (context, error, stackTrace) => defaultImage,
                                       ) : Image.asset(
                                         "assets/blank_post_image.PNG",
@@ -527,47 +569,52 @@ class BlogListPageView extends StatelessWidget {
               ),
             ),
             actions: isSearching.value == false
-            ? [
-            Container(
-              margin: const EdgeInsets.only(right: 20),
-              child: OutlinedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Cancel',
-                    style: TextStyle(
-                        color: Color(0xFF001632),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500)),
-              ),
-            ),
-            Container(
+                ? [
+              Container(
                 margin: const EdgeInsets.only(right: 20),
                 child: OutlinedButton(
                   onPressed: () {
-                    if (_postController.allPostList.isNotEmpty &&
-                        searchText != "") {
-                      isSearching.value = true;
-                      var result = _postController.allPostList
-                          .where((post) => post.headline!
-                          .toLowerCase()
-                          .contains(searchText.toLowerCase()))
-                          .toList();
-                      _postController.allPostList.value = result;
-                      Navigator.pop(context);
-                    }
+                    Navigator.of(context).pop();
                   },
-                  child: const Text('Search',
+                  child: const Text('Cancel',
                       style: TextStyle(
                           color: Color(0xFF001632),
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.w500)),
-                )),
+                ),
+              ),
+              Container(
+                  margin: const EdgeInsets.only(right: 20),
+                  child: OutlinedButton(
+                    onPressed: () {
+                      if (_postController.allPostList.isNotEmpty &&
+                          searchText != "") {
+                        isSearching.value = true;
+                        var result = _postController.allPostList
+                            .where((post) => post.headline!
+                            .toLowerCase()
+                            .contains(searchText.toLowerCase()))
+                            .toList();
+                        _postController.allPostList.value = result;
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: const Text('Search',
+                        style: TextStyle(
+                            color: Color(0xFF001632),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500)),
+                  )),
             ]
-            : [],
+                : [],
           );
         });
       },
     );
   }
 }
+
+
+// class BlogListPageView extends StatelessWidget {
+//
+// }
