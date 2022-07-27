@@ -395,8 +395,8 @@ class AppService{
             'Authorization' : 'Bearer $accessToken'
           },
       ).timeout(const Duration(seconds: TIME_OUT));
-      print("Status code Admin Info Message : ${response.statusCode}");
-      print(response.body);
+      // print("Status code Admin Info Message : ${response.statusCode}");
+      // print(response.body);
       if(response.statusCode.toString() == "200" || response.statusCode.toString() == "201"){
 
         var jsonString = jsonDecode(response.body) as List;
@@ -415,6 +415,7 @@ class AppService{
             if(msgList[i].id == _list[j].parentId){
               msgList.insert(i+1, _list[j++]);
             }
+            //print("admin message image Url : ${msgList[i].imgUrl}");
         }
         return msgList;
       }

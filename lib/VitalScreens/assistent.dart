@@ -27,7 +27,17 @@ class Assistant extends StatefulWidget {
 
 class _AssistantState extends State<Assistant> {
 
-  final AssistantController assistantController = Get.put(AssistantController());
+  late final AssistantController assistantController;
+
+  @override
+  void initState()
+  {
+    Get.delete<AssistantController>();
+    assistantController = Get.put(AssistantController());
+    super.initState();
+
+  }
+
 
   @override
   Widget build(BuildContext context){

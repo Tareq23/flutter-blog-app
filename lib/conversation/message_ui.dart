@@ -6,6 +6,7 @@ import 'package:blog_app/controller/message_controller.dart';
 import 'package:blog_app/conversation/send_message.dart';
 import 'package:blog_app/conversation/user_message.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,26 +27,68 @@ class Message extends StatefulWidget {
   _MessageState createState() => _MessageState();
 }
 
-class _MessageState extends State<Message> with TickerProviderStateMixin{
+class _MessageState extends State<Message> with TickerProviderStateMixin, WidgetsBindingObserver{
 
-  final messageController = Get.put(MessageController());
+  late final MessageController messageController;
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+
+  final ScrollController _scrollController = ScrollController();
+
 
   late TabController tabController;
 
   @override
   void initState()
   {
+    Get.delete<MessageController>();
+    messageController = Get.put(MessageController());
     super.initState();
     tabController = TabController(length: 2, vsync:this);
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      print("SchedulerBinding");
+      if(_scrollController.hasClients){
+        print("scroll controller works with has cliend checked");
+
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          // _scrollController.position.minScrollExtent,
+          duration: const Duration(microseconds: 1700),
+          curve: Curves.fastOutSlowIn,
+        );
+      }
+    });
   }
 
   @override
   void dispose(){
     tabController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(state == AppLifecycleState.inactive){
+      print("App Inactive");
+    }
+    else if(state == AppLifecycleState.paused){
+      print("App Paused");
+    }
+    else if(state == AppLifecycleState.resumed){
+      print("App Resumed");
+    }
+  }
+
+  void _scrollDown() {
+    if(_scrollController.hasClients){
+      _scrollController.animateTo(
+        // _scrollController.position.maxScrollExtent,
+        _scrollController.position.minScrollExtent,
+        duration: const Duration(microseconds: 1700),
+        curve: Curves.fastOutSlowIn,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -304,7 +347,7 @@ class _MessageState extends State<Message> with TickerProviderStateMixin{
               if (NetworkController.networkError.value &&
                   messageController.msgList.isEmpty) {
                 return Center(
-                  child: NetworkNotConnect(page: "message",controller: messageController,),
+                  child: NetworkNotConnect(page: "myMessage",controller: messageController,),
                 );
               }
               else if(messageController.isLoadingMessage.value){
@@ -312,11 +355,12 @@ class _MessageState extends State<Message> with TickerProviderStateMixin{
               }
               else if(messageController.msgList.isNotEmpty){
                 return ListView.builder(
+                  // reverse: true,
                   // itemCount: messList.length,
                   itemCount: messageController.msgList.length,
                   shrinkWrap: true,
-                  padding: EdgeInsets.only(top: 16),
-                  physics: ScrollPhysics(),
+                  padding: const EdgeInsets.only(top: 16),
+                  physics: const ScrollPhysics(),
                   itemBuilder: (context, index){
 
                     return GestureDetector(
@@ -375,11 +419,13 @@ class _MessageState extends State<Message> with TickerProviderStateMixin{
                 );
               }
               else{
-                return EmptyListData(page: "message", controller: messageController);
+                return EmptyListData(page: "myMessage", controller: messageController);
               }
 
             }),
           ),
+
+          // Admin Message
           Container(
             width: screenSize.width,
             height: screenSize.height,
@@ -389,14 +435,17 @@ class _MessageState extends State<Message> with TickerProviderStateMixin{
               if (NetworkController.networkError.value &&
                   messageController.adminMessageList.isEmpty) {
                 return Center(
-                  child: NetworkNotConnect(page: "message",controller: messageController,),
+                  child: NetworkNotConnect(page: "adminMessage",controller: messageController,),
                 );
               }
               else if(messageController.isLoadingAdminMessage.value){
                 return const Center(child: CircularProgressIndicator());
               }
               else if(messageController.adminMessageList.isNotEmpty){
+
                 return ListView(
+                  reverse: true,
+                  controller: _scrollController,
                   children: [
                     ...messageController.adminMessageList.map((element){
                       return Container(
@@ -447,11 +496,12 @@ class _MessageState extends State<Message> with TickerProviderStateMixin{
                         ),
                       );
                     }),
+                    //TextButton(onPressed: onPressed, child: child)
                   ],
                 );
               }
               else{
-                return EmptyListData(page: "message", controller: messageController);
+                return EmptyListData(page: "adminMessage", controller: messageController);
               }
 
             })

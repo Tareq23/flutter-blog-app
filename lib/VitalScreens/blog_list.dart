@@ -26,7 +26,7 @@ class BlogListPageView extends StatefulWidget {
 
 class _BlogListPageViewState extends State<BlogListPageView> {
 
-  final PostController _postController = Get.put(PostController());
+  late final PostController _postController;// = Get.put(PostController());
   final NetworkController _networkController = Get.put(NetworkController());
 
   final _globalScaffoldKey = GlobalKey<ScaffoldState>();
@@ -42,6 +42,8 @@ class _BlogListPageViewState extends State<BlogListPageView> {
 
   @override
   void initState(){
+    Get.delete<PostController>();
+    _postController = Get.put(PostController());
     super.initState();
     final newVersion = NewVersion(
       androidId: 'com.national24mrdc.BMRP',

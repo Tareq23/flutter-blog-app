@@ -90,9 +90,13 @@ class NetworkNotConnect extends StatelessWidget {
                     controller.isLoading.value = true;
                     controller.fetchAssistant();
                   }
-                  else if(page == "message"){
+                  else if(page == "myMessage"){
                     controller.isLoadingMessage.value = true;
                     controller.fetchMessages();
+                  }
+                  else if(page == "adminMessage"){
+                    controller.isLoadingAdminMessage.value = true;
+                    controller.fetchAdminMessage();
                   }
                   else if(page == "about"){
                     controller.isLoading.value = true;
@@ -164,9 +168,13 @@ class EmptyListData extends StatelessWidget {
                 controller.isLoading.value = true;
                 controller.fetchAssistant();
               }
-              else if(page == "message"){
+              else if(page == "myMessage"){
                 controller.isLoadingMessage.value = true;
                 controller.fetchMessages();
+              }
+              else if(page == "adminMessage"){
+                controller.isLoadingAdminMessage.value = true;
+                controller.fetchAdminMessage();
               }
               else if(page == "about"){
                 controller.isLoading.value = true;

@@ -21,12 +21,22 @@ class MyBlogListPageView extends StatefulWidget{
 }
 class MyBlogListState extends State<MyBlogListPageView>{
 
-  var _userPostController = Get.put(PostController());
+  late final PostController _userPostController;// = Get.put(PostController());
 
   final _globalscaffoldKey = GlobalKey<ScaffoldState>();
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   var isClickedDelete = false.obs;
+
+
+  @override
+  void initState() {
+
+    Get.delete<PostController>();
+    _userPostController = Get.put(PostController());
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {

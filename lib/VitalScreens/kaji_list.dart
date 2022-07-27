@@ -29,8 +29,8 @@ class KajiListPageViewExtend extends StatefulWidget {
 
 class _KajiListPageStateConfig extends State<KajiListPageViewExtend> {
 
-  final profileController = Get.put(ProfileController());
-  final kajiListFilterController = Get.put(KajiListFilterController());
+  late final ProfileController profileController;// = Get.put(ProfileController());
+  late final KajiListFilterController kajiListFilterController;// = Get.put(KajiListFilterController());
 
   final _globalscaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -42,6 +42,11 @@ class _KajiListPageStateConfig extends State<KajiListPageViewExtend> {
 
   @override
   initState() {
+
+    Get.delete<ProfileController>();
+    Get.delete<KajiListFilterController>();
+    profileController = Get.put(ProfileController());
+    kajiListFilterController = Get.put(KajiListFilterController());
     super.initState();
 
     // public_blog_future2 = CallFormsFromKajiAPI();

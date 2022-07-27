@@ -20,7 +20,8 @@ class CreateNewBlogPost extends StatefulWidget {
 }
 
 class _CreateNewBlogPostState extends State<CreateNewBlogPost> {
-  var postController = Get.put(PostController());
+  final PostController postController = Get.put(PostController());
+  //late final PostController postController;// = Get.put(PostController());
   // var categoryController = Get.put(CategoryController());
 
   final titleStyle = TextStyle(
@@ -41,6 +42,17 @@ class _CreateNewBlogPostState extends State<CreateNewBlogPost> {
   // ];
   //
   // Map activeStatus = {"id": 1, "value": "Active"};
+
+
+
+  @override
+  void initState() {
+    // Get.delete<PostController>();
+    // postController = Get.put(PostController());
+
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {

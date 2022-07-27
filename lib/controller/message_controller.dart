@@ -36,7 +36,7 @@ class MessageController extends GetxController
 
       adminMessageList.addAll(result);
 
-      print("Admin info size : ${result.length}");
+      //print("Admin info size : ${result.length}");
 
       isLoadingAdminMessage.value = false;
     }
@@ -46,7 +46,7 @@ class MessageController extends GetxController
   {
     if(isLoadingMessage.value){
       var _msgList = await AppService.fetchMessage();
-      msgList.assignAll(_msgList);
+      msgList.assignAll(_msgList.reversed);
       isLoadingMessage.value = false;
       fetchAdminMessage();
     }
@@ -75,7 +75,9 @@ class MessageController extends GetxController
         if(result.id != 0){
           // isLoadingMessage.value = true;
           // fetchMessages();
+          //msgList.reversed;
           msgList.add(result);
+          //msgList.reversed;
           return true;
         }
         else{
