@@ -204,7 +204,7 @@ class _LoginPageStateConfig extends State<LoginConfigExtend> {
 
                                        Container(
                                          margin: EdgeInsets.all(10),
-                                         child: FlatButton(
+                                         child: MaterialButton(
                                            minWidth: 100,
                                            height: 45,
                                            color: Colors.green,
@@ -375,14 +375,14 @@ class _LoginPageStateConfig extends State<LoginConfigExtend> {
               ),
             ),
             actions: [
-              FlatButton(
+              MaterialButton(
                 textColor: Colors.black,
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: const Text('বাতিল করুন'),
               ),
-              FlatButton(
+              MaterialButton(
                 textColor: Colors.black,
                 onPressed: () async {
                   // Validate returns true if the form is valid, or false otherwise.
@@ -572,14 +572,14 @@ class _LoginPageStateConfig extends State<LoginConfigExtend> {
 
             ),
             actions: [
-              FlatButton(
+              MaterialButton(
                 textColor: Colors.black,
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text('বাতিল করুন'),
               ),
-              FlatButton(
+              MaterialButton(
                 textColor: Colors.black,
                 onPressed: () async {
                   // Validate returns true if the form is valid, or false otherwise.

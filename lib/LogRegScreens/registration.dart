@@ -264,7 +264,7 @@ class _RegistrationPageStateConfig extends State<RegistrationPageViewExtend> {
                                       ),
                                       height: 30,
                                       width: 135,
-                                      child: FlatButton(
+                                      child: MaterialButton(
                                         minWidth: 500,
                                         height: 50,
                                         color: Colors
@@ -285,7 +285,7 @@ class _RegistrationPageStateConfig extends State<RegistrationPageViewExtend> {
                                     SizedBox(
                                       height: 30,
                                       width: 135,
-                                      child: FlatButton(
+                                      child: MaterialButton(
                                         minWidth: 500,
                                         height: 50,
                                         color: Colors
@@ -425,14 +425,14 @@ class _RegistrationPageStateConfig extends State<RegistrationPageViewExtend> {
 
             ),
             actions: [
-              FlatButton(
+              MaterialButton(
                 textColor: Colors.black,
                 onPressed: () {
                   Navigator.pop(context, false);
                 },
                 child: Text('বাতিল করুন'),
               ),
-              FlatButton(
+              MaterialButton(
                 textColor: Colors.black,
                 onPressed: () async {
                   // Validate returns true if the form is valid, or false otherwise.

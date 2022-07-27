@@ -130,7 +130,7 @@ class UpdateMyBlogListPageView extends StatelessWidget {
 
                         SizedBox(height: 20,),
 
-                        FlatButton(
+                        MaterialButton(
                           minWidth: 160,
                           height: 45,
                           color: Color(0xfffec810),

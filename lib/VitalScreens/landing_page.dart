@@ -246,7 +246,7 @@ class _LandingPageStateConfig extends State<LandingPageViewExtend> {
                     child: Text('Profile Update', style: new TextStyle(color: Colors.white)),
                   ),*/
 
-                  FlatButton(
+                  MaterialButton(
                     minWidth: 160,
                     height: 45,
                     color: Colors.green,
