@@ -28,7 +28,7 @@ class MessageController extends GetxController
   }
 
 
-  void fetchAdminMessage() async {
+  Future<void> fetchAdminMessage() async {
     if(isLoadingAdminMessage.value){
 
       var result = await AppService.fetchAdminMessage({

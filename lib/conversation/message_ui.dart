@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:blinking_text/blinking_text.dart';
 import 'package:blog_app/Model/message_model.dart';
 import 'package:blog_app/Services/color.dart';
 import 'package:blog_app/controller/message_controller.dart';
@@ -31,17 +32,32 @@ class Message extends StatefulWidget {
 class _MessageState extends State<Message>
     with TickerProviderStateMixin {
   late final MessageController messageController;
-  final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  final _refreshIndicatorKeyMyMsg= GlobalKey<RefreshIndicatorState>();
+  final _refreshIndicatorKeyAdminMsg = GlobalKey<RefreshIndicatorState>();
 
   final ScrollController _scrollController = ScrollController();
   late TabController tabController;
+
+  num unreadMessage=0;
 
   @override
   void initState() {
     Get.delete<MessageController>();
     messageController = Get.put(MessageController());
     messageController.fetchMessages();
-    super.initState();
+    UnreadMessageController.fetchUnreadMessageNumber();
+    if(UnreadMessageController.unreadMessage['admin'].toString() != "null"){
+      setState(() {
+        unreadMessage += UnreadMessageController.unreadMessage['admin'];
+      });
+    }
+    if(UnreadMessageController.unreadMessage['user'].toString() != "null"){
+      setState(() {
+        unreadMessage += UnreadMessageController.unreadMessage['user'];
+      });
+    }
+    // print("checkkkkkkk   ${UnreadMessageController.unreadMessage['admin']}");
+
     tabController = TabController(length: 2, vsync: this);
     tabController.addListener(() {
       if(tabController.indexIsChanging)
@@ -53,6 +69,7 @@ class _MessageState extends State<Message>
           UnreadMessageController.fetchUnreadMessageNumber();
         }
     });
+    super.initState();
   }
 
   @override
@@ -219,7 +236,7 @@ class _MessageState extends State<Message>
                         MaterialPageRoute(builder: (context) => DashBoardConfig()));*/
                     },
                     child: Row(
-                      children: const [
+                      children: [
                         Icon(
                           Icons.message,
                           color: ConstValue.drawerIconColor,
@@ -229,6 +246,16 @@ class _MessageState extends State<Message>
                           "ম্যাসেজ",
                           style: ConstValue.drawerTestStyle,
                         ),
+                        if(unreadMessage != 0) SizedBox(width: 30,),
+                        if(unreadMessage !=0)
+                          BlinkText(
+                              unreadMessage.toString(),
+                              style: TextStyle(fontSize: 32.0, color: Colors.redAccent),
+                              beginColor: Color(0xa6ff0000),
+                              endColor: Color(0xffff0000),
+                              times: 10,
+                              duration: Duration(seconds: 1)
+                          ),
                       ],
                     ),
                   ),
@@ -375,8 +402,9 @@ class _MessageState extends State<Message>
           controller: tabController,
           children: [
             RefreshIndicator(
-              key: _refreshIndicatorKey,
+              key: _refreshIndicatorKeyMyMsg,
               onRefresh: () async {
+                messageController.isLoadingMessage.value = true;
                 await messageController.fetchMessages();
               },
               child: Obx(() {
@@ -495,112 +523,119 @@ class _MessageState extends State<Message>
             ),
 
             // Admin Message
-            Container(
-                width: screenSize.width,
-                height: screenSize.height,
-                padding: const EdgeInsets.all(0),
-                margin: const EdgeInsets.all(0),
-                child: Obx(() {
-                  if (NetworkController.networkError.value &&
-                      messageController.adminMessageList.isEmpty) {
-                    return Center(
-                      child: NetworkNotConnect(
-                        page: "adminMessage",
-                        controller: messageController,
-                      ),
-                    );
-                  } else if (messageController.isLoadingAdminMessage.value) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (messageController.adminMessageList.isNotEmpty) {
-                    return ListView(
-                      reverse: true,
-                      children: [
-                        ...messageController.adminMessageList.map((element) {
-                          return Container(
-                            padding: const EdgeInsets.only(
-                                left: 16, right: 16, top: 10, bottom: 10),
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Row(
-                                    children: <Widget>[
-                                      CircleAvatar(
-                                        // backgroundImage: NetworkImage(widget.imageUrl.toString()),
+            RefreshIndicator(
+              key: _refreshIndicatorKeyAdminMsg,
+              onRefresh: () async{
+                messageController.isLoadingAdminMessage.value = true;
+                await messageController.fetchAdminMessage();
+              },
+              child: Container(
+                  width: screenSize.width,
+                  height: screenSize.height,
+                  padding: const EdgeInsets.all(0),
+                  margin: const EdgeInsets.all(0),
+                  child: Obx(() {
+                    if (NetworkController.networkError.value &&
+                        messageController.adminMessageList.isEmpty) {
+                      return Center(
+                        child: NetworkNotConnect(
+                          page: "adminMessage",
+                          controller: messageController,
+                        ),
+                      );
+                    } else if (messageController.isLoadingAdminMessage.value) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (messageController.adminMessageList.isNotEmpty) {
+                      return ListView(
+                        reverse: true,
+                        children: [
+                          ...messageController.adminMessageList.map((element) {
+                            return Container(
+                              padding: const EdgeInsets.only(
+                                  left: 16, right: 16, top: 10, bottom: 10),
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Row(
+                                      children: <Widget>[
+                                        CircleAvatar(
+                                          // backgroundImage: NetworkImage(widget.imageUrl.toString()),
 
-                                        // ignore: unnecessary_null_comparison
-                                        // backgroundImage: AssetImage("assets/default_person.jpg"),
-                                        backgroundImage: (element.imgUrl ==
-                                                    null ||
-                                                element.imgUrl == '')
-                                            ? const AssetImage(
-                                                "assets/default_person.jpg")
-                                            : NetworkImage(
-                                                    element.imgUrl.toString())
-                                                as ImageProvider,
-                                        maxRadius: 30,
-                                      ),
-                                      const SizedBox(
-                                        width: 16,
-                                      ),
-                                      Expanded(
-                                        child: Container(
-                                          color: Colors.transparent,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text(
-                                                "${element.messageText}",
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  color: Color(0xFF181818),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 6,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  element.name != null
-                                                      ? Text(
-                                                          "${element.name}",
-                                                          style: const TextStyle(
-                                                              fontSize: 13,
-                                                              color: Color(
-                                                                  0xFF505050)),
-                                                        )
-                                                      : const Text(""),
-                                                  Text(
-                                                    "${element.createdAtAgo}",
-                                                    style: const TextStyle(
-                                                        fontSize: 11,
-                                                        color:
-                                                            Color(0xFF505050)),
+                                          // ignore: unnecessary_null_comparison
+                                          // backgroundImage: AssetImage("assets/default_person.jpg"),
+                                          backgroundImage: (element.imgUrl ==
+                                                      null ||
+                                                  element.imgUrl == '')
+                                              ? const AssetImage(
+                                                  "assets/default_person.jpg")
+                                              : NetworkImage(
+                                                      element.imgUrl.toString())
+                                                  as ImageProvider,
+                                          maxRadius: 30,
+                                        ),
+                                        const SizedBox(
+                                          width: 16,
+                                        ),
+                                        Expanded(
+                                          child: Container(
+                                            color: Colors.transparent,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text(
+                                                  "${element.messageText}",
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    color: Color(0xFF181818),
                                                   ),
-                                                ],
-                                              ),
-                                            ],
+                                                ),
+                                                const SizedBox(
+                                                  height: 6,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    element.name != null
+                                                        ? Text(
+                                                            "${element.name}",
+                                                            style: const TextStyle(
+                                                                fontSize: 13,
+                                                                color: Color(
+                                                                    0xFF505050)),
+                                                          )
+                                                        : const Text(""),
+                                                    Text(
+                                                      "${element.createdAtAgo}",
+                                                      style: const TextStyle(
+                                                          fontSize: 11,
+                                                          color:
+                                                              Color(0xFF505050)),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }),
-                        //TextButton(onPressed: onPressed, child: child)
-                      ],
-                    );
-                  } else {
-                    return EmptyListData(
-                        page: "adminMessage", controller: messageController);
-                  }
-                }))
+                                ],
+                              ),
+                            );
+                          }),
+                          //TextButton(onPressed: onPressed, child: child)
+                        ],
+                      );
+                    } else {
+                      return EmptyListData(
+                          page: "adminMessage", controller: messageController);
+                    }
+                  })),
+            )
           ],
         ));
   }

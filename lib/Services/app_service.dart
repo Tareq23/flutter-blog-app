@@ -63,30 +63,6 @@ class AppService{
     return [];
   }
 
-  static Future<Map> fetchUnreadMessageNumber() async
-  {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? accessToken = prefs.getString('access_token');
-
-   try{
-     var response = await http.get(
-         Uri.parse(ApiUrl.UNREAD_MESSAGE_COUNT),
-         headers: {
-           'Authorization' : 'Bearer $accessToken'
-         }).timeout(const Duration(seconds: TIME_OUT));
-     if(response.statusCode == 200){
-        return jsonDecode(response.body);
-     }
-   }
-   on SocketException{
-     NetworkController.networkError.value = true;
-   }
-   on TimeoutException{
-     NetworkController.networkError.value = true;
-   }
-    return {"admin": 0, "user": 0};
-  }
-
   static Future<List<PostModel>> fetchUserPost() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('access_token');
@@ -333,6 +309,30 @@ class AppService{
   }
 
 
+  static Future<Map> fetchUnreadMessageNumber() async
+  {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+
+    try{
+      var response = await http.get(
+          Uri.parse(ApiUrl.UNREAD_MESSAGE_COUNT),
+          headers: {
+            'Authorization' : 'Bearer $accessToken'
+          }).timeout(const Duration(seconds: TIME_OUT));
+      if(response.statusCode == 200){
+        return jsonDecode(response.body);
+      }
+    }
+    on SocketException{
+      NetworkController.networkError.value = true;
+    }
+    on TimeoutException{
+      NetworkController.networkError.value = true;
+    }
+    return {"admin": 0, "user": 0};
+  }
+
   static Future<MessageModel> sendMessage(Map message) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('access_token');
@@ -378,9 +378,14 @@ class AppService{
       if(response.statusCode.toString() == "200" || response.statusCode.toString() == "201"){
 
         var jsonString = jsonDecode(response.body) as List;
+
+        ///print("message json : ${jsonString}");
+
         List<MessageModel> replayList,_list=[];
         List<MessageModel> msgList=[];
+        int x=0;
         msgList = jsonString.map((e) {
+          // print("${x++} :--> $e");
           var _msgCheck = e['replay'] as List;
           if(_msgCheck.isNotEmpty){
             replayList = _msgCheck.map((item)=>MessageModel.parseJsonData(item)).toList();
@@ -389,9 +394,10 @@ class AppService{
           //print(e);
           return MessageModel.parseJsonData(e);
         }).toList();
+        // int checkParent=0;
         for(int i=0,j=0; i<msgList.length && j < _list.length; i++){
             if(msgList[i].id == _list[j].parentId){
-              msgList.insert(i+1, _list[j++]);
+              msgList.insert(i-1, _list[j++]);
             }
         }
         return msgList;

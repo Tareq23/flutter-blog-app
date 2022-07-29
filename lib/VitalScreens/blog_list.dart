@@ -15,8 +15,8 @@ import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
 import 'package:new_version/new_version.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-
+// import 'package:cached_network_image/cached_network_image.dart';
+import 'package:blinking_text/blinking_text.dart';
 import '../controller/unread_message_controller.dart';
 
 
@@ -35,6 +35,7 @@ class _BlogListPageViewState extends State<BlogListPageView> {
 
   final _globalScaffoldKey = GlobalKey<ScaffoldState>();
   final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  num unreadMessage = 0;
 
   final Image defaultImage = Image.asset(
     "assets/default_blog_post_image.jpg",
@@ -49,8 +50,21 @@ class _BlogListPageViewState extends State<BlogListPageView> {
     Get.delete<PostController>();
     _postController = Get.put(PostController());
 
-    Get.delete<UnreadMessageController>();
-    unreadMessageController = Get.put(UnreadMessageController());
+    // Get.delete<UnreadMessageController>();
+    // unreadMessageController = Get.put(UnreadMessageController());
+    UnreadMessageController.fetchUnreadMessageNumber();
+    if(UnreadMessageController.unreadMessage['admin'].toString() != "null"){
+      setState(() {
+        unreadMessage += UnreadMessageController.unreadMessage['admin'];
+      });
+    }
+    if(UnreadMessageController.unreadMessage['user'].toString() != "null"){
+      setState(() {
+        unreadMessage += UnreadMessageController.unreadMessage['user'];
+      });
+    }
+    // print("checkkkkkkk   ${UnreadMessageController.unreadMessage['admin']}");
+    // print("${UnreadMessageController.unreadMessage['admin']??0+UnreadMessageController.unreadMessage['user']??0}");
     super.initState();
     final newVersion = NewVersion(
       androidId: 'com.national24mrdc.BMRP',
@@ -99,7 +113,6 @@ class _BlogListPageViewState extends State<BlogListPageView> {
               Container(
 
                 padding: const EdgeInsets.all(16.0),
-
                 child: InkWell(
                   onTap: () {
                     Navigator.pop(context);
@@ -225,10 +238,30 @@ class _BlogListPageViewState extends State<BlogListPageView> {
                         MaterialPageRoute(builder: (context) => DashBoardConfig()));*/
                   },
                   child: Row(
-                    children: const [
+                    children: [
                       Icon(Icons.message,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
                       Text("ম্যাসেজ",style: ConstValue.drawerTestStyle,),
+                      if(unreadMessage != 0) SizedBox(width: 30,),
+                      if(unreadMessage !=0)
+                        BlinkText(
+                            unreadMessage.toString(),
+                            style: TextStyle(fontSize: 32.0, color: Colors.redAccent),
+                            beginColor: Color(0xa6ff0000),
+                            endColor: Color(0xffff0000),
+                            times: 10,
+                            duration: Duration(seconds: 1)
+                        ),
+                      if(unreadMessage != 0) SizedBox(width: 30,),
+                      if(unreadMessage !=0)
+                        BlinkText(
+                            unreadMessage.toString(),
+                            style: TextStyle(fontSize: 32.0, color: Colors.redAccent),
+                            beginColor: Colors.black,
+                            endColor: Color(0xffff0000),
+                            times: 10,
+                            duration: Duration(seconds: 1)
+                        ),
                     ],
                   ),
                 ),
@@ -369,8 +402,16 @@ class _BlogListPageViewState extends State<BlogListPageView> {
                       post.headline.toString();
                       String author =
                       post.author.toString();
-                      String dataTime =
+                      String dataTime1 =
                           "${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}";
+                      DateTime? dataTime =
+                          post.created_at;
+                      String convertedDateTime = "";
+
+                      if(dataTime.toString() != "null"){
+                        convertedDateTime = "${dataTime?.year.toString()}-${dataTime?.month.toString()}-${dataTime?.day.toString()}";
+                      }
+
 
                       String imageFileNameString =
                       post.image.toString();
@@ -475,7 +516,7 @@ class _BlogListPageViewState extends State<BlogListPageView> {
                                               Expanded(
                                                 flex: 1,
                                                 child: Text(
-                                                  author,
+                                                  author.toString() != "null" ? author : '',
                                                   style: const TextStyle(
                                                       fontSize: 14,
                                                       fontWeight: FontWeight.w400,
@@ -485,7 +526,8 @@ class _BlogListPageViewState extends State<BlogListPageView> {
                                               Expanded(
                                                 flex: 1,
                                                 child: Text(
-                                                  dataTime,
+                                                  dataTime.toString() != "null" ? convertedDateTime : " ",
+                                                  // _postController.allPostList[index].created_at.
                                                   style: const TextStyle(
                                                       fontSize: 14,
                                                       fontWeight: FontWeight.w400,

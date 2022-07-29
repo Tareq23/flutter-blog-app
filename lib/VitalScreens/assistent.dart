@@ -1,4 +1,5 @@
 
+import 'package:blinking_text/blinking_text.dart';
 import 'package:blog_app/VitalScreens/blog_list.dart';
 import 'package:blog_app/VitalScreens/kaji_list.dart';
 import 'package:blog_app/VitalScreens/my_blog_list.dart';
@@ -14,6 +15,7 @@ import '../ProfileScreens/profile_page.dart';
 import '../Services/color.dart';
 import '../Services/common_widgets.dart';
 import '../controller/network_controller.dart';
+import '../controller/unread_message_controller.dart';
 import '../conversation/message_ui.dart';
 import 'about.dart';
 
@@ -29,11 +31,26 @@ class _AssistantState extends State<Assistant> {
 
   late final AssistantController assistantController;
 
+  num unreadMessage=0;
+
   @override
   void initState()
   {
     Get.delete<AssistantController>();
     assistantController = Get.put(AssistantController());
+
+    UnreadMessageController.fetchUnreadMessageNumber();
+    if(UnreadMessageController.unreadMessage['admin'].toString() != "null"){
+      setState(() {
+        unreadMessage += UnreadMessageController.unreadMessage['admin'];
+      });
+    }
+    if(UnreadMessageController.unreadMessage['user'].toString() != "null"){
+      setState(() {
+        unreadMessage += UnreadMessageController.unreadMessage['user'];
+      });
+    }
+
     super.initState();
 
   }
@@ -161,10 +178,20 @@ class _AssistantState extends State<Assistant> {
                         MaterialPageRoute(builder: (context) => DashBoardConfig()));*/
                   },
                   child: Row(
-                    children: const [
+                    children:  [
                       Icon(Icons.message,color: ConstValue.drawerIconColor,),
                       SizedBox(width: 10),
                       Text("ম্যাসেজ",style: ConstValue.drawerTestStyle,),
+                      if(unreadMessage != 0) SizedBox(width: 30,),
+                      if(unreadMessage !=0)
+                        BlinkText(
+                            unreadMessage.toString(),
+                            style: const TextStyle(fontSize: 32.0, color: Colors.redAccent),
+                            beginColor: const Color(0xa6ff0000),
+                            endColor: const Color(0xffff0000),
+                            times: 10,
+                            duration: const Duration(seconds: 1)
+                        ),
                     ],
                   ),
                 ),
