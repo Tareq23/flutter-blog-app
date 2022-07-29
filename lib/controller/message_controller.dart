@@ -19,9 +19,11 @@ class MessageController extends GetxController
   var isSendMessage = false.obs;
   var sentMessage = MessageModel(0, 0, "name", "messageText", "imgUrl", DateTime.now(), "createdAtAgo").obs;
 
+
+
   @override
   void onInit() {
-    fetchMessages();
+    //fetchMessages();
     super.onInit();
   }
 
@@ -48,7 +50,7 @@ class MessageController extends GetxController
       var _msgList = await AppService.fetchMessage();
       msgList.assignAll(_msgList.reversed);
       isLoadingMessage.value = false;
-      fetchAdminMessage();
+      //fetchAdminMessage();
     }
 
     //print(_msgList);

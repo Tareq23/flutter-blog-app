@@ -22,6 +22,7 @@ class ApiUrl{
   static const USER_MESSAGE_SEND = "https://api.nationalmrdc.com/api/communication/messaging";
   static const USER_MESSAGE_GET = "https://api.nationalmrdc.com/api/communication/topic/list";
   static String ADMIN_MESSAGE_GET = "https://api.nationalmrdc.com/api/communication/topic/list/admin";
+  static String UNREAD_MESSAGE_COUNT = "https://api.nationalmrdc.com/api/communication/topic/list/count";
 
   // KAJI LIST FILTER API
 

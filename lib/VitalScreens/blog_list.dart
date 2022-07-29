@@ -15,6 +15,9 @@ import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
 import 'package:new_version/new_version.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+import '../controller/unread_message_controller.dart';
 
 
 class BlogListPageView extends StatefulWidget {
@@ -27,6 +30,7 @@ class BlogListPageView extends StatefulWidget {
 class _BlogListPageViewState extends State<BlogListPageView> {
 
   late final PostController _postController;// = Get.put(PostController());
+  late final UnreadMessageController unreadMessageController;
   final NetworkController _networkController = Get.put(NetworkController());
 
   final _globalScaffoldKey = GlobalKey<ScaffoldState>();
@@ -44,6 +48,9 @@ class _BlogListPageViewState extends State<BlogListPageView> {
   void initState(){
     Get.delete<PostController>();
     _postController = Get.put(PostController());
+
+    Get.delete<UnreadMessageController>();
+    unreadMessageController = Get.put(UnreadMessageController());
     super.initState();
     final newVersion = NewVersion(
       androidId: 'com.national24mrdc.BMRP',
@@ -396,6 +403,15 @@ class _BlogListPageViewState extends State<BlogListPageView> {
                                     margin: const EdgeInsets.all(0),
                                     child: Hero(
                                       tag: post.id.toString(),
+
+                                      // child: CachedNetworkImage(
+                                      //    imageUrl: post.image.toString(),
+                                      //     placeholder: (context, url) => ShimmerWidget.rectangular(height: (MediaQuery.of(context).size.height * 0.2)),
+                                      //     errorWidget: (context, url, error) => defaultImage,
+                                      //   height: double.infinity,
+                                      //   width: double.infinity,
+                                      // ),
+
                                       child: post.image != null ? Image.network(
                                         post.image.toString(),
                                         width: double.infinity,

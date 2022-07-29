@@ -63,6 +63,30 @@ class AppService{
     return [];
   }
 
+  static Future<Map> fetchUnreadMessageNumber() async
+  {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+
+   try{
+     var response = await http.get(
+         Uri.parse(ApiUrl.UNREAD_MESSAGE_COUNT),
+         headers: {
+           'Authorization' : 'Bearer $accessToken'
+         }).timeout(const Duration(seconds: TIME_OUT));
+     if(response.statusCode == 200){
+        return jsonDecode(response.body);
+     }
+   }
+   on SocketException{
+     NetworkController.networkError.value = true;
+   }
+   on TimeoutException{
+     NetworkController.networkError.value = true;
+   }
+    return {"admin": 0, "user": 0};
+  }
+
   static Future<List<PostModel>> fetchUserPost() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('access_token');
@@ -381,7 +405,6 @@ class AppService{
     }
     return [];
   }
-
   static Future<List<MessageModel>> fetchAdminMessage(Map map) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('access_token');

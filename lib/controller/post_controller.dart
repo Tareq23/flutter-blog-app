@@ -32,7 +32,6 @@ class PostController extends GetxController{
   @override
   void onInit() {
     fetchPosts();
-
     super.onInit();
   }
 
@@ -42,6 +41,10 @@ class PostController extends GetxController{
     // TODO: implement dispose
     super.dispose();
   }
+
+
+
+
 
   Future<void> fetchPosts() async {
     try{
