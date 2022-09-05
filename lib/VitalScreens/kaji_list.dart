@@ -153,12 +153,16 @@ class _KajiListPageStateConfig extends State<KajiListPageViewExtend> {
                     Text("${profileController.kajiList[index].name}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: Color(
                         0xFF181818)),),
                     const SizedBox(height: 15,),
-
-
+                    if(profileController.kajiList[index].phone != null)
+                    Text("মোবাইল - ${profileController.kajiList[index].phone??''}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: Color(
+                        0xFF181818)),),
+                    if(profileController.kajiList[index].district?.districtNameBng != null)
                     Text("জেলা - ${profileController.kajiList[index].district?.districtNameBng??''}",style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: Color(
                         0xFF181818)),),
+                    if(profileController.kajiList[index].subDistrict?.upazilaNameBng != null)
                     Text("উপজেলা - ${profileController.kajiList[index].subDistrict?.upazilaNameBng??''}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: Color(
                         0xFF181818)),),
+                    if(profileController.kajiList[index].union?.unionNameBng != null)
                     Text("ইউনিয়ন - ${profileController.kajiList[index].union?.unionNameBng??''}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: Color(
                         0xFF171616)),),
                     // Text("সিটি কর্পোরেশন - ${profileController.kajiList[index].union?.unionNameBng??''}",style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: Color(
