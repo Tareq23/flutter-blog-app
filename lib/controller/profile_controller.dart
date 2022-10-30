@@ -94,7 +94,7 @@ class ProfileController extends GetxController
       "district_id" : map['district_id']??"",
       "subdistrict_id" : map['subdistrict_id']??"",
       "address" : "",
-      "search" : "",
+      "search" : map['search']??"",
       "city_corporation_id" : map['city_corporation_id']??"",
       "union_id" : map['union_id']??"",
       "ward_union" : map['ward_union']??"",

@@ -28,6 +28,7 @@ class ApiUrl{
 
   static const DIVISION_LIST = "https://api.nationalmrdc.com/api/get-division";
   static String DISTRICT_LIST = "https://api.nationalmrdc.com/api/get-district/";
+  static String CITY_LIST = "https://api.nationalmrdc.com/api/get-citycorporation/";
   static String SUB_DISTRICT_LIST = "https://api.nationalmrdc.com/api/get-subdistrict/";
   static String UNION_LIST = "https://api.nationalmrdc.com/api/get-union/";
   static String KAJI_CONTACT = "https://api.nationalmrdc.com/api/frontend/contacts?";

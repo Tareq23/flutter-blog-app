@@ -2,6 +2,7 @@
 import 'package:blog_app/LogRegScreens/login_page_with_phone_number.dart';
 import 'package:blog_app/Services/color.dart';
 import 'package:blog_app/VitalScreens/blog_list.dart';
+import 'package:blog_app/VitalScreens/kaji_list.dart';
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,15 +24,15 @@ class _SplashPageStateConfig extends State<SplashConfig>{
   }
 
 
-  void _checkAccessToken() async
-  {
+  void _checkAccessToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('access_token');
     if(accessToken == null){
       Navigator.push(context,MaterialPageRoute(builder: (context) => const Login()));
     }else{
       setState(() {
-        Navigator.push(context,MaterialPageRoute(builder: (context) => BlogListPageView()));
+        // Navigator.push(context,MaterialPageRoute(builder: (context) => BlogListPageView()));
+        Navigator.push(context,MaterialPageRoute(builder: (context) => KajiListPageViewExtend()));
       });
     }
   }

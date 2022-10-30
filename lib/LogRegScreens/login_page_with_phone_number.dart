@@ -2,14 +2,12 @@
 
 import 'dart:convert';
 
-import 'package:blog_app/LogRegScreens/registration.dart';
 import 'package:blog_app/Services/color.dart';
 import 'package:blog_app/VitalScreens/blog_list.dart';
-import 'package:blog_app/VitalScreens/my_blog_list.dart';
+import 'package:blog_app/VitalScreens/kaji_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../VitalScreens/landing_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_verification_code/flutter_verification_code.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,12 +32,11 @@ class _LoginState extends State<Login> {
   bool _isLoadingOTP = false;
   bool _isLoginButtonClicked = false;
 
-  void init() async
-  {
+  void init() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     String accessToken = (sp.getString('access_token')??"");
     if(accessToken != ""){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => BlogListPageView()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const BlogListPageView()));
     }
   }
 
@@ -62,8 +59,7 @@ class _LoginState extends State<Login> {
     });
   }
 
-  void _checkUserNumber() async
-  {
+  void _checkUserNumber() async {
     String api_link = "https://api.nationalmrdc.com/applicant-agency-mobile";
     var url = Uri.parse(api_link);
     Map data = {
@@ -106,8 +102,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-  void _checkOTP(BuildContext context)
-  {
+  void _checkOTP(BuildContext context) {
     setState(() {
       _isLoadingOTP = true;
     });
@@ -139,12 +134,11 @@ class _LoginState extends State<Login> {
     prefs.setInt('user_id', userId);
     String accessToken = (prefs.getString('access_token')??"default");
     if(accessToken != "default"){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => BlogListPageView()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => KajiListPageViewExtend()));
     }
     else{
       showToastMessage('ওটিপি সঠিক নয়');
     }
-
   }
 
   @override

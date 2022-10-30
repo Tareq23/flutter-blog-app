@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:blog_app/Model/DistrictModel.dart';
 import 'package:blog_app/Model/assistant_model.dart';
 import 'package:blog_app/Model/category_model.dart';
+import 'package:blog_app/Model/city_corporation_model.dart';
 import 'package:blog_app/Model/division_model.dart';
 import 'package:blog_app/Model/message_model.dart';
 import 'package:blog_app/Model/post_model.dart';
@@ -637,6 +638,38 @@ class AppService{
         var jsonString = jsonDecode(response.body) as List;
         List<SubDistrictModel> _subDistrictList = jsonString.map((items) => SubDistrictModel.parseJsonData(items)).toList();
         return _subDistrictList;
+      }
+    }
+    on SocketException{
+      NetworkController.networkError.value = true;
+    }
+    on TimeoutException{
+      NetworkController.networkError.value = true;
+    }
+    finally{
+
+    }
+    return [];
+  }
+
+
+
+  static Future<List<CityCorporationModel>> fetchCity(int id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('access_token');
+    try{
+      NetworkController.networkError.value = false;
+      var response = await http.get(
+          Uri.parse(ApiUrl.CITY_LIST+id.toString()),
+          headers: {
+            'Content-Type' : 'application/json',
+            'Accepts' : 'application/json',
+            'Authorization' : 'Bearer $accessToken'
+          }).timeout(const Duration(seconds: TIME_OUT));
+      if(response.statusCode == 200){
+        var jsonString = jsonDecode(response.body) as List;
+        List<CityCorporationModel> _cityList = jsonString.map((items) => CityCorporationModel.parseJsonData(items)).toList();
+        return _cityList;
       }
     }
     on SocketException{

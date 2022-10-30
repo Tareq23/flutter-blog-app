@@ -162,7 +162,7 @@ class EmptyListData extends StatelessWidget {
               }
               else if(page == "kajiList"){
                 controller.isLoadKajiList.value = true;
-                controller.fetchKajiList({});
+                controller.fetchKajiList(<String,String>{});
               }
               else if(page == "assistantList"){
                 controller.isLoading.value = true;

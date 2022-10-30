@@ -52,42 +52,42 @@ class _BlogListPageViewState extends State<BlogListPageView> {
 
     // Get.delete<UnreadMessageController>();
     // unreadMessageController = Get.put(UnreadMessageController());
-    UnreadMessageController.fetchUnreadMessageNumber();
-    if(UnreadMessageController.unreadMessage['admin'].toString() != "null"){
-      setState(() {
-        unreadMessage += UnreadMessageController.unreadMessage['admin'];
-      });
-    }
-    if(UnreadMessageController.unreadMessage['user'].toString() != "null"){
-      setState(() {
-        unreadMessage += UnreadMessageController.unreadMessage['user'];
-      });
-    }
-    // print("checkkkkkkk   ${UnreadMessageController.unreadMessage['admin']}");
-    // print("${UnreadMessageController.unreadMessage['admin']??0+UnreadMessageController.unreadMessage['user']??0}");
+    // UnreadMessageController.fetchUnreadMessageNumber();
+    // if(UnreadMessageController.unreadMessage['admin'].toString() != "null"){
+    //   setState(() {
+    //     unreadMessage += UnreadMessageController.unreadMessage['admin'];
+    //   });
+    // }
+    // if(UnreadMessageController.unreadMessage['user'].toString() != "null"){
+    //   setState(() {
+    //     unreadMessage += UnreadMessageController.unreadMessage['user'];
+    //   });
+    // }
+    //
+    // final newVersion = NewVersion(
+    //   androidId: 'com.national24mrdc.BMRP',
+    // );
+    // advancedStatusCheck(newVersion);
+
     super.initState();
-    final newVersion = NewVersion(
-      androidId: 'com.national24mrdc.BMRP',
-    );
-    advancedStatusCheck(newVersion);
   }
 
-  advancedStatusCheck(NewVersion newVersion) async {
-    final status = await newVersion.getVersionStatus();
-    if (status != null && status.localVersion != status.storeVersion) {
-            debugPrint(status.releaseNotes);
-            debugPrint(status.appStoreLink);
-            debugPrint(status.localVersion);
-            debugPrint(status.storeVersion);
-            debugPrint(status.canUpdate.toString());
-      newVersion.showUpdateDialog(
-        context: context,
-        versionStatus: status,
-        dialogTitle: 'Update Available',
-        dialogText: 'some new features added!!',
-      );
-    }
-  }
+  // advancedStatusCheck(NewVersion newVersion) async {
+  //   final status = await newVersion.getVersionStatus();
+  //   if (status != null && status.localVersion != status.storeVersion) {
+  //           debugPrint(status.releaseNotes);
+  //           debugPrint(status.appStoreLink);
+  //           debugPrint(status.localVersion);
+  //           debugPrint(status.storeVersion);
+  //           debugPrint(status.canUpdate.toString());
+  //     newVersion.showUpdateDialog(
+  //       context: context,
+  //       versionStatus: status,
+  //       dialogTitle: 'Update Available',
+  //       dialogText: 'some new features added!!',
+  //     );
+  //   }
+  // }
 
 
   @override
